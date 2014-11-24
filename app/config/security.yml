@@ -1,12 +1,24 @@
 security:
-    providers:
-        in_memory:
-            memory: ~
-
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-        default:
+        secured_area:
+            pattern:   ^/
             anonymous: ~
+            form_login: ~
+            logout:
+                path: /logout
+                target: /
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: [ROLE_USER , ROLE_ADMIN] }
+        # Include the following line to also secure the /admin path itself
+        # - { path: ^/admin$, roles: ROLE_ADMIN }
+
+    providers:
+        main:
+            entity:
+                class: Eye3\CaminosBundle\Entity\Usuario
+                property: username
+
+    encoders:
+        Eye3\CaminosBundle\Entity\Usuario: plaintext

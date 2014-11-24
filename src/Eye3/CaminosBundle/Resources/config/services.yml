@@ -1,0 +1,7 @@
+parameters:
+services:
+    login_listener:
+        class: 'Eye3\CaminosBundle\Listener\LoginListener'
+        arguments: ['@security.context', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }

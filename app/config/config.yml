@@ -31,9 +31,14 @@ twig:
 
 # Assetic Configuration
 assetic:
+    assets:
+        data_tables:
+            inputs:
+                - %kernel.root_dir%/../vendor/datatables/datatables/media/js/jquery.js
+                - %kernel.root_dir%/../vendor/datatables/datatables/media/js/jquery.dataTables.js
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles:        [ Eye3CaminosBundle ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

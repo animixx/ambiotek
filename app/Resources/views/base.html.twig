@@ -1,13 +1,287 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>{% block title %}Eye3 Online{% endblock %}</title>
+
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+{% block stylesheets %}
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/bootstrap.min.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/font-awesome.min.css') }}" />
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-fonts.css') }}" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace.min.css') }}" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-part2.min.css') }}" />
+		<![endif]-->
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-skins.min.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-rtl.min.css') }}" />
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-ie.min.css') }}" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+		<script src="{{ asset('bundles/eye3caminos/js/ace-extra.min.js') }}"></script>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="{{ asset('bundles/eye3caminos/js/html5shiv.min.js') }}"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/respond.min.js') }}"></script>
+		<![endif]-->
+		
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/eye3.css') }}" />
+{% endblock %}
+
+ <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+ 
+ 
+	</head>
+
+	<body class="no-skin">
+	
+		<!-- #section:basics/navbar.layout -->
+		<div id="navbar" class="navbar navbar-default">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+				<!-- #section:basics/sidebar.mobile.toggle -->
+				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button>
+
+				<!-- /section:basics/sidebar.mobile.toggle -->
+				<div class="navbar-header pull-left">
+					<!-- #section:basics/navbar.layout.brand -->
+					<a href="#" class="navbar-brand">
+						<small>
+							<span class="white" id="id-text2">EYE3 - Monitoreo Online</span>
+						</small>
+					</a>
+
+					<!-- /section:basics/navbar.layout.brand -->
+
+					<!-- #section:basics/navbar.toggle -->
+
+					<!-- /section:basics/navbar.toggle -->
+				</div>
+
+				<!-- #section:basics/navbar.dropdown -->
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav eye3">
+
+						<!-- #section:basics/navbar.user_menu -->
+						<li class="eye3">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<span class="user-info">
+									<small>Usuario,</small>
+									{{app.user.nombre}}
+								</span>
+
+								<i class="ace-icon fa fa-caret-down"></i>
+							</a>
+
+							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+
+
+								<li>
+									<a href="{{ path('logout') }}">
+										<i class="ace-icon fa fa-power-off"></i>
+										Logout
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<!-- /section:basics/navbar.user_menu -->
+					</ul>
+				</div>
+
+				<!-- /section:basics/navbar.dropdown -->
+			</div><!-- /.navbar-container -->
+		</div>
+
+		<!-- /section:basics/navbar.layout -->
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<!-- #section:basics/sidebar -->
+			<div id="sidebar" class="sidebar                  responsive">
+				<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+				</script>
+
+				
+
+				<ul class="nav nav-list">
+					
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,4) == 'Mapa' %}active open{% endif %}">
+						<a href="{{path('mapa')}}" >
+							<i class="menu-icon fa fa-map-marker"></i>
+							<span class="menu-text"> Mapa </span>
+
+						</a>
+						
+					</li>
+
+					</li>
+
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,8) == 'Registro' %}active open{% endif %}">
+						<a href="{{path('registro')}}" >
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text"> Registro </span>
+
+						</a>
+						
+					</li>
+
+					
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,8) == 'Graficos' %}active open{% endif %}">
+						<a href="{{path('graficos')}}" >
+							<i class="menu-icon fa fa-bar-chart-o"></i>
+
+							<span class="menu-text">Gráficos</span>
+							
+						</a>
+
+					</li>
+
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,12) == 'Programacion' %}active open{% endif %}">
+						<a href="{{path('actividades')}}" >
+							<i class="menu-icon fa fa-calendar"></i>
+
+							<span class="menu-text">Programación</span>
+							
+						</a>
+
+					</li>
+						
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,3) == 'Uso' %}active open{% endif %}">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-users"></i>
+							<span class="menu-text"> Control de Acceso </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="{% if app.request.attributes.get('_route') == 'usuarios' %}active {% endif %}">
+								<a href="{{path('usuarios')}}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Gesti&oacute;n
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li class="{% if app.request.attributes.get('_route') == 'uso_sistema' %}active {% endif %}">
+								<a href="{{path('uso_sistema')}}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									Ver uso del sistema
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							
+						</ul>
+					</li>
+
+
+				</ul><!-- /.nav-list -->
+
+			
+			</div>
+
+			<!-- /section:basics/sidebar -->
+			<div class="main-content">
+				<div class="page-content">
+				
+					<div class="page-content-area">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+ {% block body %}{% endblock %}
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content-area -->
+				</div><!-- /.page-content -->
+			</div><!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<!-- #section:basics/footer -->
+					<div class="footer-content">
+						<span class="bigger-120">
+							EYE3 - Monitoreo Online &copy; 2014
+						</span>
+					</div>
+
+					<!-- /section:basics/footer -->
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+
+		
+{% block js %}
+<!-- basic scripts en base -->
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.min.js') }}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery1x.min.js') }}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.mobile.custom.min.js') }}'>"+"<"+"/script>");
+		</script>
+		
+        {% javascripts 
+            'bundles/eye3caminos/js/bootstrap.min.js' 
+            'bundles/eye3caminos/js/ace-elements.min.js' 
+			'bundles/eye3caminos/js/ace.min.js'
+            %}
+            <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+    {% endblock %}
+	
+
+	</body>
 </html>

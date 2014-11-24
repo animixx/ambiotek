@@ -1,0 +1,8 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Eye3CaminosBundle:Graficos:index{% endblock %}
+
+{% block body %}
+<h1>Welcome to the Graficos:index page</h1>
+{{app.request.attributes.get('_controller')}}
+{% endblock %}

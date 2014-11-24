@@ -1,0 +1,18 @@
+eye3_caminos:
+    resource: "@Eye3CaminosBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+login:
+    path:     /login
+    defaults: { _controller: Eye3CaminosBundle:Security:login }
+
+login_check:
+    path: /login_check
+
+logout:
+    path: /logout
+
+home_page:
+    path: /
+    defaults: { _controller: Eye3CaminosBundle:Default:index }
