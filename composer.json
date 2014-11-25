@@ -19,6 +19,9 @@
 		"liuggio/excelbundle": "~2.0",
         "brown298/data-tables-bundle": "dev-master",
         "sensio/framework-extra-bundle": "~3.0",
+        "egeloen/google-map-bundle": "~2.1",
+		"widop/http-adapter": "~1.1.0",
+        "willdurand/geocoder": "~2.0",
         "incenteev/composer-parameter-handler": "~2.0"
     },
     "require-dev": {

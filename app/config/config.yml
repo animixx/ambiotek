@@ -72,3 +72,13 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+ivory_google_map:
+    geocoder_request:
+
+        # The coordinate for which you wish to obtain the closest, human-readable address (Reverse geocoding)
+        # By default, there is no coordinate
+        coordinate:
+            latitude: -21
+            longitude: -68
+            no_wrap: true

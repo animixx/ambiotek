@@ -3,5 +3,8 @@
 {% block title %}Eye3CaminosBundle:Mapa:index{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Mapa:index page</h1>
+
+{{ google_map_container(map) }}
+{{ google_map_js(map) }}
+
 {% endblock %}
