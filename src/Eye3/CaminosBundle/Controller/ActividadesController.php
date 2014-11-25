@@ -27,12 +27,14 @@ class ActividadesController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $fecha = date("d-m-Y");
+		$em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('Eye3CaminosBundle:Actividades')->findAll();
 
         return array(
             'entities' => $entities,
+			'fecha' => $fecha,
         );
     }
     /**

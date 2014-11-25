@@ -18,7 +18,14 @@ use Symfony\Component\Templating\EngineInterface;
 class AccesoTable extends QueryBuilderDataTable implements QueryBuilderDataTableInterface
 {
 	
-  
+    /**
+     * @var date
+     * @DataTable\Column(source="registro.fecha", name="Fecha", stype="date-euro")
+	 * @DataTable\Format(dataFields={"dato":"registro.fecha"}, template="Eye3CaminosBundle:Registro:fecha.html.twig")
+     * @DataTable\DefaultSort()
+     */
+    public $cuando; 
+	
 	
 	
     /**

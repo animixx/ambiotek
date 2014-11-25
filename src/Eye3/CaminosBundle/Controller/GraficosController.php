@@ -14,8 +14,10 @@ class GraficosController extends Controller
      */
     public function indexAction()
     {
-        return array(
-                // ...
+        $fecha = date("d-m-Y");
+		
+		return array(
+               'fecha' => $fecha,
             );    }
 
 }

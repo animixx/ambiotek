@@ -21,6 +21,7 @@ class UsuariosTable extends QueryBuilderDataTable implements QueryBuilderDataTab
     /**
      * @var datetime
      * @DataTable\Column(source="usuario.last_login", name="Último Acceso")
+	 * @DataTable\Format(dataFields={"dato":"usuario.last_login"}, template="Eye3CaminosBundle:Registro:fecha.html.twig")
      */
     public $fecha; 
 	
