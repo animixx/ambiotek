@@ -1,0 +1,5 @@
+{%- if dato is null -%}
+	{{dato}}
+{% else %}
+	{{ dato|date("d/m/Y","America/Santiago") }}
+{% endif %}

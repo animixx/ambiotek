@@ -24,18 +24,23 @@ class ActividadesController extends Controller
      * @Route("/", name="actividades")
      * @Method("GET")
      * @Template()
+	 * @param \Symfony\Component\HttpFoundation\Request $request
+	 * @return array
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $fecha = date("d-m-Y");
-		$em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('Eye3CaminosBundle:Actividades')->findAll();
+		
+		 $dataTable = $this->get('data_tables.manager')->getTable('actividadesTable');
+        if ($response = $dataTable->ProcessRequest($request)) {
+            return $response;
+        }
 
         return array(
-            'entities' => $entities,
+            'dataTable' => $dataTable,
 			'fecha' => $fecha,
         );
+
     }
     /**
      * Creates a new Actividades entity.
@@ -87,14 +92,35 @@ class ActividadesController extends Controller
      * Displays a form to create a new Actividades entity.
      *
      * @Route("/new", name="actividades_new")
-     * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
         $entity = new Actividades();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createFormBuilder( $entity, array(
+            'method' => 'POST',
+        ))
+			->add('usuario', 'text', array('label'=>'Usuario','required' => true))
+			->add('actividad', 'text', array('label'=>'Actividad','required' => true))
+			->add('hora', 'time',array('label'=>'Hora','widget'=>'single_text'))
+			->add('fecha', 'date',array('label'=>'Fecha','widget'=>'single_text'))
+		
+			->add('submit', 'submit', array('label' => 'Crear'))
+            ->getForm();
 
+		
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('actividades'));
+        }
+
+        $entity = new Actividades();
+		
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -204,6 +230,26 @@ class ActividadesController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+	/**
+     * Deletes a Actividades entity.
+     *
+     * @Route("/actividades/deleteconfirm/{id}", name="actividad_deleteconfirm")
+     * @Method("GET")
+     * @Template()
+     */
+    public function deleteconfirmAction(Request $request, $id)
+    {
+		$deleteForm = $this->createDeleteForm($id);
+        $deleteForm->handleRequest($request);
+        
+		 return array(
+            'entity'      => $id,
+            'delete_form' => $deleteForm->createView(),
+        );
+		
+
+    } 
+	
     /**
      * Deletes a Actividades entity.
      *
@@ -242,7 +288,7 @@ class ActividadesController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('actividades_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array('label' => 'Borrar'))
             ->getForm()
         ;
     }

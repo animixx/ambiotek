@@ -105,7 +105,7 @@ class UsoController extends Controller
                     ),
 			'multiple'  => false,
                 ))
-			->add('submit', 'submit', array('label' => 'Create'))
+			->add('submit', 'submit', array('label' => 'Crear'))
             ->getForm();
 
 		

@@ -21,21 +21,19 @@ class MapaController extends Controller
 		$map = new Map();
 
 		// Enable the auto zoom flag
-		$map->setAutoZoom(false);
+		// $map->setAutoZoom(true);
 		
-		$map->setCenter(0, 0, true);
-		$map->setMapOption('zoom', 5);
+		$map->setCenter(-21.0030005,-68.8088258, true);
+		$map->setMapOption('zoom', 15);
 		
-		$map->setBound(-21, -62, -22, -63, true, true);
 		
 		$map->setMapOption('mapTypeId', MapTypeId::SATELLITE);
 		$map->setMapOption('mapTypeId', 'satellite');
 
-		$map->setMapOption('mapTypeId', MapTypeId::TERRAIN);
-		$map->setMapOption('mapTypeId', 'terrain');
-
 		// Add marker overlay to your map
-		$map->addMarker(new Marker());
+			$marker = new Marker();
+			$marker->setPosition(-21.0030005,-68.8088258, true);     
+		$map->addMarker($marker);
 		
 		
 		$map->setStylesheetOptions(array(

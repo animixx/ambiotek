@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Actividades
  *
- * @ORM\Table()
+ * @ORM\Table(name="actividades")
  * @ORM\Entity
  */
 class Actividades

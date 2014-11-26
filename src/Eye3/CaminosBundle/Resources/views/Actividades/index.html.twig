@@ -1,47 +1,54 @@
 {% extends '::base.html.twig' %}
+{% block stylesheets %}
+{{parent()}}
+ {% javascripts '@data_tables' %}
+   
 
-{% block body -%}
-    <h1>Actividades list</h1>
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.min.js') }}'>"+"<"+"/script>");
+		</script>
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Usuario</th>
-                <th>Actividad</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('actividades_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.hora }}</td>
-                <td>{{ entity.usuario }}</td>
-                <td>{{ entity.actividad }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('actividades_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('actividades_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+		<!-- <![endif]-->
 
-        <ul>
-        <li>
-            <a href="{{ path('actividades_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery1x.min.js') }}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.mobile.custom.min.js') }}'>"+"<"+"/script>");
+		</script>
+		
+ {% endjavascripts %}
+
+{% endblock %}
+{% block body %}
+   
+<div class="row">
+				<div class="col-12">
+					<div class="page-header"><h1>Programación </h1></div>
+				</div>
+</div>
+
+    <div class="table-bordered table-responsive">
+		{{ addDataTable(dataTable, {
+									"info": false ,
+									
+								}) 
+		}}
+    </div>
+	<div> <a class="btn btn-primary" href="{{ path('actividades_new') }}"><i class="ace-icon fa fa-plus"></i>Agregar Actividad</a>
+	</div>
+	
+{% block js %}{% endblock %}
+		<script src="{{ asset('bundles/eye3caminos/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/jquery.dataTables.bootstrap.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/date-time/datatables-date-euro.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/bootstrap.min.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/ace-elements.min.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/ace.min.js') }}" type="text/javascript"></script>
+    
+
+{% endblock %}
