@@ -1,5 +1,12 @@
 Symfony Standard Edition
 ========================
+paquetes adicionales
+ "doctrine/doctrine-fixtures-bundle": "2.2.*"  para instalar datos por defecto a la BD nueva
+ "liuggio/excelbundle": "~2.0",  para generar archivos excel
+ "brown298/data-tables-bundle": "dev-master", , para las tablas ocupadas en registro, programacion y control de acceso
+ "egeloen/google-map-bundle": "~2.1",	, Para utilizar el googlemaps, con sus referencias para poder georeferenciar y hacer los apuntadores
+		"widop/http-adapter": "~1.1.0",
+        "willdurand/geocoder": "~2.0",
 
 Welcome to the Symfony Standard Edition - a fully-functional Symfony2
 application that you can use as the skeleton for your new applications.

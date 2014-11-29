@@ -1,60 +1,60 @@
 .eye3color {
-  color: #00a79d !important;
+  color: #74BD43 !important;
 }
 .navbar {
-  background: #00a79d;
+  background: #74BD43;
 }
 
 .page-header h1 { 
-  color: #00a79d;
+  color: #74BD43;
 }
 .widget-header {
-  color: #00a79d;
+  color: #74BD43;
 }
 
 .no-skin .nav-list > li.active > a:hover,
 .no-skin .nav-list > li.active > a:focus,
 .no-skin .nav-list > li.active > a {
-  color: #00a79d;
+  color: #74BD43;
 }
 .no-skin .nav-list > li > a:hover,
 .no-skin .nav-list > li > a:focus {
-  color: #00a79d;
+  color: #74BD43;
 }
 .no-skin .nav-list > li .submenu > li.active > a:hover,
 .no-skin .nav-list > li .submenu > li.active > a:focus,
 .no-skin .nav-list > li .submenu > li.active > a {
-  color: #00a79d;
+  color: #74BD43;
  }
 .no-skin .nav-list > li .submenu > li > a:hover,
 .no-skin .nav-list > li .submenu > li > a:focus {
-  color: #00a79d;
+  color: #74BD43;
  }
  
  .no-skin .nav-list li.active > a:after {
-  border-right-color: #00a79d;
-  -moz-border-right-colors: #00a79d;
+  border-right-color: #74BD43;
+  -moz-border-right-colors: #74BD43;
 }
 .no-skin .nav-list > li.active:after {
-  border-color: #00a79d;
+  border-color: #74BD43;
 }
 
 .nav-list > li:before {
-  background-color: #00a79d;
+  background-color: #74BD43;
 } 
  
  .no-skin .nav-list > li > .submenu li > .submenu > li a {
   color: #757575;
 }
 .no-skin .nav-list > li > .submenu li > .submenu > li a:hover {
-  color: #00a79d;
+  color: #74BD43;
 }
 .no-skin .nav-list > li > .submenu li.open > a {
-  color: #00a79d;
+  color: #74BD43;
 }
 .no-skin .nav-list > li > .submenu li > .submenu li.open > a,
 .no-skin .nav-list > li > .submenu li > .submenu li.active > a {
-  color: #00a79d;
+  color: #74BD43;
 }
 .no-skin .nav-list > li > .submenu:before,
 .no-skin .nav-list > li > .submenu > li:before {
@@ -66,10 +66,10 @@
 }
  
 .no-skin .sidebar.navbar-collapse .nav-list > li .submenu > li.active.hover > a.dropdown-toggle > .menu-icon {
-color: #00a79d;
+color: #74BD43;
 }
 .no-skin .sidebar.navbar-collapse .nav-list > li .submenu > li.active.open.hover > a.dropdown-toggle > .menu-icon {
-color: #00a79d;
+color: #74BD43;
 }
   
 .no-skin .nav-list>li.open>a { 
@@ -103,7 +103,7 @@ color: #00a79d;
 }
 
 .login-box .toolbar {
-  background: #00a79d;
+  background: #74BD43;
   border-top: 0px solid #666666;
 }
 
@@ -126,8 +126,8 @@ color: #00a79d;
 
 .btn-primary,
 .btn-primary:focus {
-  background-color: #00a79d!important;
-  border-color: #00a79d;
+  background-color: #74BD43!important;
+  border-color: #74BD43;
 }
 
 .btn-primary:hover,

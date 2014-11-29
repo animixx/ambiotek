@@ -225,6 +225,7 @@ class Usuario implements UserInterface, \Serializable
         return null;
     }
 	
+	//roles es un arreglo global del bundle security, por lo cual es quien debe existir, en este caso se ocupa alternamente con tipo el cual se convierte en arreglo
 	 /**
      * Get roles
      *

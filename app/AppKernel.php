@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Brown298\DataTablesBundle\Brown298DataTablesBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
             new Eye3\CaminosBundle\Eye3CaminosBundle(),
         );

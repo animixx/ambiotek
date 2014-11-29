@@ -9,3 +9,12 @@
 /vendor/
 /bin/
 /composer.phar
+/error_log
+/app/error_log
+/composer.lock
+/web/app_dev.php
+/web/config.php
+/web/error_log
+/debug
+/web/assetic/
+/web/js/
