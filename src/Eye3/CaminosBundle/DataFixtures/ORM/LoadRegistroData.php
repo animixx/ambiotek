@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Eye3\CaminosBundle\Entity\Registro;
 
-class LoadRegistroData implements FixtureInterface
+class LoadRegistroData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * {@inheritDoc}
@@ -15,12 +15,12 @@ class LoadRegistroData implements FixtureInterface
     {
         $creacionAdmin = new Registro();
         $creacionAdmin->setAccion('Creación');
+		$creacionAdmin->setFecha();
         $creacionAdmin->setUsuario($this->getReference('admin-user'));
 
         $manager->persist($creacionAdmin);
         $manager->flush();
 		
-		 $this->addReference('admin-user', $creacionAdmin);
     }
 	
 	  /**

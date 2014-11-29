@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Eye3\CaminosBundle\Entity\Usuario;
 
-class LoadUsuarioData implements FixtureInterface
+class LoadUsuarioData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * {@inheritDoc}
