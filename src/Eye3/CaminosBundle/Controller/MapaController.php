@@ -5,7 +5,7 @@ namespace Eye3\CaminosBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Eye3\CaminosBundle\Entity\Pmdata;
+use Eye3\CaminosBundle\Entity\Sightdata;
 use Ivory\GoogleMap\Map,
 	Ivory\GoogleMap\MapTypeId,
     Ivory\GoogleMap\Overlays\Marker;
@@ -22,7 +22,7 @@ class MapaController extends Controller
     {
 	
 		$em = $this->getDoctrine()->getManager();
-		$puntos = $em->getRepository('Eye3CaminosBundle:Pmdata')->GetPuntos();
+		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetPuntos();
 		
 		$map = new Map();
 

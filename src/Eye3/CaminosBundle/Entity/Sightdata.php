@@ -5,12 +5,12 @@ namespace Eye3\CaminosBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pmdata
+ * Sightdata
  *
- * @ORM\Table(name="pmdata", indexes={@ORM\Index(name="id_gps", columns={"id_gps"})})
- * @ORM\Entity(repositoryClass="Eye3\CaminosBundle\Entity\PmdataRepository")
+ * @ORM\Table(name="sightdata", indexes={@ORM\Index(name="id_gps", columns={"id_gps"})})
+ * @ORM\Entity(repositoryClass="Eye3\CaminosBundle\Entity\SightdataRepository")
  */
-class Pmdata
+class Sightdata
 {
     /**
      * @var integer
@@ -68,7 +68,7 @@ class Pmdata
      * Set value
      *
      * @param string $value
-     * @return Pmdata
+     * @return Sightdata
      */
     public function setValue($value)
     {
@@ -91,7 +91,7 @@ class Pmdata
      * Set utctime
      *
      * @param string $utctime
-     * @return Pmdata
+     * @return Sightdata
      */
     public function setUtctime($utctime)
     {
@@ -114,7 +114,7 @@ class Pmdata
      * Set date
      *
      * @param string $date
-     * @return Pmdata
+     * @return Sightdata
      */
     public function setDate($date)
     {
