@@ -1,24 +1,22 @@
 security:
     firewalls:
-        secured_area:
-            pattern:   ^/
-            anonymous: ~
-            form_login: ~
-            logout:
-                path: /logout
-                target: /
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+            logout:       true
+            anonymous:    true
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: [ROLE_USER , ROLE_ADMIN] }
-        # Include the following line to also secure the /admin path itself
-        # - { path: ^/admin$, roles: ROLE_ADMIN }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
 
     providers:
-        main:
-            entity:
-                class: Eye3\CaminosBundle\Entity\Usuario
-                property: username
+        fos_userbundle:
+            id: fos_user.user_provider.username
 
     encoders:
-        Eye3\CaminosBundle\Entity\Usuario: plaintext
+        FOS\UserBundle\Model\UserInterface: sha512

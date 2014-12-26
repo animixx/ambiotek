@@ -23,7 +23,9 @@
 		"widop/http-adapter": "~1.1.0",
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
         "willdurand/geocoder": "~2.0",
-        "incenteev/composer-parameter-handler": "~2.0"
+		"friendsofsymfony/user-bundle": "~2.0@dev",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

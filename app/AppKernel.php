@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Ivory\GoogleMapBundle\IvoryGoogleMapBundle(),
             new Eye3\CaminosBundle\Eye3CaminosBundle(),
+			new FOS\UserBundle\FOSUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

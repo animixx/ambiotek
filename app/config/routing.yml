@@ -4,15 +4,22 @@ eye3_caminos:
     prefix:   /
 
 login:
-    path:     /login
+    path:     /logon
     defaults: { _controller: Eye3CaminosBundle:Security:login }
 
 login_check:
-    path: /login_check
+    path: /logon_check
 
 logout:
-    path: /logout
+    path: /logot
 
 home_page:
     path: /
     defaults: { _controller: Eye3CaminosBundle:Mapa:index }
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /grupos

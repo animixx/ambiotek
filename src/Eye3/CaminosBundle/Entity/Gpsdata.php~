@@ -1,0 +1,109 @@
+<?php
+
+namespace Eye3\CaminosBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Gpsdata
+ *
+ * @ORM\Table(name="gpsdata")
+ * @ORM\Entity
+ */
+class Gpsdata
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=5, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="utctime", type="string", length=10, nullable=true)
+     */
+    private $utctime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="date", type="string", length=6, nullable=true)
+     */
+    private $date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=1, nullable=true)
+     */
+    private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="latitude", type="string", length=9, nullable=true)
+     */
+    private $latitude;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ns", type="string", length=1, nullable=true)
+     */
+    private $ns;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="longitude", type="string", length=10, nullable=true)
+     */
+    private $longitude;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ew", type="string", length=1, nullable=true)
+     */
+    private $ew;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="speed", type="string", length=10, nullable=true)
+     */
+    private $speed;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fix", type="string", length=1, nullable=true)
+     */
+    private $fix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="satellites", type="string", length=2, nullable=true)
+     */
+    private $satellites;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="altitude", type="string", length=10, nullable=true)
+     */
+    private $altitude;
+
+
+}

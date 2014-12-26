@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Eye3\CaminosBundle\Entity\Usuario;
 use Eye3\CaminosBundle\Entity\Registro;
@@ -26,7 +25,6 @@ class UsoController extends Controller
     *
     * @Route("/uso", name="uso_sistema")
     * @Template()
-	* @Security("has_role('ROLE_ADMIN')")
 	* @param \Symfony\Component\HttpFoundation\Request $request
     * @return array
     */
@@ -48,7 +46,6 @@ class UsoController extends Controller
     *
     * @Route("/usuarios", name="usuarios")
     * @Template("Eye3CaminosBundle:Uso:user.html.twig")
-	* @Security("has_role('ROLE_ADMIN')")
 	* @param \Symfony\Component\HttpFoundation\Request $request
     * @return array
     */
@@ -69,7 +66,6 @@ class UsoController extends Controller
     * Displays a form to create a new Usuario entity.
     *
     * @Route("/usuarios/new", name="nuevo_usuario")
-	* @Security("has_role('ROLE_ADMIN')")
     * @Template()
     */
     public function newAction(Request $request)
@@ -137,7 +133,6 @@ class UsoController extends Controller
      *
      * @Route("/usuarios/deleteconfirm/{id}", name="user_deleteconfirm")
      * @Method("GET")
-	 * @Security("has_role('ROLE_ADMIN')")
      * @Template()
      */
     public function deleteconfirmAction(Request $request, $id)
@@ -157,7 +152,6 @@ class UsoController extends Controller
      * Deletes a Usuario entity.
      *
      * @Route("/{id}", name="users_delete")
-	 * @Security("has_role('ROLE_ADMIN')")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -189,7 +183,6 @@ class UsoController extends Controller
     /**
      * Creates a form to delete a Usuario entity by id.
      * @param mixed $id The entity id
-     * @Security("has_role('ROLE_ADMIN')")
      *
      * @return \Symfony\Component\Form\Form The form
      */
