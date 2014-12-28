@@ -15,9 +15,30 @@ use Eye3\CaminosBundle\Entity\Sightdata;
 class SightdataRepository extends EntityRepository
 {
 
+		public function GetMedicion($tipo=true)
+		{
+			if ($tipo)
+			{
+				$query = $this->getEntityManager()
+				->getConnection()
+				->prepare(
+					'select avg(tsplat) as tpm, avg(pm10lat) as pm10, avg(pm25lat) as pm25, avg(pm1lat) as pm1, id_tramo as id from pmdata group by id_tramo having id_tramo is not null  '
+				);
+			}
+			else
+			{
+				$query = $this->getEntityManager()
+				->getConnection()
+				->prepare(
+					'SELECT * FROM pmdata join gpsdata on id_gps=id '
+				);
+			}
+			$query->execute();
+
+			return $query->fetchAll();
+		}
 		
-		
-		public function GetPuntos($fecha = "031214")
+		public function GetSightDots($fecha = "031214")
 		{
 			$query = $this->getEntityManager()
 				->createQuery(

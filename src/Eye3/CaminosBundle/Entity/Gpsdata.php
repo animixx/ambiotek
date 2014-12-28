@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Gpsdata
  *
  * @ORM\Table(name="gpsdata")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Eye3\CaminosBundle\Entity\GpsdataRepository")
  */
 class Gpsdata
 {
