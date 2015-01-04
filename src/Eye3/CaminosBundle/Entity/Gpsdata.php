@@ -24,13 +24,6 @@ class Gpsdata
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=5, nullable=true)
-     */
-    private $type;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="utctime", type="string", length=10, nullable=true)
      */
     private $utctime;
@@ -115,29 +108,6 @@ class Gpsdata
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return Gpsdata
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**

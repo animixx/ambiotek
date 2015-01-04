@@ -52,8 +52,8 @@
 	</head>
 
 	<body class="no-skin">
-	
-		<!-- #section:basics/navbar.layout -->
+
+	<!-- #section:basics/navbar.layout -->
 		<div id="navbar" class="navbar navbar-default">
 			<script type="text/javascript">
 				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
@@ -161,22 +161,67 @@
 
 					
 					<li class="{% if app.request.attributes.get('_controller')|slice(30,8) == 'Graficos' %}active open{% endif %}">
-						<a href="{{path('graficos')}}" >
+						<a href="" class="dropdown-toggle" >
 							<i class="menu-icon fa fa-bar-chart-o"></i>
 
-							<span class="menu-text">Gráficos</span>
+							<span class="menu-text">Niveles</span>
+							<b class="arrow fa fa-angle-down"></b>
 							
 						</a>
+								<b class="arrow"></b>
 
+									<ul class="submenu">
+										<li class="{% if app.request.attributes.get('_controller')|slice(50,11) == 'polvoAction' %}active {% endif %}">
+											<a href="{{path('polvo')}}">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Polvo
+											</a>
+
+											<b class="arrow"></b>
+										</li>
+
+										<li class="{% if app.request.attributes.get('_controller')|slice(50,13) == 'aditivoAction' %}active {% endif %}">
+											<a href="{{path('aditivo')}}">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Agua y Aditivo
+											</a>
+
+											<b class="arrow"></b>
+										</li>
+
+									</ul>
 					</li>
 
-					<li class="{% if app.request.attributes.get('_controller')|slice(30,12) == 'Programacion' %}active open{% endif %}">
-						<a href="{{path('actividades')}}" >
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,11) == 'Actividades' %}active open{% endif %}">
+						<a href="" class="dropdown-toggle" >
 							<i class="menu-icon fa fa-calendar"></i>
 
-							<span class="menu-text">Programación</span>
+							<span class="menu-text">Planificación</span>
+							<b class="arrow fa fa-angle-down"></b>
 							
 						</a>
+								<b class="arrow"></b>
+
+									<ul class="submenu">
+										<li class="{% if app.request.attributes.get('_controller')|slice(53,13) == 'observaciones' %}active {% endif %}">
+											<a href="{{path('observaciones')}}">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Observaciones Camino
+											</a>
+
+											<b class="arrow"></b>
+										</li>
+
+										<li class="{% if app.request.attributes.get('_controller')|slice(53,11) == 'conductores' %}active {% endif %}">
+											<a href="{{path('conductores')}}">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Conductores
+											</a>
+
+											<b class="arrow"></b>
+										</li>
+
+									</ul>
 
 					</li>
 						

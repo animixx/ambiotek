@@ -6,16 +6,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class ProgramacionController extends Controller
+class PlanificacionController extends Controller
 {
     /**
-     * @Route("programacion")
+     * @Route("planificacion")
      * @Template()
      */
     public function indexAction()
     {
         $fecha = date("d-m-Y");
-		
+
 		return array(
                 'fecha' => $fecha,
             );    }

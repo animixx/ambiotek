@@ -34,7 +34,7 @@ class GpsdataRepository extends EntityRepository
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					'SELECT id,NombreTramo from tramoMapa'.(is_null($area)?'':" where zonaid = $area")
+					'SELECT id,NombreTramo from tramoMapa where 1 '.(is_null($area)?'':" and zonaid = $area")
 				);
 
 			$query->execute();

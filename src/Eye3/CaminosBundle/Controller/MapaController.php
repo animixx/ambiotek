@@ -2,14 +2,17 @@
 
 namespace Eye3\CaminosBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Templating\Helper\AssetsHelper;
 use Eye3\CaminosBundle\Entity\Sightdata;
 use Ivory\GoogleMap\Map,
 	Ivory\GoogleMap\MapTypeId,
     Ivory\GoogleMap\Overlays\Marker,
 	Ivory\GoogleMap\Overlays\Polyline,
+	Ivory\GoogleMap\Events\Event,
 	Ivory\GoogleMap\Events\MouseEvent,
 	Ivory\GoogleMap\Overlays\InfoWindow;
 	
@@ -19,35 +22,53 @@ class MapaController extends Controller
      * @Route("/mapa", name="mapa")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-	
-		$em = $this->getDoctrine()->getManager();
-		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetSightDots();
-		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false);
-		$medicionXtramos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion();
 		
-		$tramos = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos();
+		// $fecha = date("d-m-Y");
+		$fecha = $request->request->get('fecha', '03-12-2014');;
+		$date= date_create($fecha);
+
+		$em = $this->getDoctrine()->getManager();
+		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetSightDots($date->format('dmy'));
+		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
+		$medicionXtramos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(true,$date->format('dmy'));
+		
+		$tramos = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos(3);
+		
 		
 		$map = new Map();
 
 		// Enable the auto zoom flag
-		// $map->setAutoZoom(true);
+		$map->setAutoZoom(true);
 		
-		$map->setCenter(-21.004101,-68.792018, true);
-		$map->setMapOption('zoom', 16);
+		// $map->setCenter(-21.004101,-68.792018, true);
+		// $map->setMapOption('zoom', 16);
 		
-		$dot = 'http://issues.carrot2.org/secure/attachmentzip/unzip/10816/10145%5B1%5D/center-vertical/dot.png';
-		
+		$map->setMapOption('streetViewControl', false);
 		$map->setMapOption('mapTypeId', MapTypeId::SATELLITE);
-		$map->setMapOption('mapTypeId', 'satellite');
-		$cuentaPunto=1;
+		$map->setMapOption('mapTypeControl', false);
+	
 		
+		$dot_red = '/testing/web/bundles/eye3caminos/images/dot-red.png';
+		$dot_blue = '/testing/web/bundles/eye3caminos/images/dot-blue.png';
+		$dot_green = '/testing/web/bundles/eye3caminos/images/dot-green.png';
+		$dot_yellow = '/testing/web/bundles/eye3caminos/images/dot-yellow.png';
+		
+		// $dot_red =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-red.png');
+		// $dot_blue =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-blue.png','eye3caminos');
+		// $dot_green =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-green.png','eye3caminos');
+		// $dot_yellow =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-yellow.png','eye3caminos');
+		
+		$cuentaPunto=0;
+		
+		$eventos[]=array('tramo','polylines');
 		foreach ($medicionXtramos as $tramo)
 		{
 			$polyline="polyline".$tramo['id'];
 			$infoWindow="infoWindow".$tramo['id'];
 			$$polyline = new Polyline();
+			$$polyline->setPrefixJavascriptVariable('tramo_');
 			
 			$punto_tramo = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramo($tramo['id']);
 
@@ -72,12 +93,12 @@ class MapaController extends Controller
 				'pane' => "mapPane",
 				'enableEventPropagation' => true
 				));
-			$$infoWindow->setOpen(false);
+			$$infoWindow->setOpen(true);
 			$$infoWindow->setAutoOpen(true);
 			$$infoWindow->setOpenEvent(MouseEvent::MOUSEOVER);
 			$$infoWindow->setAutoClose(true);
 
-			// $$polyline->setInfoWindow($$infoWindow);
+			$$polyline->setInfoWindow($$infoWindow);
 			
 			$$polyline->setOptions(array(
 				'geodesic'    => true,
@@ -88,10 +109,12 @@ class MapaController extends Controller
 			$map->addPolyline($$polyline);
 		}
 		
+		$eventos[]=array('ruta','polylines');
 		foreach ($tramos as $tramo)
 		{
 			$polyline="polyline".$tramo['id'];
 			$$polyline = new Polyline();
+			$$polyline->setPrefixJavascriptVariable('ruta_');
 			
 			$punto_tramo = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramo($tramo['id']);
 
@@ -111,47 +134,7 @@ class MapaController extends Controller
 			$map->addPolyline($$polyline);
 		}
 		
-		foreach ($puntos as $marca)
-		{
-			print_r($marca);exit;
-			$latitud = substr($marca->getIdGps()->getLatitude(),0,2);
-			$longitud = substr($marca->getIdGps()->getLongitude(),0,3);
-			$decimal_latitud = substr($marca->getIdGps()->getLatitude(), 2);
-			$decimal_longitud = substr($marca->getIdGps()->getLongitude(), 3);
-			
-				$cuentaPunto++;
-				$marker="marker".$cuentaPunto;
-				$infoWindow="infoWindow".$cuentaPunto;
-			// Add marker overlay to your map
-				$$marker = new Marker();
-				$$marker->setPosition(-($latitud+($decimal_latitud/60)),-($longitud+($decimal_longitud/60)), true);  
-				$$marker->setIcon($dot);
-				
-
-			$$infoWindow = new InfoWindow();
-
-			// Configure your info window options
-			$$infoWindow->setContent("<div style='width:".(strlen($marca->getValue())*6+10)."px;'>".$marca->getValue()."</div>");
-			$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
-			$$infoWindow->setOptions(array(
-				'disableAutoPan' => true,
-				'zIndex'         => 10,
-				'flat'         => false,
-				'width' => '200px',
-				'pane' => "mapPane",
-				'enableEventPropagation' => true
-				));
-			$$infoWindow->setOpen(false);
-			$$infoWindow->setAutoOpen(true);
-			$$infoWindow->setOpenEvent(MouseEvent::MOUSEOVER);
-			$$infoWindow->setAutoClose(true);
-
-			$$marker->setInfoWindow($$infoWindow);
-			
-			$map->addMarker($$marker);
-			 // if ($cuentaPunto==3 )break;
-		}	
-				
+		$eventos[]=array('medicion','markers');
 		foreach ($medicionXpuntos as $maraca)
 		{
 			
@@ -159,23 +142,31 @@ class MapaController extends Controller
 				$infoWindow="infoWindow".$maraca['id_gps'];
 			// Add marker overlay to your map
 				$$marker = new Marker();
+				$$marker->setPrefixJavascriptVariable('medicion_');
 				$$marker->setPosition($maraca['latitud'],$maraca['longitud'], true);  
-				$$marker->setIcon($dot);
-				
+				if ($maraca['id_tramo']>0)
+					$$marker->setIcon($dot_green);
+				else
+					$$marker->setIcon($dot_red);
 
 			$$infoWindow = new InfoWindow();
-
+			
 			// Configure your info window options
-			$$infoWindow->setContent("<div >PM25=".$maraca['pm25lat']."</div>");
+			$info='';
+			if ($maraca['tsplat']) {$info.=" TSP=".$maraca['tsplat'];};
+			if ($maraca['pm10lat']) {$info.=" PM10=".$maraca['pm10lat'];};
+			if ($maraca['pm25lat']) {$info.=" PM2.5=".$maraca['pm25lat'];};
+			if ($maraca['pm1lat']) {$info.=" PM1=".$maraca['pm1lat'];};
+			$$infoWindow->setContent("<div style='width:".(strlen($info)*6+10)."px;'>$info</div>");
 			$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
-			$$infoWindow->setOptions(array(
-				'disableAutoPan' => true,
-				'zIndex'         => 10,
-				'flat'         => false,
-				'width' => '200px',
-				'pane' => "mapPane",
-				'enableEventPropagation' => true
-				));
+			// $$infoWindow->setOptions(array(
+				// 'disableAutoPan' => true,
+				// 'zIndex'         => 10,
+				// 'flat'         => false,
+				// 'width' => '200px',
+				// 'pane' => "mapPane",
+				// 'enableEventPropagation' => true
+				// ));
 			$$infoWindow->setOpen(false);
 			$$infoWindow->setAutoOpen(true);
 			$$infoWindow->setOpenEvent(MouseEvent::MOUSEOVER);
@@ -184,12 +175,81 @@ class MapaController extends Controller
 			$$marker->setInfoWindow($$infoWindow);
 			
 			$map->addMarker($$marker);
-			 // if ($cuentaPunto==3 )break;
+			 // if ($cuentaPuto==263 )break;
 		}	
 		
+		$eventos[]=array('observacion','markers');
+		foreach ($puntos as $marca)
+		{
+			if (!is_numeric ($marca->getValue()))
+			{
+				$latitud = substr($marca->getIdGps()->getLatitude(),0,2);
+				$longitud = substr($marca->getIdGps()->getLongitude(),0,3);
+				$decimal_latitud = substr($marca->getIdGps()->getLatitude(), 2);
+				$decimal_longitud = substr($marca->getIdGps()->getLongitude(), 3);
+				
+					$cuentaPunto++;
+					$marker="marker".$cuentaPunto;
+					$infoWindow="infoWindow".$cuentaPunto;
+				// Add marker overlay to your map
+					$$marker = new Marker();
+					$$marker->setPrefixJavascriptVariable('observacion_');
+					$$marker->setPosition(-($latitud+($decimal_latitud/60+0.00002)),-($longitud+($decimal_longitud/60+0.00003)), true);  
+					$$marker->setIcon($dot_blue);
+					
+
+				$$infoWindow = new InfoWindow();
+
+				// Configure your info window options
+				$$infoWindow->setContent("<div style='width:".(strlen($marca->getValue())*6+10)."px;'>".$marca->getValue()."</div>");
+				$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
+				$$infoWindow->setOptions(array(
+					'disableAutoPan' => true,
+					'zIndex'         => 10,
+					'flat'         => false,
+					'width' => '200px',
+					'pane' => "mapPane",
+					'enableEventPropagation' => true
+					));
+				$$infoWindow->setOpen(false);
+				$$infoWindow->setAutoOpen(true);
+				$$infoWindow->setOpenEvent(MouseEvent::MOUSEOVER);
+				$$infoWindow->setAutoClose(true);
+
+				$$marker->setInfoWindow($$infoWindow);
+				
+				$map->addMarker($$marker);
+				 // if ($cuentaPunto==2 )break;
+			}
+		}	
+		
+		foreach ($eventos as $evento)
+		{
+				$event = 'event_'.$evento[0];
+				$instance = 'instance_'.$evento[0];
+				$handle = 'handle_'.$evento[0];
+				
+				$$event = new Event();
+
+				$$instance = 'document.getElementById("'.$evento[0].'")';
+				$$handle = 'function(){ 
+										var map; var container = '.$map->getJavascriptVariable().'_container; 
+										if ('.$$instance.'.checked){ map = '.$map->getJavascriptVariable().';};
+										for (var dato in container.'.$evento[1].') 
+												{ if (dato.split("_",1)=="'.$evento[0].'") {container.'.$evento[1].'[dato].setMap(map)}}
+									}';
+				// Configure your event
+				$$event->setInstance($$instance);
+				$$event->setEventName('click');
+				$$event->setHandle($$handle);
+				
+				$map->getEventManager()->addDomEvent($$event);
+				
+		}
+	
 		
 		$map->setStylesheetOptions(array(
-			'width'  => '800px',
+			'width'  => '100%',
 			'height' => '500px'
 		));
 
@@ -197,6 +257,7 @@ class MapaController extends Controller
 
         return array(
                'map' => $map,
+			   'fecha' => $fecha,
             );    }
 
 }

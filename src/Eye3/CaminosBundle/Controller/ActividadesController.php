@@ -13,7 +13,7 @@ use Eye3\CaminosBundle\Form\ActividadesType;
 /**
  * Actividades controller.
  *
- * @Route("/actividades")
+ * @Route("/")
  */
 class ActividadesController extends Controller
 {
@@ -21,13 +21,13 @@ class ActividadesController extends Controller
     /**
      * Lists all Actividades entities.
      *
-     * @Route("/", name="actividades")
+     * @Route("/observaciones", name="observaciones")
      * @Method("GET")
      * @Template()
 	 * @param \Symfony\Component\HttpFoundation\Request $request
 	 * @return array
      */
-    public function indexAction(Request $request)
+    public function observacionesAction(Request $request)
     {
         $fecha = date("d-m-Y");
 		
@@ -42,10 +42,11 @@ class ActividadesController extends Controller
         );
 
     }
+	
     /**
      * Creates a new Actividades entity.
      *
-     * @Route("/", name="actividades_create")
+     * @Route("/actividades", name="actividades_create")
      * @Method("POST")
      * @Template("Eye3CaminosBundle:Actividades:new.html.twig")
      */
@@ -91,7 +92,7 @@ class ActividadesController extends Controller
     /**
      * Displays a form to create a new Actividades entity.
      *
-     * @Route("/new", name="actividades_new")
+     * @Route("/actividades/new", name="actividades_new")
      * @Template()
      */
     public function newAction(Request $request)
@@ -130,7 +131,7 @@ class ActividadesController extends Controller
     /**
      * Finds and displays a Actividades entity.
      *
-     * @Route("/{id}", name="actividades_show")
+     * @Route("/actividades/{id}", name="actividades_show")
      * @Method("GET")
      * @Template()
      */
@@ -200,7 +201,7 @@ class ActividadesController extends Controller
     /**
      * Edits an existing Actividades entity.
      *
-     * @Route("/{id}", name="actividades_update")
+     * @Route("/actividades/{id}", name="actividades_update")
      * @Method("PUT")
      * @Template("Eye3CaminosBundle:Actividades:edit.html.twig")
      */
@@ -253,7 +254,7 @@ class ActividadesController extends Controller
     /**
      * Deletes a Actividades entity.
      *
-     * @Route("/{id}", name="actividades_delete")
+     * @Route("/actividades/{id}", name="actividades_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -292,4 +293,19 @@ class ActividadesController extends Controller
             ->getForm()
         ;
     }
+	
+	/**
+     * @Route("/conductores", name="conductores")
+     * @Template()
+     */
+    public function conductoresAction()
+    {
+        $fecha = date("d-m-Y");
+
+		return array(
+                'fecha' => $fecha,
+            );    
+	}
+	
+
 }

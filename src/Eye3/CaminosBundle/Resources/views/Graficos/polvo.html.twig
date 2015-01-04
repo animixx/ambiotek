@@ -27,18 +27,16 @@ value="{{fecha}}" />
         </div>
 		
 		<div class="col-12">
-			<div class="page-header"><h1>Gráficos </h1></div>
+			<div class="page-header"><h1>Gráficos Polvo</h1></div>
 		</div>
 		
 		<div class="col-12">
-			<div class="col-sm-10 col-sm-offset-1 col-xs-12 ">
-				<img src='{{asset('bundles/eye3caminos/images/particulado1.png')}}' class="img-responsive">
-			</div>
-			<div class="col-sm-10 col-sm-offset-1 col-xs-12 ">
-				<img src='{{asset('bundles/eye3caminos/images/particulado10.png')}}' class="img-responsive">
-			</div>
+			
+				<div id="placeholder1" ></div><br><br>
+				<div id="placeholder2"></div><br><br>
+				<div id="placeholder3" ></div><br><br>
+				<div id="placeholder4" ></div>
 		</div>
-		
 		
 <!-- basic scripts en base -->
 		<!--[if !IE]> -->
@@ -63,15 +61,78 @@ value="{{fecha}}" />
 
             <script src="{{ asset('bundles/eye3caminos/js/date-time/bootstrap-datepicker.js') }}" type="text/javascript"></script>
             <script src="{{ asset('bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
-           
+            <script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.min.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.time.min.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.resize.min.js') }}" type="text/javascript"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+ 
+			//flot chart resize plugin, somehow manipulates default browser resize event to optimize it!
+			  //but sometimes it brings up errors with normal resize event handlers
+			  $.resize.throttleWindow = false;
+			  
+			var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+			var previousPoint = null;
+				  
+			{% set graficos = {'tpm':"#EE3830", 'pm10':"#F47A2C", 'pm25':"#9CCC51", 'pm1':"#00828F"} %}
 			
+			{% for medicion,color in graficos %}
+				{% if datos[0][medicion]  %}
+					var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'200px'});
+			
+					var build_{{medicion}}_data = [
+							{%- for i in datos[1:] -%}
+								[{{(fecha|date("Ymd")~'T'~(i.utctime|round))|date("U")}}000, {{i[medicion]}}]
+								{% if not loop.last %},{% endif %}
+							{%- endfor -%}
+						  ]
+
+					var data{{loop.index}} = [
+						{label: "{{medicion}}", data: build_{{medicion}}_data, color: "{{color}}"}
+					];
+		 
+					var options = {
+						xaxis: { 
+								mode: "time" ,
+								timezone: "browser"
+							{#	timezone: "UTC" la otra alternativa seria #}
+						}, yaxis: {
+						}, grid: {
+							hoverable: true,
+							clickable: true,
+							borderWidth: .3
+						}, legend: {
+						}, series: {
+						}
+					};
+	 
+					$.plot($("#placeholder{{loop.index}}"), data{{loop.index}}, options);	
+					
+
+
+					placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
+						if(item) {
+								var fecha = new Date(item.datapoint[0]);
+							if (previousPoint != item.seriesIndex) {
+								previousPoint = item.seriesIndex;
+								var tip = fecha.toLocaleTimeString() + " -> " + item.datapoint[1].toFixed(1) ; 
+								$tooltip.show().children(0).text(tip);
+							}
+							$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5});
+						} else {
+							$tooltip.hide();
+							previousPoint = null;
+						}
+						
+					 });
+				{% endif %}
+			{% endfor %}
+ 
+        });
 		
-<script type="text/javascript">
-
+		
         jQuery(function($) {
-
-
 
                                 //datepicker plugin
                                 //link
@@ -87,7 +148,6 @@ value="{{fecha}}" />
                                 .next().on(ace.click_event, function(){
                                         $(this).prev().focus();
                                 });
-
 
                         });
 

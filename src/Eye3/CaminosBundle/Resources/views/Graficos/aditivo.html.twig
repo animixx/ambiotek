@@ -1,17 +1,15 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}Eye3CaminosBundle:Mapa:index{% endblock %}
-
 {% block stylesheets %}
 {{ parent() }}
                 <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker.css') }}" />
                 <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker3.css') }}" />
-
 {% endblock %}
 
+
 {% block body %}
-   
-    <div class="row" >
+
+   <div class="row" >
                 <div class="col-md-4 col-xs-2"></div>
                 <div class="col-md-3 col-xs-8">
                         <!-- #section:plugins/date-time.datepicker -->
@@ -28,23 +26,12 @@ value="{{fecha}}" />
                 </div>
         </div>
 		
+		<div class="col-12">
+			<div class="page-header"><h1>Gráficos Agua y Aditivos</h1></div>
+		</div>
 		
-<div class="row">
-				<div class="col-12">
-					<div class="page-header"><h1>Mapa </h1></div>
-				</div>
-</div>
- <div id="panel">Ruta 1 : 
-      <input type=checkbox id='ruta' checked >Ver Ruta | 
-      <input type=checkbox id='tramo' checked >Ver Tramos |  
-      <input type=checkbox id='medicion' checked >Ver Medición | 
-      <input type=checkbox id='observacion' checked >Ver Observaciones
-    </div>
-{{ google_map_container(map) }}
-{{ google_map_js(map) }}
-
-
-	
+		
+		
 <!-- basic scripts en base -->
 		<!--[if !IE]> -->
 		<script type="text/javascript">
@@ -62,15 +49,16 @@ value="{{fecha}}" />
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='{{asset('bundles/eye3caminos/js/jquery.mobile.custom.min.js')}}'>"+"<"+"/script>");
 		</script>
+			
+			
+
+
+            <script src="{{ asset('bundles/eye3caminos/js/date-time/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
+           
+
+			
 		
- {% javascripts 
-			'bundles/eye3caminos/js/date-time/bootstrap-datepicker.js'
-			'bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js'
-            %}
-            <script src="{{ asset_url }}" type="text/javascript"></script>
-        {% endjavascripts %}
-
-
 <script type="text/javascript">
 
         jQuery(function($) {
@@ -95,5 +83,6 @@ value="{{fecha}}" />
 
                         });
 
-</script>	
+</script>		
+	
 {% endblock %}

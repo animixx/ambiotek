@@ -15,22 +15,54 @@ use Eye3\CaminosBundle\Entity\Sightdata;
 class SightdataRepository extends EntityRepository
 {
 
-		public function GetMedicion($tipo=true)
-		{
+		public function GetMedicion($tipo=true,$fecha = '031214')
+		{ 
 			if ($tipo)
 			{
+				//con esta opcion se obtienen los tramos medidos con sus respectivos promedios
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					'select avg(tsplat) as tpm, avg(pm10lat) as pm10, avg(pm25lat) as pm25, avg(pm1lat) as pm1, id_tramo as id from pmdata group by id_tramo having id_tramo is not null  '
+					"select avg(tsplat) as tpm, avg(pm10lat) as pm10, avg(pm25lat) as pm25, avg(pm1lat) as pm1, id_tramo as id from pmdata join gpsdata on id_gps=id where date='$fecha' group by id_tramo having id_tramo is not null "
 				);
 			}
 			else
 			{
+				//con esta otra opcion se obtienen TODOS los puntos de la medicion incluyendo los que no pertenecen a un tramo
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					'SELECT * FROM pmdata join gpsdata on id_gps=id '
+					"SELECT * FROM pmdata join gpsdata on id_gps=id where date='$fecha'"
+				);
+			}
+			$query->execute();
+
+			return $query->fetchAll();
+		}
+		
+		public function GraficarMedicion($tipo=true,$fecha = '031214')
+		{ 
+			if ($tipo)
+			{
+				//con esta opcion se obtienen los tramos medidos con sus respectivos promedios
+				$query = $this->getEntityManager()
+				->getConnection()
+				->prepare(
+					"select avg(tsplat) as tpm, avg(pm10lat) as pm10, avg(pm25lat) as pm25, avg(pm1lat) as pm1, id_tramo as id from pmdata join gpsdata on id_gps=id where date='$fecha' group by id_tramo having id_tramo is not null "
+				);
+			}
+			else
+			{
+				//con esta otra opcion se obtienen TODOS los puntos de la medicion incluyendo los que no pertenecen a un tramo
+				$query = $this->getEntityManager()
+				->getConnection()
+				->prepare(
+					"SELECT round(avg(tsplat),1) as tpm, round(avg(pm10lat),1) as pm10, round(avg(pm25lat),1) as pm25, round(avg(pm1lat),1) as pm1, null, null as utctime FROM pmdata join gpsdata on id_gps=id where date='$fecha' 
+							and ( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null) 
+					UNION
+					SELECT round(tsplat,1), round(pm10lat,1), round(pm25lat,1), round(pm1lat,1), id , utctime FROM pmdata join gpsdata on id_gps=id where date='$fecha'  and ( tsplat< 6000 or tsplat is null) 
+							and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null)  
+						order by utctime"
 				);
 			}
 			$query->execute();
