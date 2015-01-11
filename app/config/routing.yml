@@ -3,16 +3,6 @@ eye3_caminos:
     type:     annotation
     prefix:   /
 
-login:
-    path:     /logon
-    defaults: { _controller: Eye3CaminosBundle:Security:login }
-
-login_check:
-    path: /logon_check
-
-logout:
-    path: /logot
-
 home_page:
     path: /
     defaults: { _controller: Eye3CaminosBundle:Mapa:index }

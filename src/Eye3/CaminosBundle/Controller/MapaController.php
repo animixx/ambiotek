@@ -33,18 +33,25 @@ class MapaController extends Controller
 		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetSightDots($date->format('dmy'));
 		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
 		$medicionXtramos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(true,$date->format('dmy'));
+
+		$area = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetAreas($date->format('Y-m-d'));
 		
-		$tramos = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos(3);
-		
+		// todavia falta validar cuando mas de un area
+		$tramos = (is_numeric($area))?$em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos($area):array();
 		
 		$map = new Map();
 
-		// Enable the auto zoom flag
-		$map->setAutoZoom(true);
-		
-		// $map->setCenter(-21.004101,-68.792018, true);
-		// $map->setMapOption('zoom', 16);
-		
+		if( ( count($tramos) + count($puntos) + count($medicionXpuntos) + count($medicionXtramos))>0)
+		{
+			// Enable the auto zoom flag
+			$map->setAutoZoom(true);
+		}
+		else
+		{
+			$map->setCenter(-21.004101,-68.792018, true);
+			$map->setMapOption('zoom', 16);
+		}
+			
 		$map->setMapOption('streetViewControl', false);
 		$map->setMapOption('mapTypeId', MapTypeId::SATELLITE);
 		$map->setMapOption('mapTypeControl', false);
@@ -71,6 +78,7 @@ class MapaController extends Controller
 			$$polyline->setPrefixJavascriptVariable('tramo_');
 			
 			$punto_tramo = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramo($tramo['id']);
+		// print_r($medicionXtramos);exit;
 
 			if (is_array($punto_tramo))
 			{
@@ -181,8 +189,8 @@ class MapaController extends Controller
 		$eventos[]=array('observacion','markers');
 		foreach ($puntos as $marca)
 		{
-			if (!is_numeric ($marca->getValue()))
-			{
+			// if (!is_numeric ($marca->getValue()))
+			// {
 				$latitud = substr($marca->getIdGps()->getLatitude(),0,2);
 				$longitud = substr($marca->getIdGps()->getLongitude(),0,3);
 				$decimal_latitud = substr($marca->getIdGps()->getLatitude(), 2);
@@ -220,7 +228,7 @@ class MapaController extends Controller
 				
 				$map->addMarker($$marker);
 				 // if ($cuentaPunto==2 )break;
-			}
+			// }
 		}	
 		
 		foreach ($eventos as $evento)
@@ -258,6 +266,10 @@ class MapaController extends Controller
         return array(
                'map' => $map,
 			   'fecha' => $fecha,
+			   'rutas' => count($tramos),
+			   'observaciones' => count($puntos),
+			   'mediciones' => count($medicionXpuntos),
+			   'tramos' => count($medicionXtramos),
             );    }
 
 }

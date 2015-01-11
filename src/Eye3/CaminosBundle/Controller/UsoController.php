@@ -51,6 +51,7 @@ class UsoController extends Controller
     */
     public function userAction(Request $request)
     {
+	
         $dataTable = $this->get('data_tables.manager')->getTable('usuariosTable');
         if ($response = $dataTable->ProcessRequest($request)) {
             return $response;
@@ -71,6 +72,9 @@ class UsoController extends Controller
     public function newAction(Request $request)
     {
 		$entity = new Usuario();
+		$tipos=array('user'=>'Usuario','admin'=>'Administrador');
+		if($this->get('security.context')->isGranted('ROLE_DIOS')) $tipos['dios']='SuperAdmin';
+		
         $form = $this->createFormBuilder( $entity, array(
             'method' => 'POST',
         ))
@@ -86,20 +90,11 @@ class UsoController extends Controller
                     ),
 			'multiple'  => false,
                 ))
-			->add('password', 'repeated', array(
-                'required'=>true,
-                'type'=>'password',
-                'invalid_message' => 'Las claves deben coincidir.',
-                'first_options'  => array('label' => 'Contraseña'),
-                'second_options' => array('label' => 'Confirmar'),
-                ))
             ->add('tipo','choice', array(
-            'empty_value' => 'Elija permisos',
-                'choices' => array(
-                    'ROLE_ADMIN'=>'Admin',
-                    'ROLE_USER'=>'Usuario',
-                    ),
-			'multiple'  => false,
+				'label' => 'Tipo Usuario',
+				'empty_value' => 'Elija permisos',
+                'choices' => $tipos,
+				'multiple'  => false,
                 ))
 			->add('submit', 'submit', array('label' => 'Crear'))
             ->getForm();
@@ -113,6 +108,70 @@ class UsoController extends Controller
 			$registry->setAccion("Creación");
 			$registry->setFecha();
 			$registry->setUsuario($entity);
+			$entity->setEnabled(1);
+			$entity->setPassword('');
+            $em->persist($entity);
+            $em->persist($registry);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('usuarios'));
+        }
+
+        $entity = new Usuario();
+		
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }	
+	/**
+    * Displays a form to edit a Usuario entity.
+    *
+    * @Route("/usuarios/edit/{id}", name="editar_usuario")
+	* @Method("GET")
+    * @Template()
+    */
+    public function editAction(Request $request,$id)
+    {
+		$entity = new Usuario();
+		$tipos=array('user'=>'Usuario','admin'=>'Administrador');
+		if($this->get('security.context')->isGranted('ROLE_DIOS')) $tipos['dios']='SuperAdmin';
+		
+        $form = $this->createFormBuilder( $entity, array(
+            'method' => 'POST',
+        ))
+			->add('username', 'text', array('label'=>'Usuario','required' => true))
+			->add('nombre', 'text', array('label'=>'Nombre','required' => true))
+			->add('email', 'email',array('required' => true))
+			->add('genero','choice', array(
+			'empty_value' => 'Elija Genero',
+			   'required' => true,
+                'choices' => array(
+                    '0'=>'Hombre',
+                    '1'=>'Mujer',
+                    ),
+			'multiple'  => false,
+                ))
+            ->add('tipo','choice', array(
+				'label' => 'Tipo Usuario',
+				'empty_value' => 'Elija permisos',
+                'choices' => $tipos,
+				'multiple'  => false,
+                ))
+			->add('submit', 'submit', array('label' => 'Editar'))
+            ->getForm();
+
+		
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+			$registry = new Registro();
+			$registry->setAccion("Edición por ".$this->getUser());
+			$registry->setFecha();
+			$registry->setUsuario($entity);
+			// $entity->setEnabled(1);
+			// $entity->setPassword('');
             $em->persist($entity);
             $em->persist($registry);
             $em->flush();
@@ -151,7 +210,7 @@ class UsoController extends Controller
 	/**
      * Deletes a Usuario entity.
      *
-     * @Route("/{id}", name="users_delete")
+     * @Route("/usuarios/{id}", name="users_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -167,7 +226,7 @@ class UsoController extends Controller
                 throw $this->createNotFoundException('Unable to find Usuario entity.');
             }
 
-            $entity->setActivo(0);
+            $entity->setEnabled(0);
 			$registry = new Registro();
 			$registry->setAccion("Eliminación");
 			$registry->setFecha();

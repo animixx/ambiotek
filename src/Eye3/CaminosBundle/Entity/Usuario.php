@@ -1,8 +1,8 @@
 <?php
 namespace Eye3\CaminosBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Usuario
@@ -33,6 +33,12 @@ class Usuario extends BaseUser
      */
     private $genero;
 
+    /**
+     * @var string
+     *
+     */
+    private $tipo;
+
 	
 	public function __construct()
 	{
@@ -41,7 +47,7 @@ class Usuario extends BaseUser
 		
 	}
 	
- /**
+	/**
      * Set nombre
      *
      * @param string $nombre
@@ -64,6 +70,29 @@ class Usuario extends BaseUser
         return $this->nombre;
     }
 
+    /**
+     * Get tipo
+     * //variable fake para poder ocupar los roles como unicos (no multi roles)
+     * @return string 
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     * @return Usuario
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+	
     /**
      * Set genero
      *

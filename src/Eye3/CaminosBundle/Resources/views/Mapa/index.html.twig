@@ -35,10 +35,10 @@ value="{{fecha}}" />
 				</div>
 </div>
  <div id="panel">Ruta 1 : 
-      <input type=checkbox id='ruta' checked >Ver Ruta | 
-      <input type=checkbox id='tramo' checked >Ver Tramos |  
-      <input type=checkbox id='medicion' checked >Ver Medición | 
-      <input type=checkbox id='observacion' checked >Ver Observaciones
+      <input type=checkbox id='ruta' {{(rutas)>0?:'disabled'}} checked class="ace ace-switch ace-switch-6"><span class="lbl">Ver Ruta |</span> 
+      <input type=checkbox id='tramo' {{(tramos)>0?:'disabled'}} checked class="ace ace-switch ace-switch-6"><span class="lbl">Ver Tramos |</span> 
+      <input type=checkbox id='medicion' {{(mediciones)>0?:'disabled'}} checked class="ace ace-switch ace-switch-6"><span class="lbl">Ver Medición |</span> 
+      <input type=checkbox id='observacion' {{(observaciones)>0?:'disabled'}} checked class="ace ace-switch ace-switch-6"><span class="lbl">Ver Observaciones</span>
     </div>
 {{ google_map_container(map) }}
 {{ google_map_js(map) }}

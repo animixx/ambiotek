@@ -10,22 +10,7 @@
 
 {% block body %}
 
-   <div class="row" >
-                <div class="col-md-4 col-xs-2"></div>
-                <div class="col-md-3 col-xs-8">
-                        <!-- #section:plugins/date-time.datepicker -->
-                                <form action="#" method="POST">
-                        <div class="input-group">
-                                <input class="form-control date-picker" name="fecha" id="id-date-picker-1" type="text"  placeholder="{{fecha}}" 
-value="{{fecha}}" />
-                                <span class="input-group-addon">
-                                        <i class="fa fa-calendar "></i>
-                                </span>
-                        </div>
-                                <input type="submit" value="ver">
-                                </form>
-                </div>
-        </div>
+
 
 {% set meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"] %}
 		<div class="col-12">
@@ -44,28 +29,34 @@ value="{{fecha}}" />
 									Medición Polvo
 								</th>
 								<th class="center">
-									Medición Liquidos
+									Consumo Liquidos
 								</th>
 							
 								
 							</tr>
 						</thead>
 						<tbody>
-						{% for innermes in 0..11 %}
+						{% set contador = 1 %}
+						{% for anyo in ("now"|date("Y"))..(desde|date("Y")) %}
+						{% set comienzo = ((loop.first)?("now"|date("n"))-1:11)%}
+						{% set termino = ((loop.last)?(desde|date("n"))-1:0)%}
+						
+							{% for innermes in comienzo..termino %}
 								<tr>
-									<td class="hidden"> {{loop.index}} </td>
+									<td class="hidden"> {{contador}}{% set contador = contador + 1 %} </td>
 									<td class="center">
-										{{cycle(meses,innermes)}} - 2014
+										{{meses[(innermes)]}}-{{anyo}}
 									</td>
 									<td class="center">
-										<a class="green" href=#><i class="fa fa-file-excel-o fa-2x"></i></a>
+										<a class="green" href='{{path('genera_excel',{'fecha':anyo~'/'~(innermes+1)})}}'><i class="fa fa-file-excel-o fa-2x"></i></a>
 									</td>
 									<td class="center">
-										<a class="green" href=#><i class="fa fa-file-excel-o fa-2x"></i></a>
+										<a class="red" href="#"{#{path('reporte_mensual',{'fecha':anyo~'/'~(innermes+1),'descarga':'D'})}#}><i class="fa fa-file-excel-o fa-2x"></i></a>
 									</td>
 								</tr>
-							
+							{% endfor %}
 						{% endfor %}
+						
 						</tbody>
 				</table>
 			</div>

@@ -40,29 +40,34 @@ class SightdataRepository extends EntityRepository
 			return $query->fetchAll();
 		}
 		
-		public function GraficarMedicion($tipo=true,$fecha = '031214')
+		public function GraficarMedicion($tipo=true,$fecha = '2014-12-03',$fecha_inicio = "2014-12-02")
 		{ 
 			if ($tipo)
 			{
-				//con esta opcion se obtienen los tramos medidos con sus respectivos promedios
+				//con esta opcion se obtienen las mediciones promediadas por zonas para filtro xrango
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"select avg(tsplat) as tpm, avg(pm10lat) as pm10, avg(pm25lat) as pm25, avg(pm1lat) as pm1, id_tramo as id from pmdata join gpsdata on id_gps=id where date='$fecha' group by id_tramo having id_tramo is not null "
+					"SELECT round(avg(tsplat),1) as tpm, round(avg(pm10lat),1) as pm10, round(avg(pm25lat),1) as pm25, round(avg(pm1lat),1) as pm1, NombreZona,date,fecha FROM pmdata 
+					join gpsdata gps on id_gps=gps.id join tramoMapa tramo on id_tramo=tramo.id join zonaMapa zona on zonaid=zona.id where  fecha >= '$fecha_inicio' and fecha <= '$fecha 23:59:59' 
+							and	( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null) and id_tramo is not null 
+						group by NombreZona, date"
 				);
 			}
 			else
 			{
-				//con esta otra opcion se obtienen TODOS los puntos de la medicion incluyendo los que no pertenecen a un tramo
+				//con esta otra opcion se obtienen las mediciones validas por zonas para filtro xdia
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"SELECT round(avg(tsplat),1) as tpm, round(avg(pm10lat),1) as pm10, round(avg(pm25lat),1) as pm25, round(avg(pm1lat),1) as pm1, null, null as utctime FROM pmdata join gpsdata on id_gps=id where date='$fecha' 
-							and ( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null) 
+					"SELECT round(avg(tsplat),1) as tpm, round(avg(pm10lat),1) as pm10, round(avg(pm25lat),1) as pm25, round(avg(pm1lat),1) as pm1, NombreZona, null as utctime,null as fecha FROM pmdata 
+					join gpsdata gps on id_gps=gps.id join tramoMapa tramo on id_tramo=tramo.id join zonaMapa zona on zonaid=zona.id where fecha like '$fecha%' 
+							and ( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null) and id_tramo is not null group by NombreZona
 					UNION
-					SELECT round(tsplat,1), round(pm10lat,1), round(pm25lat,1), round(pm1lat,1), id , utctime FROM pmdata join gpsdata on id_gps=id where date='$fecha'  and ( tsplat< 6000 or tsplat is null) 
-							and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null)  
-						order by utctime"
+					SELECT round(tsplat,1), round(pm10lat,1), round(pm25lat,1), round(pm1lat,1), NombreZona , utctime,fecha FROM pmdata 
+					join gpsdata gps on id_gps=gps.id join tramoMapa tramo on id_tramo=tramo.id join zonaMapa zona on zonaid=zona.id where fecha like '$fecha%'  
+							and ( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null)  and id_tramo is not null
+						order by NombreZona, utctime"
 				);
 			}
 			$query->execute();
@@ -75,7 +80,7 @@ class SightdataRepository extends EntityRepository
 			$query = $this->getEntityManager()
 				->createQuery(
 					'SELECT dato FROM Eye3CaminosBundle:Sightdata dato where dato.date = :fecha'
-				)->setParameter('fecha', $fecha);;
+				)->setParameter('fecha', $fecha);
 
 			try {
 				return $query->getResult();
@@ -83,6 +88,21 @@ class SightdataRepository extends EntityRepository
 				return null;
 			}
 			 
+		}
+		
+		
+		public function FirstDato()
+		{ 
+			
+			$query = $this->getEntityManager()
+			->getConnection()
+			->prepare(
+				"SELECT min(fecha) FROM pmdata join gpsdata on id_gps=id where id_tramo is not null"
+			);
+			
+			$query->execute();
+
+			return $query->fetchcolumn(0);
 		}
 
 }

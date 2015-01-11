@@ -64,22 +64,22 @@
 												Por favor ingrese sus datos
 											</h4>
 {% if error %}
-    <div class="red" >Error : {{ error.message }}</div>
+    <div class="red" >Error : {{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 											<div class="space-6"></div>
 
-											<form method='post' action='{{ path('login_check') }}'>
+											<form method='post' action='{{ path("fos_user_security_check") }}'>
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="Usuario" name="_username" value="{{ last_username }}" />
+															<input type="text" class="form-control" placeholder="Usuario" name="_username" value="{{ last_username }}" required="required" />
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="Clave" name="_password" />
+															<input type="password" class="form-control" placeholder="Clave" name="_password" required="required" />
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
 													</label>
@@ -87,12 +87,13 @@
 													<div class="space"></div>
 
 													<div class="clearfix">
-													<!--	<label class="inline">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"> Recordarme</span>
-														</label> -->
+												<!--		<label class="inline">
+															<input type="checkbox" class="ace" name="_remember_me" checked  />
+															<span class="lbl"> Recordarme</span>	-->
+														</label> 
 														
-														 <input type="hidden" name="_target_path" value="/" />
+														<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+														<input type="hidden" name="_target_path" value="/" />  
 														 
 														<button type="submit" class="width-40 pull-right btn btn-sm btn-primary">
 															<span class="bigger-110">Iniciar Sesión</span>
@@ -133,7 +134,7 @@
 												Ingresa tu email
 											</p>
 
-											<form>
+											<form method='post' action='{{ path("fos_user_security_check") }}'>
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
