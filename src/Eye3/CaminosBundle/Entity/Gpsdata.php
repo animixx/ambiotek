@@ -34,6 +34,13 @@ class Gpsdata
      * @ORM\Column(name="date", type="string", length=6, nullable=true)
      */
     private $date;
+	
+	/**
+     * @var datetime
+     *
+     * @ORM\Column(name="fecha", type="datetime", nullable=false)
+     */
+    private $fecha;
 
     /**
      * @var string
@@ -47,8 +54,8 @@ class Gpsdata
      *
      * @ORM\Column(name="latitude", type="string", length=9, nullable=true)
      */
-    private $latitude;
-
+    
+	private $latitude;
     /**
      * @var string
      *
@@ -56,19 +63,33 @@ class Gpsdata
      */
     private $ns;
 
+	/**
+     * @var float(10,6)
+     *
+     * @ORM\Column(name="latitud", type="decimal", scale=6, precision=10, nullable=true)
+     */
+    private $latitud;
+
     /**
      * @var string
      *
      * @ORM\Column(name="longitude", type="string", length=10, nullable=true)
      */
     private $longitude;
-
-    /**
+    
+	/**
      * @var string
      *
      * @ORM\Column(name="ew", type="string", length=1, nullable=true)
      */
     private $ew;
+
+	/**
+     * @var float
+     *
+     * @ORM\Column(name="longitud", type="decimal", scale=6, precision=10, nullable=true)
+     */
+    private $longitud;
 
     /**
      * @var string
@@ -145,7 +166,6 @@ class Gpsdata
 
         return $this;
     }
-
     /**
      * Get date
      *
@@ -154,6 +174,30 @@ class Gpsdata
     public function getDate()
     {
         return $this->date;
+    }
+
+	
+    /**
+     * Set fecha
+     *
+     * @param datetime $fecha
+     * @return Gpsdata
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return datetime 
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
 
     /**
@@ -226,6 +270,29 @@ class Gpsdata
     }
 
     /**
+     * Set latitud
+     *
+     * @param decimal $latitud
+     * @return Gpsdata
+     */
+    public function setLatitud($latitud)
+    {
+        $this->latitud = $latitud;
+
+        return $this;
+    }
+
+    /**
+     * Get latitud
+     *
+     * @return decimal 
+     */
+    public function getLatitud()
+    {
+        return $this->latitud;
+    }
+	
+    /**
      * Set longitude
      *
      * @param string $longitude
@@ -269,6 +336,29 @@ class Gpsdata
     public function getEw()
     {
         return $this->ew;
+    }
+
+    /**
+     * Set longitud
+     *
+     * @param decimal $longitud
+     * @return Gpsdata
+     */
+    public function setLongitud($longitud)
+    {
+        $this->longitud = $longitud;
+
+        return $this;
+    }
+
+    /**
+     * Get longitud
+     *
+     * @return string 
+     */
+    public function getLongitud()
+    {
+        return $this->longitud;
     }
 
     /**

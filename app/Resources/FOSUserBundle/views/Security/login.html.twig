@@ -45,7 +45,7 @@
 	<body class="login-layout">
 		<div class="main-container">
 			<div class="main-content">
-				<div class="row">
+				<div class="row"> 
 					<div class="col-sm-10 col-sm-offset-1">
 						<div class="login-container">
 							<div class="center">
@@ -57,22 +57,23 @@
 							<div class="space-6"></div>
 
 							<div class="position-relative">
-								<div id="login-box" class="login-box visible widget-box no-border">
+								<div id="login-box" class="login-box {% if app.request.attributes.get('_controller')|slice(26,8) == 'Security' %}visible{% endif %} widget-box no-border">
 									<div class="widget-body">
 										<div class="widget-main">
 											<h4 class="header blue lighter bigger">
 												Por favor ingrese sus datos
 											</h4>
-{% if error %}
+
+{% if error is defined %}{% if error %}
     <div class="red" >Error : {{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
+{% endif %}{% endif %}
 											<div class="space-6"></div>
 
 											<form method='post' action='{{ path("fos_user_security_check") }}'>
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" placeholder="Usuario" name="_username" value="{{ last_username }}" required="required" />
+															<input type="text" class="form-control" placeholder="Usuario" name="_username" value="{% if last_username is defined %}{{ last_username }}{% endif %}" required="required" />
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
@@ -92,7 +93,7 @@
 															<span class="lbl"> Recordarme</span>	-->
 														</label> 
 														
-														<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+														<input type="hidden" name="_csrf_token" value="{% if csrf_token is defined %}{{ csrf_token }}{% endif %}" />
 														<input type="hidden" name="_target_path" value="/" />  
 														 
 														<button type="submit" class="width-40 pull-right btn btn-sm btn-primary">
@@ -122,34 +123,45 @@
 									</div><!-- /.widget-body -->
 								</div><!-- /.login-box -->
 
-								<div id="forgot-box" class="forgot-box widget-box no-border">
+								<div id="forgot-box" class="forgot-box {% if app.request.attributes.get('_controller')|slice(26,8) != 'Security' %}visible{% endif %}  widget-box no-border">
 									<div class="widget-body">
 										<div class="widget-main">
 											<h4 class="header red lighter bigger">
 												Recuperar contraseña
 											</h4>
-
+		{% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="flash-{{ type }} bigger">
+                    {{ message }}
+                </div><br>
+            {% endfor %}
+        {% endfor %}
+{% block fos_user_content %}
 											<div class="space-6"></div>
 											<p>
-												Ingresa tu email
+												Ingresa tu email o usuario
 											</p>
 
-											<form method='post' action='{{ path("fos_user_security_check") }}'>
+											<form method='post' action='{{ path('fos_user_resetting_send_email') }}' >
 												<fieldset>
+												 {% if invalid_username is defined %}
+													<p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
+												{% endif %}
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="email" class="form-control" placeholder="Email" />
+															<input type="text" class="form-control" placeholder="Email o Usuario" id="username" name="username" required="required" />
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
 													</label>
 
 													<div class="clearfix">
-														<button type="button" class="width-35 pull-right btn btn-sm btn-danger">
+														<button type="submit" class="width-35 pull-right btn btn-sm btn-danger">
 															<span class="bigger-110">Enviar!</span>
 														</button>
 													</div>
 												</fieldset>
 											</form>
+{% endblock fos_user_content %}
 										</div><!-- /.widget-main -->
 
 										<div class="toolbar center">

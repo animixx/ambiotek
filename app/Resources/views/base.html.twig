@@ -107,9 +107,15 @@
 
 
 								<li>
+									<a href="{{ path('profile_usuario') }}">
+										<i class="ace-icon fa fa-gear"></i>
+										Editar Perfil
+									</a>
+								</li>
+								<li>
 									<a href="{{ path('fos_user_security_logout') }}">
 										<i class="ace-icon fa fa-power-off"></i>
-										Logout
+										Cerrar Sesión
 									</a>
 								</li>
 							</ul>
@@ -192,6 +198,7 @@
 									</ul>
 					</li>
 
+			{% if is_granted('ROLE_PLAN') %}		
 					<li class="{% if app.request.attributes.get('_controller')|slice(30,11) == 'Actividades' %}active open{% endif %}">
 						<a href="" class="dropdown-toggle" >
 							<i class="menu-icon fa fa-calendar"></i>
@@ -224,7 +231,8 @@
 									</ul>
 
 					</li>
-						
+			{% endif %}
+			{% if is_granted('ROLE_ADMIN') %}		
 					<li class="{% if app.request.attributes.get('_controller')|slice(30,3) == 'Uso' %}active open{% endif %}">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-users"></i>
@@ -257,7 +265,7 @@
 							
 						</ul>
 					</li>
-
+		{% endif %}
 
 				</ul><!-- /.nav-list -->
 

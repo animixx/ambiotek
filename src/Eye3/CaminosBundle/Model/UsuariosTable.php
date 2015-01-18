@@ -8,13 +8,6 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Templating\EngineInterface;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Eye3\CaminosBundle\Entity\Usuario;
-use Eye3\CaminosBundle\Entity\Registro;
-
 /**
  * Class UsuariosTable
  *
@@ -54,7 +47,7 @@ class UsuariosTable extends QueryBuilderDataTable implements QueryBuilderDataTab
    /**
      * @var string
      * @DataTable\Column(source="usuario.groups.name",name="Permisos")
-	 * @DataTable\Format(dataFields={"dato":"usuario.roles"}, template="Eye3CaminosBundle:Uso:permisos2.html.twig")
+	 * @DataTable\Format(dataFields={"dato":"usuario.roles"}, template="Eye3CaminosBundle:Uso:roles.html.twig")
      */
     public $rol;
 
@@ -86,7 +79,7 @@ class UsuariosTable extends QueryBuilderDataTable implements QueryBuilderDataTab
         $qb = $userRepository->createQueryBuilder('usuario');
 		
 		if (!$this->container->get('security.context')->isGranted('ROLE_DIOS'))
-			$qb->add('where', "usuario.enabled = true and usuario.roles not like '%dios%'");
+			$qb->add('where', "usuario.locked = false and usuario.roles not like '%dios%'");
 
         return $qb;
     }

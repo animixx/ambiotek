@@ -15,10 +15,10 @@ class ActividadesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // ->add('fecha')
-            // ->add('hora')
-            ->add('usuario')
-            ->add('actividad')
+			->add('usuario', 'text', array('label'=>'Usuario','required' => true))
+			->add('actividad', 'text', array('label'=>'Actividad','required' => true))
+			->add('hora', 'time',array('label'=>'Hora','widget'=>'single_text'))
+			->add('fecha', 'date',array('label'=>'Fecha','widget'=>'single_text'))
         ;
     }
     

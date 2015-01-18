@@ -92,12 +92,8 @@ class GpsdataRepository extends EntityRepository
 			$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"SELECT @lati,@longi,altitude, d.id_gps as id_gps ,tsplat ,pm10lat ,pm25lat ,pm1lat ,fecha ,  (((acos(sin((@lati*pi()/180)) * 
-            sin((latitud*pi()/180))+cos((@lati*pi()/180)) * 
-            cos((latitud*pi()/180)) * cos(((@longi- longitud )* 
-            pi()/180))))*180/pi())*60*1.1515*1609.344
-        ) as distancia, @lati:=latitud as latitud, @longi:=longitud as longitud ,speed ,value ,NombreTramo , NombreZona FROM pmdata d 
-		join gpsdata  gps on d.id_gps = gps.id join tramoMapa tramo on id_tramo = tramo.id join zonaMapa z on zonaid=z.id left join sightdata o on d.id_gps =o.id_gps  ,  (select @lati :=null , @longi := null ) nulo 
+					"SELECT altitude, d.id_gps as id_gps ,tsplat ,pm10lat ,pm25lat ,pm1lat ,fecha, latitud, longitud ,speed ,value ,NombreTramo , NombreZona FROM pmdata d 
+		join gpsdata  gps on d.id_gps = gps.id join tramoMapa tramo on id_tramo = tramo.id join zonaMapa z on zonaid=z.id left join sightdata o on d.id_gps =o.id_gps  
 		WHERE fecha BETWEEN :desde and :hasta  and id_tramo is not null order by date_format(fecha,'%Y%m%d'), zonaid, id_tramo ;"
 
 			);

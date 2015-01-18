@@ -77,7 +77,13 @@ class Usuario extends BaseUser
      */
     public function getTipo()
     {
-        return $this->tipo;
+		
+		if (in_array("ROLE_DIOS", $this->roles)) 	 $fulano = 'dios';
+		elseif (in_array("ROLE_ADMIN", $this->roles)) $fulano = 'admin';
+		elseif (in_array("ROLE_PLAN", $this->roles)) $fulano = 'plan';
+		else									  	 $fulano = 'user';
+		
+        return $fulano;
     }
 
     /**
@@ -88,7 +94,10 @@ class Usuario extends BaseUser
      */
     public function setTipo($tipo)
     {
-        $this->tipo = $tipo;
+        if ($tipo == 'user') 		$this->setRoles(array());
+        elseif ($tipo == 'plan') 		$this->setRoles(array("ROLE_PLAN"));
+        elseif ($tipo == 'admin') 	$this->setRoles(array("ROLE_ADMIN"));
+        elseif ($tipo == 'dios') 	$this->setRoles(array("ROLE_DIOS"));
 
         return $this;
     }

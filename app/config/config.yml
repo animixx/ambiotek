@@ -6,12 +6,24 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Eye3\CaminosBundle\Entity\Usuario
-    group:
-        group_class: Eye3\CaminosBundle\Entity\Grupo
+    from_email:
+        address:        contacto@eye3.cl
+        sender_name:    "Monitor Online"
+    registration:
+        confirmation:
+            enabled:    false # change to true for required email confirmation
+            template:   FOSUserBundle:Registration:email.txt.twig
+        form:
+            type:               fos_user_registration
+            name:               fos_user_registration_form
+    resetting:
+        token_ttl: 86400
+        email:
+            template:   FOSUserBundle:Resetting:email.txt.twig
 
 framework:
     #esi:             ~
-    #translator:      { fallback: "%locale%" }
+    translator:      { fallback: "%locale%" }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -77,6 +89,8 @@ swiftmailer:
     transport: "%mailer_transport%"
     host:      "%mailer_host%"
     username:  "%mailer_user%"
+    sender_address: "contacto@eye3.cl"
+    # delivery_address: "animixx+cabron@gmail.com"
     password:  "%mailer_password%"
     spool:     { type: memory }
 

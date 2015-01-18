@@ -22,5 +22,6 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_ADMIN:  ROLE_USER
+        ROLE_PLAN:  ROLE_USER
+        ROLE_ADMIN:  ROLE_PLAN
         ROLE_DIOS:   ROLE_ADMIN

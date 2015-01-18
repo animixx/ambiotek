@@ -42,10 +42,10 @@
 		
 		<div class="col-12">
 			
-				<div id="placeholder1" ></div><br><br>
-				<div id="placeholder2"></div><br><br>
-				<div id="placeholder3" ></div><br><br>
-				<div id="placeholder4" ></div>
+				<div id="placeholder1" style="position: relative" ></div><div id="placeholder1b" style="position: relative; display: none"></div><div id="legendContainer1" ></div><br><br>
+				<div id="placeholder2" style="position: relative"></div><div id="placeholder2b" style="position: relative; display: none"></div><div id="legendContainer2"></div><br><br>
+				<div id="placeholder3" style="position: relative"></div><div id="placeholder3b" style="position: relative; display: none"></div><div id="legendContainer3" ></div><br><br>
+				<div id="placeholder4" style="position: relative"></div><div id="placeholder4b" style="position: relative; display: none"></div><div id="legendContainer4" ></div>
 		</div>
 
 		
@@ -77,10 +77,16 @@
             <script src="{{ asset('bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
             <script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.min.js') }}" type="text/javascript"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.symbol.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.axislabels.js') }}"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.time.min.js') }}"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.resize.min.js') }}" type="text/javascript"></script>
 
-			{% set graficos = {'tpm':"#EE3830", 'pm10':"#F47A2C", 'pm25':"#9CCC51", 'pm1':"#00828F"} %}
+			{% set colores = [['#EE3830','#F47A2C',"#9CCC51"], ['#F47A2C','#9CCC51',"#00828F"], ['#9CCC51','#00828F',"#EE3830"], ['#00828F','#EE3830',"#F47A2C"]] %}
+			{% set graficos = {'tpm':["TPM","(ug/m^3)"], 'pm10':["PM10","(ug/m^3)"], 'pm25':["PM2,5","(ug/m^3)"], 'pm1':["PM1","(ug/m^3)"]} %}
+			{% set fecha_minima = {} %}
+			{% set fecha_maxima = {} %}
+			{% set m_pm10 = 0 %}
+			{% set tramos = {} %}
 			
     <script type="text/javascript">
         $(document).ready(function () {
@@ -95,9 +101,17 @@
 		
 		function ocultar(){
 			var placeholder1 = $('#placeholder1').css({'display':'none'});
+			var leyenda1 = $('#legendContainer1').css({'display':'none'});
 			var placeholder2 = $('#placeholder2').css({'display':'none' });
+			var leyenda2 = $('#legendContainer2').css({'display':'none'});
 			var placeholder3 = $('#placeholder3').css({'display':'none' });
+			var leyenda3 = $('#legendContainer3').css({'display':'none'});
 			var placeholder4 = $('#placeholder4').css({'display':'none'});
+			var leyenda4 = $('#legendContainer4').css({'display':'none'});
+			var placeholderb1 = $('#placeholder1b').css({'display':'none'});
+			var placeholderb2 = $('#placeholder2b').css({'display':'none' });
+			var placeholderb3 = $('#placeholder3b').css({'display':'none' });
+			var placeholderb4 = $('#placeholder4b').css({'display':'none'});
 		}
 		
 		function xdia() {
@@ -110,12 +124,13 @@
 			
 			var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
 			var previousPoint = null;
-				  
+			{% set tramotemp = null %}
+			{% set contadortemporal = 0 %}	  
 			
-			{% for medicion,color in graficos %}
-				{% if datos is not empty  %}
-					{% if datos[0][medicion]  %}
-						var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'200px', 'display': ''});
+			{% for medicion,titulos in graficos if datos is not empty %}
+				{% if datos[0][medicion]  %}
+						var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'300px', 'display': 'inline-block'});
+						var leyenda{{loop.index}} = $('#legendContainer{{loop.index}}').css({'width':'5%' , 'min-height':'300px', 'display': 'inline-block'});
 				
 						var build_{{medicion}}_data = [
 								{%- for i in datos[1:] -%}
@@ -123,22 +138,48 @@
 									{% if not loop.last %},{% endif %}
 								{%- endfor -%}
 							  ]
+						var extra_{{medicion}}_data = [
+								{%- for i in datos[1:] -%}
+									{% set contadortemporal = contadortemporal +(tramotemp != i.NombreTramo?1:0) %}
+									{% if tramotemp != i.NombreTramo %}
+										{% set tramos = tramos |merge({ (i.NombreTramo):((fecha|date("Ymd")~'T'~(i.utctime|round))|date("U"))}) %}
+									{% endif %}
+									'{{contadortemporal%2}}{{ i.NombreTramo }}'
+									{% set tramotemp = i.NombreTramo %}
+									{% if not loop.last %},{% endif %}
+								{%- endfor -%}
+							  ]
 
 						var data{{loop.index}} = [
-							{label: "{{medicion}}", data: build_{{medicion}}_data,  points: { symbol: "diamond" },color: "{{color}}"}
+							{label: "{{titulos.0}}", data: build_{{medicion}}_data,  points: { symbol: "diamond" },color: "{{colores[loop.index0].0}}",colores: ['{{colores[loop.index0].1}}','{{colores[loop.index0].2}}'], extra: extra_{{medicion}}_data}
+							
 						];
 			 
 						var options = {
-							xaxis: { 
+							axisLabels: {
+								show: true
+							},xaxis: { 
 									mode: "time" ,
+									axisLabel: 'Tiempo/tramos',
 									timezone: "browser"
 								{#	timezone: "UTC" la otra opcion #}
 							}, yaxis: {
+									min : 0,
+									axisLabel: '{{titulos.0 ~ titulos.1}}'
 							}, grid: {
 								hoverable: true,
 								clickable: true,
+						{#% if medicion == "pm10" %#}
+								markings: [
+										{%- for nombre,posicion in tramos  -%}
+											 { color: 'green', xaxis: { from: {{posicion}}000, to: {{posicion}}000  } }
+											 {% if not loop.last %},{% endif %}
+										{% endfor %}
+											],
+						{#% endif %#}
 								borderWidth: .3
 							}, legend: {
+								container:$("#legendContainer{{loop.index}}")        
 							}, series: {
 									points: {
 											show: true,
@@ -147,30 +188,25 @@
 							}
 						};
 		 
-						$.plot($("#placeholder{{loop.index}}"), data{{loop.index}}, options);	
-						
-
-
+					var plot = $.plot($("#placeholder{{loop.index}}"), data{{loop.index}}, options);	
+					
 						placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
-								if (previousPoint != item.seriesIndex) {
-									previousPoint = item.seriesIndex;
-									var tip = fecha.toLocaleTimeString() + " -> " + item.datapoint[1].toFixed(1) ; 
-									$tooltip.show().children(0).text(tip);
-								}
-								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5});
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia= " + item.datapoint[1].toFixed(1) + "(ug/m^3)"  ; 
+									$tooltip.show().children(0).html(tip);
+								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
+								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
 							} else {
 								$tooltip.hide();
 								previousPoint = null;
 							}
 							
 						 });
-					{% endif %}
 				{% endif %}
 			{% endfor %}
 		}
-		
+
 		function xrango() {
 		
 			$.resize.throttleWindow = false;
@@ -180,36 +216,81 @@
 			
 			var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
 			var previousPoint = null;
-				  
+			{% set zonatemp = null %}
+			{% set contadortemporal = 0 %}	  
 			
-			{% for medicion,color in graficos %}
-				{% if promedio is not empty  %}
-					
-						var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'200px', 'display': ''});
+			{% for medicion,titulos in graficos if promedio is not empty %}
 				
 						var build_{{medicion}}_data = [
-								{%- for i in promedio-%}
-									[{{i.fecha|date("U")}}000, {{i[medicion]}}]
-									{% if not loop.last %},{% endif %}
+								{%- for i in promedio -%}
+									{% if i[medicion] %}				
+										{% if fecha_minima[medicion] is not defined  %}		{#  seteo de primera fecha válida #}
+											{% set fecha_minima = fecha_minima| merge ({ (medicion): i.fecha }) %}
+										{% endif %}
+										{% if medicion == "pm10" and m_pm10 < i[medicion] %}	{#  seteo del valor máximo #}	
+											{% set m_pm10= i[medicion] %}
+										{% endif %}
+										[{{i.fecha|date("U")}}000, {{i[medicion]}}]
+										{% if not loop.last %},{% endif %}
+									{% endif %}
 								{%- endfor -%}
 							  ]
-
+							  
+					if (build_{{medicion}}_data.length > 0)
+					{
+						var placeholderb{{loop.index}} = $('#placeholder{{loop.index}}b').css({'width':'90%' , 'min-height':'300px', 'display': 'inline-block'});
+						var leyenda{{loop.index}} = $('#legendContainer{{loop.index}}').css({'width':'5%' , 'min-height':'300px', 'display': 'inline-block'});
+					}
+					else
+					{
+						var placeholderb{{loop.index}} = $('#placeholder{{loop.index}}b').css({'width':'0px' , 'height':'0px', 'display': 'inline-block'});
+						var leyenda{{loop.index}} = $('#legendContainer{{loop.index}}').css({'width':'0px' , 'min-height':'0px', 'display': 'inline-block'});
+					}
+							  
+						var extra_{{medicion}}_data = [
+								{%- for i in promedio -%}
+									{% if i[medicion] %}
+										{% set contadortemporal = contadortemporal +(zonatemp != i.NombreZona?1:0) %}
+										'{{contadortemporal%2}}{{ i.NombreZona }}'
+										{% set zonatemp = i.NombreZona %}
+										{% if not loop.last %},{% endif %}
+									{% endif %}
+								{%- endfor -%}
+							  ]
+							  
 						var data{{loop.index}} = [
-							{label: "{{medicion}}", data: build_{{medicion}}_data , points: { symbol: "circle" },  color: "{{color}}"}
+							{label: "{{titulos.0}}", data: build_{{medicion}}_data , points: { symbol: "circle" }, color: "{{colores[loop.index0].0}}",colores: ['{{colores[loop.index0].1}}','{{colores[loop.index0].2}}'], extra: extra_{{medicion}}_data}
 						];
 			 
 						var options = {
 							xaxis: { 
 									mode: "time" ,
+								{%- if fecha_minima[medicion] is defined -%}
+									min : {{fecha_minima[medicion]|date_modify("-1 day")|date("U")}}000,
+								{%- endif -%}
+								
+									axisLabel: 'Fecha/zonas',
 									tickSize: [1, "day"],
 									timezone: "browser"
 								{#	timezone: "UTC" la otra opcion #}
 							}, yaxis: {
+									min : 0,
+						{#% if medicion == "pm10"  %}
+									max : 5000,
+						{% endif %#}
+									axisLabel: '{{titulos.0 ~ titulos.1}}'
 							}, grid: {
 								hoverable: true,
 								clickable: true,
+						{% if medicion == "pm10" %}
+								markings: [
+											  { color: 'yellow', yaxis: { from: 1600, to: 1600  } },
+											  { color: 'red', yaxis: { from: 1800, to: 1800   } }
+											],
+						{% endif %}
 								borderWidth: .3
 							}, legend: {
+								container:$("#legendContainer{{loop.index}}")   
 							}, series: {
 										points: {
 											show: true,
@@ -217,20 +298,28 @@
 											}
 							}
 						};
-		 
-						$.plot($("#placeholder{{loop.index}}"), data{{loop.index}}, options);	
+
+					if (build_{{medicion}}_data.length > 0)
+						var plot = $.plot($("#placeholder{{loop.index}}b"), data{{loop.index}}, options);	
 						
+{% if medicion == "pm10" and m_pm10 > 1500 %}
+	var o;
+    o = plot.pointOffset({ x:{{fecha_minima[medicion]|date("U")}}000, y:1610});
+    $('#placeholder3b').append('<div style="position:absolute;left:' + (o.left + 6) + 'px;top:' + o.top + 'px;color:#666;font-size:smaller">Umbral de riego</div>');
+    o = plot.pointOffset({ x:{{fecha_minima[medicion]|date("U")}}000, y:2050});
+    $('#placeholder3b').append('<div style="position:absolute;left:' + (o.left + 6) + 'px;top:' + o.top + 'px;color:#666;font-size:smaller">Máximo norma</div>');
+{% endif %}	
 
-
-						placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
+						placeholderb{{loop.index}}.on('plothover', function (event, pos, item) {
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
 								if (previousPoint != item.seriesIndex) {
 									previousPoint = item.seriesIndex;
-									var tip = fecha.toLocaleTimeString() + " -> " + item.datapoint[1].toFixed(1) ; 
-									$tooltip.show().children(0).text(tip);
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
+									$tooltip.show().children(0).html(tip);
 								}
-								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5});
+								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
+								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
 							} else {
 								$tooltip.hide();
 								previousPoint = null;
@@ -238,7 +327,6 @@
 							
 						 });
 					
-				{% endif %}
 			{% endfor %}
 
 		}

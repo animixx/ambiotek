@@ -21,13 +21,13 @@ class ActividadesController extends Controller
     /**
      * Lists all Actividades entities.
      *
-     * @Route("/observaciones", name="observaciones")
+     * @Route("/actividades", name="actividades")
      * @Method("GET")
      * @Template()
 	 * @param \Symfony\Component\HttpFoundation\Request $request
 	 * @return array
      */
-    public function observacionesAction(Request $request)
+    public function actividadesAction(Request $request)
     {
         $fecha = date("d-m-Y");
 		
@@ -42,52 +42,7 @@ class ActividadesController extends Controller
         );
 
     }
-	
-    /**
-     * Creates a new Actividades entity.
-     *
-     * @Route("/actividades", name="actividades_create")
-     * @Method("POST")
-     * @Template("Eye3CaminosBundle:Actividades:new.html.twig")
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new Actividades();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('actividades_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Creates a form to create a Actividades entity.
-     *
-     * @param Actividades $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Actividades $entity)
-    {
-        $form = $this->createForm(new ActividadesType(), $entity, array(
-            'action' => $this->generateUrl('actividades_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
 
     /**
      * Displays a form to create a new Actividades entity.
@@ -97,17 +52,14 @@ class ActividadesController extends Controller
      */
     public function newAction(Request $request)
     {
-        $entity = new Actividades();
-        $form = $this->createFormBuilder( $entity, array(
+		 $entity = new Actividades();
+		$form = $this->createForm(new ActividadesType(),  $entity, array(
+            // 'action' => $this->generateUrl('actividades_create'),
             'method' => 'POST',
-        ))
-			->add('usuario', 'text', array('label'=>'Usuario','required' => true))
-			->add('actividad', 'text', array('label'=>'Actividad','required' => true))
-			->add('hora', 'time',array('label'=>'Hora','widget'=>'single_text'))
-			->add('fecha', 'date',array('label'=>'Fecha','widget'=>'single_text'))
-		
-			->add('submit', 'submit', array('label' => 'Crear'))
-            ->getForm();
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Crear'));
+
 
 		
         $form->handleRequest($request);
@@ -129,34 +81,9 @@ class ActividadesController extends Controller
     }
 
     /**
-     * Finds and displays a Actividades entity.
-     *
-     * @Route("/actividades/{id}", name="actividades_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('Eye3CaminosBundle:Actividades')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Actividades entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
      * Displays a form to edit an existing Actividades entity.
      *
-     * @Route("/{id}/edit", name="actividades_edit")
+     * @Route("/actividades/{id}/edit", name="actividades_edit")
      * @Method("GET")
      * @Template()
      */
@@ -171,12 +98,10 @@ class ActividadesController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -294,18 +219,5 @@ class ActividadesController extends Controller
         ;
     }
 	
-	/**
-     * @Route("/conductores", name="conductores")
-     * @Template()
-     */
-    public function conductoresAction()
-    {
-        $fecha = date("d-m-Y");
-
-		return array(
-                'fecha' => $fecha,
-            );    
-	}
 	
-
 }
