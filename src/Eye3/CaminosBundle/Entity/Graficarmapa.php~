@@ -1,0 +1,49 @@
+<?php
+
+namespace Eye3\CaminosBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Graficarmapa
+ *
+ * @ORM\Table(name="graficarMapa", indexes={@ORM\Index(name="tramoid", columns={"tramoid"})})
+ * @ORM\Entity
+ */
+class Graficarmapa
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var linestring
+     *
+     * @ORM\Column(name="tramo", type="linestring", nullable=false)
+     */
+    private $tramo;
+
+    /**
+     * @var polygon
+     *
+     * @ORM\Column(name="zona", type="polygon", nullable=false)
+     */
+    private $zona;
+
+    /**
+     * @var \Tramomapa
+     *
+     * @ORM\ManyToOne(targetEntity="Tramomapa")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tramoid", referencedColumnName="id")
+     * })
+     */
+    private $tramoid;
+
+
+}

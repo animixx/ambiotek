@@ -7,50 +7,88 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pmdata
  *
- * @ORM\Table(name="pmdata", indexes={@ORM\Index(name="id_gps", columns={"id_gps"})})
+ * @ORM\Table(name="pmdata", indexes={@ORM\Index(name="id_tramo", columns={"id_tramo"})})
  * @ORM\Entity
  */
 class Pmdata
 {
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="tsplat", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $tsplat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pm10lat", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $pm10lat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pm25lat", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $pm25lat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pm1lat", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $pm1lat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="tspavg", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $tspavg;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pm10avg", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $pm10avg;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pm25avg", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $pm25avg;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pm1avg", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $pm1avg;
+
+    /**
+     * @var \Gpsdata
+     *
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="value", type="string", length=255, nullable=false)
-     */
-    private $value;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="utctime", type="string", length=10, nullable=true)
-     */
-    private $utctime;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="date", type="string", length=6, nullable=true)
-     */
-    private $date;
-
-    /**
-     * @var \Eye3\CaminosBundle\Entity\Gpsdata
-     *
-     * @ORM\ManyToOne(targetEntity="Eye3\CaminosBundle\Entity\Gpsdata")
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="Gpsdata")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_gps", referencedColumnName="id")
      * })
      */
     private $idGps;
+
+    /**
+     * @var \Tramomapa
+     *
+     * @ORM\ManyToOne(targetEntity="Tramomapa")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_tramo", referencedColumnName="id")
+     * })
+     */
+    private $idTramo;
 
 
 }

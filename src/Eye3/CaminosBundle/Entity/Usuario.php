@@ -1,4 +1,5 @@
 <?php
+
 namespace Eye3\CaminosBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
@@ -7,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Usuario
  *
+ * @ORM\Table(name="usuario", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_2265B05D92FC23A8", columns={"username_canonical"}), @ORM\UniqueConstraint(name="UNIQ_2265B05DA0D96FBF", columns={"email_canonical"})})
  * @ORM\Entity
- * @ORM\Table(name="usuario")
  */
 class Usuario extends BaseUser
 {

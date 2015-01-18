@@ -1,0 +1,56 @@
+<?php
+
+namespace Eye3\CaminosBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Sightdata
+ *
+ * @ORM\Table(name="sightdata", indexes={@ORM\Index(name="id_gps", columns={"id_gps"})})
+ * @ORM\Entity
+ */
+class Sightdata
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="value", type="string", length=255, nullable=false)
+     */
+    private $value;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="utctime", type="string", length=10, nullable=true)
+     */
+    private $utctime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="date", type="string", length=6, nullable=true)
+     */
+    private $date;
+
+    /**
+     * @var \Gpsdata
+     *
+     * @ORM\ManyToOne(targetEntity="Gpsdata")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_gps", referencedColumnName="id")
+     * })
+     */
+    private $idGps;
+
+
+}

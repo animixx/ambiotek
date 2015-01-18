@@ -15,39 +15,40 @@ class Actividades
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="date")
+     * @ORM\Column(name="fecha", type="date", nullable=false)
      */
     private $fecha;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="hora", type="time")
+     * @ORM\Column(name="hora", type="time", nullable=false)
      */
     private $hora;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="usuario", type="string", length=50)
+     * @ORM\Column(name="usuario", type="string", length=50, nullable=false)
      */
     private $usuario;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="actividad", type="string", length=255)
+     * @ORM\Column(name="actividad", type="string", length=255, nullable=false)
      */
     private $actividad;
+
 
 
     /**

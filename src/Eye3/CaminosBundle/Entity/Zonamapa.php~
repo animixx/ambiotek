@@ -1,0 +1,39 @@
+<?php
+
+namespace Eye3\CaminosBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Zonamapa
+ *
+ * @ORM\Table(name="zonaMapa", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
+ * @ORM\Entity
+ */
+class Zonamapa
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="NombreZona", type="string", length=60, nullable=false)
+     */
+    private $nombrezona;
+
+    /**
+     * @var polygon
+     *
+     * @ORM\Column(name="validez", type="polygon", nullable=false)
+     */
+    private $validez;
+
+
+}

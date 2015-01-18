@@ -15,7 +15,7 @@ class Sightdata
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -43,9 +43,9 @@ class Sightdata
     private $date;
 
     /**
-     * @var \Eye3\CaminosBundle\Entity\Gpsdata
+     * @var \Gpsdata
      *
-     * @ORM\ManyToOne(targetEntity="Eye3\CaminosBundle\Entity\Gpsdata")
+     * @ORM\ManyToOne(targetEntity="Gpsdata")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_gps", referencedColumnName="id")
      * })
@@ -137,7 +137,7 @@ class Sightdata
      * Set idGps
      *
      * @param \Eye3\CaminosBundle\Entity\Gpsdata $idGps
-     * @return Pmdata
+     * @return Sightdata
      */
     public function setIdGps(\Eye3\CaminosBundle\Entity\Gpsdata $idGps = null)
     {

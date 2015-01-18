@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Registro
  *
- * @ORM\Table(name="registro", indexes={@ORM\Index(name="fk_Registro_Usuario1_idx", columns={"Userid"})})
+ * @ORM\Table(name="registro", indexes={@ORM\Index(name="IDX_397CA85BF69E6C58", columns={"Userid"})})
  * @ORM\Entity
  */
 class Registro
@@ -29,22 +29,22 @@ class Registro
     private $accion;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="datetime", nullable=false)
+     */
+    private $fecha;
+
+    /**
      * @var \Usuario
      *
      * @ORM\ManyToOne(targetEntity="Usuario")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="Userid", referencedColumnName="id")
      * })
-     *
      */
     private $usuario;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fecha", type="datetime", nullable=false)
-     */
-    private $fecha ;
 
 
     /**
@@ -80,8 +80,6 @@ class Registro
         return $this->accion;
     }
 
- 
-
     /**
      * Set fecha
      *
@@ -106,12 +104,12 @@ class Registro
     }
 
     /**
-     * Set usuario
+     * Set userid
      *
      * @param \Eye3\CaminosBundle\Entity\Usuario $usuario
      * @return Registro
      */
-    public function setUsuario(\Eye3\CaminosBundle\Entity\Usuario $usuario )
+    public function setUsuario(\Eye3\CaminosBundle\Entity\Usuario $usuario = null)
     {
         $this->usuario = $usuario;
 
