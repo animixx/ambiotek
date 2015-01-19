@@ -1,88 +1,54 @@
-{% extends "::base.html.twig" %}
-
+{% extends '::base.html.twig' %}
 {% block stylesheets %}
-{{ parent() }}
-                <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker.css') }}" />
-                <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker3.css') }}" />
-{% endblock %}
+{{parent()}}
+ {% javascripts '@data_tables' %}
+   
 
-
-{% block body %}
-
-   <div class="row" >
-                <div class="col-md-4 col-xs-2"></div>
-                <div class="col-md-3 col-xs-8">
-                        <!-- #section:plugins/date-time.datepicker -->
-                                <form action="#" method="POST">
-                        <div class="input-group">
-                                <input class="form-control date-picker" name="fecha" id="id-date-picker-1" type="text"  placeholder="{{fecha}}" 
-value="{{fecha}}" />
-                                <span class="input-group-addon">
-                                        <i class="fa fa-calendar "></i>
-                                </span>
-                        </div>
-                                <input type="submit" value="ver">
-                                </form>
-                </div>
-        </div>
-		
-		<div class="col-12">
-			<div class="page-header"><h1>Gráficos Agua y Aditivos</h1></div>
-		</div>
-		
-		
-		
-<!-- basic scripts en base -->
 		<!--[if !IE]> -->
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='{{asset('bundles/eye3caminos/js/jquery.min.js')}}'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.min.js') }}'>"+"<"+"/script>");
 		</script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
 		<script type="text/javascript">
-		 window.jQuery || document.write("<script src='{{asset('bundles/eye3caminos/js/jquery1x.min.js')}}'>"+"<"+"/script>");
+		 window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery1x.min.js') }}'>"+"<"+"/script>");
 		</script>
 		<![endif]-->
 		
 		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='{{asset('bundles/eye3caminos/js/jquery.mobile.custom.min.js')}}'>"+"<"+"/script>");
+			if('ontouchstart' in document.documentElement) document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.mobile.custom.min.js') }}'>"+"<"+"/script>");
 		</script>
-			
-			
-
-
-            <script src="{{ asset('bundles/eye3caminos/js/date-time/bootstrap-datepicker.js') }}" type="text/javascript"></script>
-            <script src="{{ asset('bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
-           
-
-			
 		
-<script type="text/javascript">
+ {% endjavascripts %}
 
-        jQuery(function($) {
+{% endblock %}
+{% block body %}
+   
+<div class="row">
+				<div class="col-12">
+					<div class="page-header"><h1>Agua y Aditivo</h1></div>
+				</div>
+</div>
 
-
-
-                                //datepicker plugin
-                                //link
-                                $('.date-picker').datepicker({
-                                        autoclose: true,
-                                        weekStart: 1,
-                                        language: "es",
-                                        todayBtn: "linked",
-                                        format: "dd-mm-yyyy",
-                                        todayHighlight: true
-                                })
-                                //show datepicker when clicking on the icon
-                                .next().on(ace.click_event, function(){
-                                        $(this).prev().focus();
-                                });
-
-
-                        });
-
-</script>		
+    <div class="table-bordered table-responsive">
+		{{ addDataTable(dataTable, {
+									"info": false ,
+									"order": [ 0, "desc" ]
+								}) 
+		}}
+    </div>
+	<div> <a class="btn btn-primary" href="# {#{ path('actividades_new') }#}"><i class="ace-icon fa fa-plus"></i>Agregar Actividad</a> 
+	</div>
 	
+{% block js %}{% endblock %}
+		<script src="{{ asset('bundles/eye3caminos/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/jquery.dataTables.bootstrap.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/date-time/datatables-date-euro.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/bootstrap.min.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/ace-elements.min.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/ace.min.js') }}" type="text/javascript"></script>
+    
+
 {% endblock %}

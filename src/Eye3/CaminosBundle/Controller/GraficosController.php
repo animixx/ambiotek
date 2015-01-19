@@ -45,11 +45,16 @@ class GraficosController extends Controller
      */
     public function aditivoAction(Request $request)
     {
-        $fecha = date("d-m-Y");
 		
-		return array(
-               'fecha' => $fecha,
-            );    
+		 $dataTable = $this->get('data_tables.manager')->getTable('aditivoTable');
+        if ($response = $dataTable->ProcessRequest($request)) {
+            return $response;
+        }
+
+        return array(
+            'dataTable' => $dataTable,
+        );
+		
 	}
 
 }

@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>{% block title %}Eye3 Online{% endblock %}</title>
+		<title>{% block title %}Moc Poc{% endblock %}</title>
 
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -75,17 +75,22 @@
 				<div class="navbar-header pull-left">
 					<!-- #section:basics/navbar.layout.brand -->
 					<a href="#" class="navbar-brand">
-						<img style="max-width:100px; margin-top: -7px;"  src="{{ asset('bundles/eye3caminos/images/ambiotek.png') }}">
+						<img style="height:20px;"  src="{{ asset('bundles/eye3caminos/img/teck_logo.png') }}">
 						<small>
-							<span class="white" id="id-text2">EYE3 - Monitoreo Online</span>
+							<span class="white" id="id-text2">| Quebrada Blanca</span>
 						</small>
 					</a>
-
 					<!-- /section:basics/navbar.layout.brand -->
 
 					<!-- #section:basics/navbar.toggle -->
 
 					<!-- /section:basics/navbar.toggle -->
+				</div>
+				<div class="navbar-header navbar-brand visible-lg visible-md">
+						<img style="height:22px;"  src="{{ asset('bundles/eye3caminos/img/moc_poc_header.png') }}">
+						<small>
+							<span class="white text-center" >| Sistema de monitoreo y control de polvo y caminos</span>
+						</small>
 				</div>
 
 				<!-- #section:basics/navbar.dropdown -->
@@ -199,7 +204,7 @@
 					</li>
 
 			{% if is_granted('ROLE_PLAN') %}		
-					<li class="{% if app.request.attributes.get('_controller')|slice(30,11) == 'Actividades' %}active open{% endif %}">
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,13) == 'Planificacion' %}active open{% endif %}">
 						<a href="" class="dropdown-toggle" >
 							<i class="menu-icon fa fa-calendar"></i>
 
@@ -210,7 +215,7 @@
 								<b class="arrow"></b>
 
 									<ul class="submenu">
-										<li class="{% if app.request.attributes.get('_controller')|slice(53,13) == 'observaciones' %}active {% endif %}">
+										<li class="{% if app.request.attributes.get('_controller')|slice(55,13) == 'observaciones' %}active {% endif %}">
 											<a href="{{path('observaciones')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
 												Observaciones Camino
@@ -219,7 +224,7 @@
 											<b class="arrow"></b>
 										</li>
 
-										<li class="{% if app.request.attributes.get('_controller')|slice(53,11) == 'conductores' %}active {% endif %}">
+										<li class="{% if app.request.attributes.get('_controller')|slice(55,11) == 'conductores' %}active {% endif %}">
 											<a href="{{path('conductores')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
 												Conductores
@@ -287,14 +292,17 @@
 					</div><!-- /.page-content-area -->
 				</div><!-- /.page-content -->
 			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
 
-			<div class="footer">
-				<div class="footer-inner">
+			<div class="footer" >
+				<div class="footer-inner" >
 					<!-- #section:basics/footer -->
-					<div class="footer-content">
-						<span class="bigger-120">
-							EYE3 - Monitoreo Online &copy; 2014
+					<div class="footer-content" style="background-color:#666;">
+					<img style="height:20px;"  src="{{ asset('bundles/eye3caminos/img/moc_poc_footer.png') }}">
+						<span class="white bigger-120">
+							| Todos los derechos reservados | 2014 | Diseñado y desarrollado por |
 						</span>
+					<img style="height:20px;"  src="{{ asset('bundles/eye3caminos/img/vialactivo_eye3_footer.png') }}">
 					</div>
 
 					<!-- /section:basics/footer -->
@@ -304,7 +312,6 @@
 			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 			</a>
-		</div><!-- /.main-container -->
 
 
 		
