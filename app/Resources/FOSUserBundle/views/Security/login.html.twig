@@ -11,33 +11,37 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/bootstrap.min.css') }}" />
-		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/font-awesome.min.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/bootstrap.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/font-awesome.css') }}" />
 
 		<!-- text fonts -->
 		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-fonts.css') }}" />
 
 		<!-- ace styles -->
-		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace.min.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace.css') }}" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!-- page specific plugin styles -->
 
 		<!--[if lte IE 9]>
-			<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-part2.min.css') }}" />
+			<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-part2.css') }}" class="ace-main-stylesheet" />
 		<![endif]-->
-		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-rtl.min.css') }}" />
 
 		<!--[if lte IE 9]>
-		  <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-ie.min.css') }}" />
+		  <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace-ie.css') }}" />
 		<![endif]-->
-		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/ace.onpage-help.css') }}" />
 
-		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- inline styles related to this page -->
 
-		<!--[if lt IE 9]>
+		<!-- ace settings handler -->
+		<script src="{{ asset('bundles/eye3caminos/js/ace-extra.js') }}"></script>
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
 		<script src="{{ asset('bundles/eye3caminos/js/html5shiv.js') }}"></script>
-		<script src="{{ asset('bundles/eye3caminos/js/respond.min.js') }}"></script>
+		<script src="{{ asset('bundles/eye3caminos/js/respond.js') }}"></script>
 		<![endif]-->
 		
-		<!-- eye3 styles -->
 		<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/eye3-ambiotek.css') }}" />
 
 	</head>
@@ -194,18 +198,18 @@
 
 		<!--[if !IE]> -->
 		<script type="text/javascript">
-			window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.min.js') }}'>"+"<"+"/script>");
+			window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.js') }}'>"+"<"+"/script>");
 		</script>
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
 <script type="text/javascript">
- window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery1x.min.js') }}'>"+"<"+"/script>");
+ window.jQuery || document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery1x.js') }}'>"+"<"+"/script>");
 </script>
 <![endif]-->
 		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.mobile.custom.min.js') }}'>"+"<"+"/script>");
+			if('ontouchstart' in document.documentElement) document.write("<script src='{{ asset('bundles/eye3caminos/js/jquery.mobile.custom.js') }}'>"+"<"+"/script>");
 		</script>
 
 		<!-- inline scripts related to this page -->

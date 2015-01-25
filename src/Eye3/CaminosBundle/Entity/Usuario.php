@@ -82,6 +82,7 @@ class Usuario extends BaseUser
 		if (in_array("ROLE_DIOS", $this->roles)) 	 $fulano = 'dios';
 		elseif (in_array("ROLE_ADMIN", $this->roles)) $fulano = 'admin';
 		elseif (in_array("ROLE_PLAN", $this->roles)) $fulano = 'plan';
+		elseif (in_array("ROLE_SYNC", $this->roles)) $fulano = 'sync';
 		else									  	 $fulano = 'user';
 		
         return $fulano;
@@ -96,6 +97,7 @@ class Usuario extends BaseUser
     public function setTipo($tipo)
     {
         if ($tipo == 'user') 		$this->setRoles(array());
+        elseif ($tipo == 'sync') 		$this->setRoles(array("ROLE_SYNC"));
         elseif ($tipo == 'plan') 		$this->setRoles(array("ROLE_PLAN"));
         elseif ($tipo == 'admin') 	$this->setRoles(array("ROLE_ADMIN"));
         elseif ($tipo == 'dios') 	$this->setRoles(array("ROLE_DIOS"));

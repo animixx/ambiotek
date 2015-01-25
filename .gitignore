@@ -18,3 +18,4 @@
 /debug
 /web/assetic/
 /web/js/
+/web/upload/*

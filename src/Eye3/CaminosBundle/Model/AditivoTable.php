@@ -47,7 +47,7 @@ class AditivoTable extends QueryBuilderDataTable implements QueryBuilderDataTabl
 	/**
      * @var int
      * @DataTable\Column(source="aditivo.id", name="",sortable=false,searchable=false)
-	 * @DataTable\Format(dataFields={"id":"aditivo.id"}, template="Eye3CaminosBundle:Graficos:modifica.html.twig")
+	 * @DataTable\Format(dataFields={"id":"aditivo.id"}, template="Eye3CaminosBundle:Niveles:modifica.html.twig")
      */
     public $id;
 

@@ -47,14 +47,14 @@ class UsuariosTable extends QueryBuilderDataTable implements QueryBuilderDataTab
    /**
      * @var string
      * @DataTable\Column(source="usuario.groups.name",name="Permisos")
-	 * @DataTable\Format(dataFields={"dato":"usuario.roles"}, template="Eye3CaminosBundle:Uso:roles.html.twig")
+	 * @DataTable\Format(dataFields={"dato":"usuario.roles"}, template="Eye3CaminosBundle:Acceso:roles.html.twig")
      */
     public $rol;
 
 	/**
      * @var int
      * @DataTable\Column(source="usuario.id", name="",sortable=false,searchable=false)
-	 * @DataTable\Format(dataFields={"id":"usuario.id"}, template="Eye3CaminosBundle:Uso:modifica.html.twig")
+	 * @DataTable\Format(dataFields={"id":"usuario.id"}, template="Eye3CaminosBundle:Acceso:modifica.html.twig")
      */
     public $id;
 

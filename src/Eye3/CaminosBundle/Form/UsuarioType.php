@@ -32,6 +32,7 @@ class UsuarioType extends AbstractType
 				'empty_value' => 'Elija permisos',
                 'choices' => array(
                     'user'=>'Usuario',
+					'sync'=>'Sincronizador',
                     'plan'=>'Planificador',
                     'admin'=>'Administrador',
                     ),
