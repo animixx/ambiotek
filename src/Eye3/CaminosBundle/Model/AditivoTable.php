@@ -21,7 +21,7 @@ class AditivoTable extends QueryBuilderDataTable implements QueryBuilderDataTabl
     /**
      * @var date
      * @DataTable\Column(source="aditivo.fecha", name="Fecha", stype="date-euro")
-	 * @DataTable\Format(dataFields={"dato":"aditivo.fecha"}, template="Eye3CaminosBundle:Registro:fecha.html.twig")
+	 * @DataTable\Format(dataFields={"dato":"aditivo.fecha"}, template="Eye3CaminosBundle:Niveles:fechaUTC.html.twig")
      * @DataTable\DefaultSort()
      */
     public $cuando; 

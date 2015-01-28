@@ -27,13 +27,14 @@ class AccesoTable extends QueryBuilderDataTable implements QueryBuilderDataTable
     public $cuando; 
 	
 	
-	
     /**
      * @var string
      * @DataTable\Column(source="registro.accion", name="Accion")
      */
     public $accion;
 
+	
+	
    /**
      * @var string
      * @DataTable\Column(source="registro.usuario.nombre", name="Usuario")
@@ -59,6 +60,13 @@ class AccesoTable extends QueryBuilderDataTable implements QueryBuilderDataTable
         $userRepository = $this->container->get('doctrine.orm.entity_manager')
             ->getRepository('Eye3\CaminosBundle\Entity\Registro');
         $qb = $userRepository->createQueryBuilder('registro');
+		$qb->join('registro.usuario', 'user');
+		
+		if (!$this->container->get('security.context')->isGranted('ROLE_DIOS'))
+		 $qb->add('where', "user.roles not like '%dios%'");
+	 
+		// $qb->join('registro.usuario', 'user','WITH', 'user.id = :identifier ')->setParameter('identifier', 8);;
+		 // $qb->add('where', "user.nombre = :tipo")->setParameter('tipo','Supremo');
 
         return $qb;
     }

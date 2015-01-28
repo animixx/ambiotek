@@ -11,7 +11,7 @@ security:
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/subiendo, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/subiendo, role: ROLE_SYNC }
         - { path: ^/usuarios, role: ROLE_ADMIN }
         - { path: ^/, role: ROLE_USER }
 

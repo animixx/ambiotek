@@ -39,12 +39,12 @@
 								}) 
 		}}
     </div>
-	<div> <a class="btn btn-primary" href="# {#{ path('actividades_new') }#}"><i class="ace-icon fa fa-plus"></i>Agregar Actividad</a> 
+	<div> <a class="btn btn-primary" href="{{ path('aditivo_new') }}"><i class="ace-icon fa fa-plus"></i>Agregar Valores</a> 
 	</div>
 	
 	
 	{% block js %}{% endblock %}
-			<script src="{{ asset('bundles/eye3caminos/js/dataTables/jquery.dataTables.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/dataTables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/dataTables/jquery.dataTables.bootstrap.js') }}" type="text/javascript"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/bootstrap.js') }}" type="text/javascript"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/ace/ace.js') }}" type="text/javascript"></script>

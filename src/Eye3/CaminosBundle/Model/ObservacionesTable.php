@@ -52,7 +52,7 @@ class ObservacionesTable extends QueryBuilderDataTable implements QueryBuilderDa
 	/**
      * @var int
      * @DataTable\Column(source="sightdata.id", name="",sortable=false,searchable=false)
-	 * @DataTable\Format(dataFields={"id":"sightdata.id"}, template="Eye3CaminosBundle:Planificacion:modifica.html.twig")
+	 * @DataTable\Format(dataFields={"id":"sightdata.id","latitud":"sightdata.idGps.latitud","longitud":"sightdata.idGps.longitud"}, template="Eye3CaminosBundle:Planificacion:modifica.html.twig")
      */
     public $id;
 
@@ -76,6 +76,8 @@ class ObservacionesTable extends QueryBuilderDataTable implements QueryBuilderDa
             ->getRepository('Eye3\CaminosBundle\Entity\Sightdata');
         $qb = $userRepository->createQueryBuilder('sightdata');
 		
+		if (!$this->container->get('security.context')->isGranted('ROLE_DIOS'))
+		$qb->add('where', "sightdata.invalido is null");
 
         return $qb;
     }

@@ -67,7 +67,7 @@ class Aditivo
     /**
      * Set fecha
      *
-     * @param \DateTime $fecha
+     * @param string $fecha
      * @return Aditivo
      */
     public function setFecha($fecha)

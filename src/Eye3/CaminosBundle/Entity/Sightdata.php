@@ -51,7 +51,13 @@ class Sightdata
      * })
      */
     private $idGps;
-
+ 
+	/**
+     * @var boolean
+     *
+     * @ORM\Column(name="borrado", type="boolean", length=1, nullable=true)
+     */
+    private $invalido;
 
 
     /**
@@ -154,5 +160,28 @@ class Sightdata
     public function getIdGps()
     {
         return $this->idGps;
+    }
+	
+	/**
+     * Set invalido
+     *
+     * @param boolean $invalido
+     * @return Sightdata
+     */
+    public function setInvalido($invalido)
+    {
+        $this->invalido = $invalido;
+
+        return $this;
+    }
+
+    /**
+     * Get invalido
+     *
+     * @return boolean 
+     */
+    public function getInvalido()
+    {
+        return $this->invalido;
     }
 }

@@ -156,6 +156,7 @@ class ActividadesController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+	
 	/**
      * Deletes a Actividades entity.
      *
@@ -172,8 +173,6 @@ class ActividadesController extends Controller
             'entity'      => $id,
             'delete_form' => $deleteForm->createView(),
         );
-		
-
     } 
 	
     /**

@@ -103,6 +103,7 @@ class AccesoController extends Controller
             $em = $this->getDoctrine()->getManager();
 			$registry = new Registro();
 			$registry->setAccion("Creación");
+			$registry->setDetalle("Creado como ".$entity->getTipo()." por ".$this->getUser());
 			$registry->setFecha();
 			$registry->setUsuario($entity);
 			$entity->setEnabled(1);
@@ -165,7 +166,8 @@ class AccesoController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 			$registry = new Registro();
-			$registry->setAccion("Edición por ".$this->getUser());
+			$registry->setAccion("Modificación Usuario");
+			$registry->setDetalle("Editado por ".$this->getUser());
 			$registry->setFecha();
 			$registry->setUsuario($entity);
             $em->persist($entity);
@@ -300,6 +302,12 @@ class AccesoController extends Controller
 
 			if($this->get('security.context')->isGranted('ROLE_DIOS')) 
 			{
+				$registry = new Registro();
+				$registry->setAccion("Purgación Usuario");
+				$registry->setDetalle("Exterminado usuario ".$entity->getNombre().", tipo=".$entity->getTipo());
+				$registry->setFecha();
+				$registry->setUsuario($this->getUser());
+				$em->persist($registry);
 				$em->remove($entity);
 				$em->flush();
 			}
@@ -308,6 +316,7 @@ class AccesoController extends Controller
 				$entity->setLocked(1);
 				$registry = new Registro();
 				$registry->setAccion("Eliminación");
+				$registry->setDetalle("Eliminado por ".$this->getUser());
 				$registry->setFecha();
 				$registry->setUsuario($entity);
 				$em->persist($registry);

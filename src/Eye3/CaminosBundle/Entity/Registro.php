@@ -27,6 +27,13 @@ class Registro
      * @ORM\Column(name="accion", type="string", length=50, nullable=false)
      */
     private $accion;
+	
+	/**
+     * @var string
+     *
+     * @ORM\Column(name="detalle", type="string", length=255, nullable=true)
+     */
+    private $detalle;
 
     /**
      * @var \DateTime
@@ -78,6 +85,29 @@ class Registro
     public function getAccion()
     {
         return $this->accion;
+    }
+
+    /**
+     * Set detalle
+     *
+     * @param string $detalle
+     * @return Registro
+     */
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
+
+        return $this;
+    }
+
+    /**
+     * Get detalle
+     *
+     * @return string 
+     */
+    public function getDetalle()
+    {
+        return $this->detalle;
     }
 
     /**

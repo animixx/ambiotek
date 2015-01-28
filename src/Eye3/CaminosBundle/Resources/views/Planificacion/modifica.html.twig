@@ -1,14 +1,16 @@
 <div class="hidden-sm hidden-xs action-buttons">
 
-	<a class="light-orange" href="{{ id  }}">
+	<a data-toggle="modal" class="light-orange" href="http://maps.googleapis.com/maps/api/staticmap?markers={{latitud}},{{longitud}}&zoom=16&size=500x500&maptype=satellite&sensor=false" data-target="#myModal" >
 		<i class="ace-icon fa fa-map-marker bigger-130"></i>
 	</a>
-	
-	<a class="green" href="{#{ path('editar_usuario', {'id': id }) }#}">
+
+
+
+	<a class="green" href="{{ path('observacion_edit', {'id': id }) }}">
 		<i class="ace-icon fa fa-pencil bigger-130"></i>
 	</a>
 
-	<a class="red" href="{#{ path('user_deleteconfirm', {'id': id }) }#}">
+	<a class="red" href="{{ path('observacion_deleteconfirm', {'id': id }) }}">
 		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 	</a>
 	
