@@ -16,7 +16,7 @@
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~3.0",
-		"liuggio/excelbundle": "~2.0",
+		"liuggio/ExcelBundle": "~2.0",
         "brown298/data-tables-bundle": "dev-master",
         "sensio/framework-extra-bundle": "~3.0",
         "egeloen/google-map-bundle": "~2.1",

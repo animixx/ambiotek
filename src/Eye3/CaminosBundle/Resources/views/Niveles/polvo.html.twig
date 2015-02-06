@@ -98,6 +98,28 @@
 										</button>
 									</div><!-- /.modal-dialog -->
 								</div>
+								
+								<div id="modalito" class="modal fade" tabindex="-1">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+												<h3 id="titulo" class="smaller lighter blue no-margin">xxx</h3>
+											</div>
+
+											<div class="modal-body">
+												<img src="" class="img-responsive img-rounded" id="img1"  />
+											</div>
+
+											<div class="modal-footer">
+												<button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+													<i class="ace-icon fa fa-times"></i>
+													Close
+												</button>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal-dialog -->
+								</div>
 {% endblock %}
 
 {% block js %}
@@ -187,7 +209,8 @@
 			{% set contadortemporal = 0 %}	  
 			
 			{% for medicion,titulos in graficos if datos is not empty %}
-				{% if datos[0][medicion]  %}
+{# aun falta modificar pero la idea es que el primer dato de la serie contiene el promedio de la medicion, asi si el promedio no existe no se muestra el grafico #}
+				{% if datos[0][medicion]  %}  
 						var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'300px', 'display': 'inline-block'});
 						var leyenda{{loop.index}} = $('#legendContainer{{loop.index}}').css({'width':'5%' , 'min-height':'300px', 'display': 'inline-block'});
 				
@@ -208,9 +231,17 @@
 									{% if not loop.last %},{% endif %}
 								{%- endfor -%}
 							  ]
+						var gps_{{medicion}}_data = [
+								{%- for i in datos[1:] -%}
+									['{{i.latitud}},{{ i.longitud }}']
+									{% if not loop.last %},{% endif %}
+								{%- endfor -%}
+							  ]
 
 						var data{{loop.index}} = [
-							{label: "{{titulos.0}}", data: build_{{medicion}}_data,  points: { symbol: "diamond" },color: "{{colores[loop.index0].0}}",colores: ['{{colores[loop.index0].1}}','{{colores[loop.index0].2}}'], extra: extra_{{medicion}}_data}
+							{label: "{{titulos.0}}", data: build_{{medicion}}_data,  points: { symbol: "diamond" },color: "{{colores[loop.index0].0}}",
+							{# estos ya son valores extras para adornar el grafico :D #}
+							colores: ['{{colores[loop.index0].1}}','{{colores[loop.index0].2}}'], extra: extra_{{medicion}}_data, gps: gps_{{medicion}}_data}
 							
 						];
 			 
@@ -252,13 +283,22 @@
 						placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia= " + item.datapoint[1].toFixed(1) + "(ug/m^3)"  ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia= " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
 									$tooltip.show().children(0).html(tip);
 								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
 								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
 							} else {
 								$tooltip.hide();
 								previousPoint = null;
+							}
+							
+						 });
+						 
+						 placeholder{{loop.index}}.on('plotclick', function (event, pos, item) {
+							if(item) {
+							document.getElementById('img1').src = "http://maps.googleapis.com/maps/api/staticmap?markers="+item.series['gps'][item.dataIndex][0]+"&zoom=16&size=600x400&maptype=satellite&sensor=false";
+							$('#modalito').find('#titulo').text(item.series['extra'][item.dataIndex].substring(1) + "-> {{titulos.0}}=" + item.datapoint[1].toFixed(1) + "(ug/m3)" );
+									$('#modalito').modal('show')  ;
 							}
 							
 						 });
@@ -310,7 +350,7 @@
 								{%- for i in promedio -%}
 									{% if i[medicion] %}
 										{% set contadortemporal = contadortemporal +(zonatemp != i.NombreZona?1:0) %}
-										'{{contadortemporal%2}}{{ i.NombreZona }}'
+										'{{contadortemporal%2}}{{ i.NombreZona }}->{{ i.NombreTramo }}'
 										{% set zonatemp = i.NombreZona %}
 										{% if not loop.last %},{% endif %}
 									{% endif %}
@@ -372,13 +412,12 @@
 						placeholderb{{loop.index}}.on('plothover', function (event, pos, item) {
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
-								if (previousPoint != item.seriesIndex) {
 									previousPoint = item.seriesIndex;
 									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
 									$tooltip.show().children(0).html(tip);
-								}
-								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
-								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
+								
+									$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
+									$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
 							} else {
 								$tooltip.hide();
 								previousPoint = null;

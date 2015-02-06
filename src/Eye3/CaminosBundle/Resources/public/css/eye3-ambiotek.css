@@ -73,7 +73,7 @@ color: #74BD43;
 }
   
 .no-skin .nav-list>li.open>a { 
-   color: #009890;
+   color: #66A548;
   }
 
   
@@ -81,7 +81,7 @@ color: #74BD43;
   background-color: #66A548;
 }
 .no-skin .navbar .navbar-toggle:focus {
-  background-color: #c0dada;
+  background-color: #66A548;
   border-color: transparent;
 }
 .no-skin .navbar .navbar-toggle:hover {

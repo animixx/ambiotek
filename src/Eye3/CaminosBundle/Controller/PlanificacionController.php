@@ -46,7 +46,7 @@ class PlanificacionController extends Controller
                 'fecha' => $fecha,
             );    
 	}
-	
+		
 	
     /**
      * Displays a form to edit an existing Observacion entity.

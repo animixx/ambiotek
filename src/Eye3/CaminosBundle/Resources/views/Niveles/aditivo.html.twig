@@ -1,6 +1,9 @@
 {% extends '::base.html.twig' %}
 {% block stylesheets %}
 {{parent()}}
+
+				<link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker.css') }}" />
+                <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker3.css') }}" />
  {% javascripts '@data_tables' %}
    
 
@@ -26,22 +29,18 @@
 {% endblock %}
 {% block body %}
    
-<div class="row">
-				<div class="col-12">
 					<div class="page-header"><h1>Agua y Aditivo</h1></div>
-				</div>
-</div>
-
-    <div class="table-bordered table-responsive">
-		{{ addDataTable(dataTable, {
-									"info": false ,
-									"order": [ 0, "desc" ]
-								}) 
-		}}
-    </div>
-	<div> <a class="btn btn-primary" href="{{ path('aditivo_new') }}"><i class="ace-icon fa fa-plus"></i>Agregar Valores</a> 
-	</div>
-	
+				
+					
+					<div  class="table-bordered table-responsive">
+						{{ addDataTable(dataTable, {
+													"info": false ,
+													"order": [ 0, "desc" ]
+												}) 
+						}}
+					</div>
+					<a class="btn btn-primary" href="{{ path('aditivo_new') }}"><i class="ace-icon fa fa-plus"></i>Agregar Valores</a> 
+					
 	
 	{% block js %}{% endblock %}
 			<script src="{{ asset('bundles/eye3caminos/js/dataTables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
@@ -49,5 +48,70 @@
 			<script src="{{ asset('bundles/eye3caminos/js/bootstrap.js') }}" type="text/javascript"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/ace/ace.js') }}" type="text/javascript"></script>
 			<script src="{{ asset('bundles/eye3caminos/js/ace/ace.sidebar.js') }}" type="text/javascript"></script>
+			
+			 <script src="{{ asset('bundles/eye3caminos/js/date-time/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
+
+            <script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.min.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.symbol.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.axislabels.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.time.min.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.resize.min.js') }}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+					{{rango?'xrango()'}};
+        });
+		
+		function cambios(event){
+			ocultar();
+			if(event.checked) xrango();
+			else tabla();
+		}
+		
+		function ocultar(){
+			var tabla = $('.tabla').css({'display':'none'});
+			var graficos = $('.graficos').css({'display':'none' });
+		}
+		
+		
+
+		function xrango() {
+		
+			$.resize.throttleWindow = false;
+			
+			$('.tabla').css({'display': 'none'});
+			$('.graficos').css({'display': ''});
+			
+			}
+			
+		function tabla() {
+		
+			$.resize.throttleWindow = false;
+			
+			$('.graficos').css({'display': 'none'});
+			$('.tabla').css({'display': ''});
+			
+			}
+		
+        jQuery(function($) {
+
+								//or change it into a date range picker
+								$('.input-daterange').datepicker({
+										autoclose:true,
+                                        weekStart: 1,
+                                        language: "es",
+                                        format: "dd-mm-yyyy"
+								})
+							
+				
+                                //show datepicker when clicking on the icon
+                                .next().on(ace.click_event, function(){
+                                        $(this).prev().focus();
+                                });
+								
+
+                        });
+
+</script>	
 
 {% endblock %}

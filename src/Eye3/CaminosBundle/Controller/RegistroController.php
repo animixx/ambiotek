@@ -5,6 +5,8 @@ namespace Eye3\CaminosBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Fill;
 
 class RegistroController extends Controller
 {
@@ -70,6 +72,67 @@ class RegistroController extends Controller
 						$latTo = deg2rad($llenado['latitud']);
 						$lonTo = deg2rad($llenado['longitud']);
 						
+						$style['titulo'] = array(
+														'font'  => array(
+															'bold'  => true,
+															'color' => array('rgb' => '63B434'),
+															'size'  => 11,
+															'name'  => 'Calibri'
+															),
+											  'borders' => array(
+												'left' => array(
+												  'style' => PHPExcel_Style_Border::BORDER_THIN,
+												),
+												'right' => array(
+												  'style' => PHPExcel_Style_Border::BORDER_THIN,
+												),
+												'bottom' => array(
+												  'style' => PHPExcel_Style_Border::BORDER_NONE,
+												), 
+											  ),
+											  'fill' => array(
+												'type' => PHPExcel_Style_Fill::FILL_SOLID,
+												'startcolor' => array(
+												  'argb' => 'FFFFFFCC',
+												),
+											  ),
+													);
+													
+						
+													
+						$style['impares'] = array(
+														'font' => array(
+															'name' => 'Calibri',
+															'color' => array(
+																'rgb' => '464646'
+															)
+														),
+													);
+						
+						
+						$styleArray = array(
+											  'font' => array(
+												'name' => 'Arial',
+												'size' => '8',
+											  ),
+											  'borders' => array(
+												'left' => array(
+												  'style' => PHPExcel_Style_Border::BORDER_THIN,
+												),
+												'right' => array(
+												  'style' => PHPExcel_Style_Border::BORDER_THIN,
+												),
+												'bottom' => array(
+												  'style' => PHPExcel_Style_Border::BORDER_NONE,
+												), 
+											  ),
+											  'fill' => array(
+												'type' => PHPExcel_Style_Fill::FILL_SOLID,
+												'startcolor' => array(
+												  'argb' => 'FFFFFFCC',
+												),
+											  ),
+											);
 						$fechaMedicion=date_create($llenado['fecha']);
 
 						$angle = 2 * asin(sqrt(pow(sin(($latTo - $latFrom) / 2), 2) +
@@ -81,21 +144,21 @@ class RegistroController extends Controller
 						{
 							if ($contador >0 ) $phpExcelObject->createSheet();
 							$phpExcelObject->setActiveSheetIndex($contador++)
-									->setCellValue('A1', 'ID')
-									->setCellValue('B1', 'Tramo')
-									->setCellValue('C1', 'Zona')
-									->setCellValue('D1', 'Fecha')
-									->setCellValue('E1', 'Latitud')
-									->setCellValue('F1', 'Longitud')
-									->setCellValue('G1', "Velocidad\n(km/h)")
-									->setCellValue('H1', "Altura\n(mts)")
-									->setCellValue('I1', "Distancia\n(mts)")
-									->setCellValue('J1', "Acumulada\nx tramo (mts)")
-									->setCellValue('K1', 'TPS')
-									->setCellValue('L1', 'PM10')
-									->setCellValue('M1', 'PM2,5')
-									->setCellValue('N1', 'PM1')
-									->setCellValue('O1', 'Observación');
+									->setCellValue('A2', 'ID')
+									->setCellValue('B2', 'Tramo')
+									->setCellValue('C2', 'Zona')
+									->setCellValue('D2', 'Fecha')
+									->setCellValue('E2', 'Latitud')
+									->setCellValue('F2', 'Longitud')
+									->setCellValue('G2', "Velocidad\n(km/h)")
+									->setCellValue('H2', "Altura\n(mts)")
+									->setCellValue('I2', "Distancia\n(mts)")
+									->setCellValue('J2', "Acumulada\nx tramo (mts)")
+									->setCellValue('K2', 'TPS')
+									->setCellValue('L2', 'PM10')
+									->setCellValue('M2', 'PM2,5')
+									->setCellValue('N2', 'PM1')
+									->setCellValue('O2', 'Observación');
 							
 							foreach (range('A', $phpExcelObject->getActiveSheet()->getHighestDataColumn()) as $col) 
 							{
@@ -104,15 +167,18 @@ class RegistroController extends Controller
 											->getColumnDimension($col)
 											->setAutoSize(true);
 								$phpExcelObject->getActiveSheet()
-										->getStyle($col.'1')
-										->getFont()->setBold(true);
+										->getStyle($col.'2')
+										->applyFromArray($style['titulo']);
 								$phpExcelObject->getActiveSheet()
-										->getStyle($col.'1')
+										->getStyle($col.'2')
 										->getAlignment()->setWrapText(true);
 							}
+							$phpExcelObject->getActiveSheet()
+										->getStyle('A3:O30')
+										->applyFromArray($style['impares']);
 							$phpExcelObject->getActiveSheet()->calculateColumnWidths();
-							$phpExcelObject->getActiveSheet()->freezePane('A2');
-							$aux=2;
+							$phpExcelObject->getActiveSheet()->freezePane('A3');
+							$aux=3;
 							
 							if ($llenado['NombreTramo']!='')
 								$phpExcelObject->getActiveSheet()->setTitle($llenado['NombreZona'].'('.$fechaMedicion->format('d-m-Y').')');
