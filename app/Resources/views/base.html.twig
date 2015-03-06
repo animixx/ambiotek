@@ -148,24 +148,67 @@
 
 				<ul class="nav nav-list">
 					
+					<li class="#">
+						<a href="" class="dropdown-toggle" >
+							<i class="menu-icon fa fa-bar-chart-o"></i>
+
+							<span class="menu-text">Resumen</span>
+							<b class="arrow fa fa-angle-down"></b>
+							
+						</a>
+								<b class="arrow"></b>
+
+									<ul class="submenu">
+										<li class="#">
+											<a href="#">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Última Medición
+											</a>
+
+											<b class="arrow"></b>
+										</li>
+
+										<li class="#">
+											<a href="#">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Medición y Riego
+											</a>
+
+											<b class="arrow"></b>
+										</li>
+
+									</ul>
+					</li>
+					
 					<li class="{% if app.request.attributes.get('_controller')|slice(30,4) == 'Mapa' %}active open{% endif %}">
-						<a href="{{path('mapa')}}" >
+						<a href="" class="dropdown-toggle" >
 							<i class="menu-icon fa fa-map-marker"></i>
 							<span class="menu-text"> Mapa </span>
+							<b class="arrow fa fa-angle-down"></b>
 
 						</a>
-						
-					</li>
+						<b class="arrow"></b>
 
-					</li>
+									<ul class="submenu">
+										<li class="#">
+											<a href="{{path('mapa')}}">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Material Particulado
+											</a>
 
-					<li class="{% if app.request.attributes.get('_controller')|slice(30,8) == 'Registro' %}active open{% endif %}">
-						<a href="{{path('registro')}}" >
-							<i class="menu-icon fa fa-list"></i>
-							<span class="menu-text"> Registro </span>
+											<b class="arrow"></b>
+										</li>
 
-						</a>
-						
+										<li class="#">
+											<a href="#">
+												<i class="menu-icon fa fa-caret-right"></i>
+												Riego 
+											</a>
+
+											<b class="arrow"></b>
+										</li>
+
+									</ul>
 					</li>
 
 					
@@ -183,7 +226,7 @@
 										<li class="{% if app.request.attributes.get('_controller')|slice(49,11) == 'polvoAction' %}active {% endif %}">
 											<a href="{{path('polvo')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
-												Polvo
+												Material Particulado
 											</a>
 
 											<b class="arrow"></b>
@@ -223,18 +266,27 @@
 										</li>
 
 			{% endif %}
-										<li class="{% if app.request.attributes.get('_controller')|slice(55,11) == 'conductores' %}active {% endif %}">
-											<a href="{{path('conductores')}}">
+										<li class="">
+											<a href="#">
 												<i class="menu-icon fa fa-caret-right"></i>
-												Conductores
+												Planificación Riego
 											</a>
 
 											<b class="arrow"></b>
 										</li>
-
 									</ul>
 
 					</li>
+
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,8) == 'Registro' %}active open{% endif %}">
+						<a href="{{path('registro')}}" >
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text"> Registro </span>
+
+						</a>
+						
+					</li>
+
 			{% if is_granted('ROLE_ADMIN') %}		
 					<li class="{% if app.request.attributes.get('_controller')|slice(30,6) == 'Acceso' %}active open{% endif %}">
 						<a href="#" class="dropdown-toggle">
