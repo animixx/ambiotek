@@ -133,8 +133,8 @@ color: #74BD43;
 .btn-primary:hover,
 .btn-primary:active,
 .open .btn-primary.dropdown-toggle {
-  background-color: #009a90 !important;
-  border-color: #009a90;
+  background-color: #66A548 !important;
+  border-color: #66A548;
 }
 
  .login-layout .widget-box {
@@ -153,7 +153,7 @@ color: #74BD43;
 }
 
 .blue {
-  color: #00726b !important;
+  color: #858585 !important;
 }
 
 .header.blue {
