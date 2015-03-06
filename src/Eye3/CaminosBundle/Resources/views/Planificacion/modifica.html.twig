@@ -1,15 +1,13 @@
 <div class="hidden-sm hidden-xs action-buttons">
 
-	<a data-toggle="modal" class="light-orange" href="http://maps.googleapis.com/maps/api/staticmap?markers={{latitud}},{{longitud}}&zoom=16&size=500x500&maptype=satellite&sensor=false" data-target="#myModal" >
+	<a class="light-orange" obb="{{obs}}" href="#" imm="http://maps.googleapis.com/maps/api/staticmap?markers={{latitud}},{{longitud}}&zoom=16&size=600x400&maptype=satellite&sensor=false" >
 		<i class="ace-icon fa fa-map-marker bigger-130"></i>
 	</a>
-
-
 
 	<a class="green" href="{{ path('observacion_edit', {'id': id }) }}">
 		<i class="ace-icon fa fa-pencil bigger-130"></i>
 	</a>
-
+	
 	<a class="red" href="{{ path('observacion_deleteconfirm', {'id': id }) }}">
 		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 	</a>
