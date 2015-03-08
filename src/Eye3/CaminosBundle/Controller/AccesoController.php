@@ -196,7 +196,6 @@ class AccesoController extends Controller
     public function perfilAction(Request $request)
     {
 		
-		// print_r($this->getUser());exit;
 		$em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('Eye3CaminosBundle:Usuario')->find($this->getUser());
         // $entity = $this->getUser();
@@ -249,7 +248,7 @@ class AccesoController extends Controller
             $em->persist($registry);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('usuarios'));
+            return $this->redirect($this->generateUrl('home_page'));
         }
 
         $entity = new Usuario();

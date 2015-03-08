@@ -57,10 +57,10 @@ class MapaController extends Controller
 		$map->setMapOption('mapTypeControl', false);
 	
 		
-		$dot_red = '/testing/web/bundles/eye3caminos/images/punto_rojo.png';
-		$dot_blue = '/testing/web/bundles/eye3caminos/images/puto_azul.png';
-		$dot_green = '/testing/web/bundles/eye3caminos/images/punto_verde.png';
-		$dot_yellow = '/testing/web/bundles/eye3caminos/images/dot-yellow.png';
+		$dot_red = '/teck/bundles/eye3caminos/images/punto_rojo.png';
+		$dot_blue = '/teck/bundles/eye3caminos/images/punto_azul.png';
+		$dot_green = '/teck/bundles/eye3caminos/images/punto_verde.png';
+		$dot_yellow = '/teck/bundles/eye3caminos/images/dot-yellow.png';
 		
 		// $dot_red =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-red.png');
 		// $dot_blue =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-blue.png','eye3caminos');
