@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Templating\Helper\AssetsHelper;
 use Eye3\CaminosBundle\Entity\Sightdata;
+use Eye3\CaminosBundle\Entity\Aditivo;
 use Ivory\GoogleMap\Map,
 	Ivory\GoogleMap\MapTypeId,
     Ivory\GoogleMap\Overlays\Marker,
@@ -129,5 +130,30 @@ class ResumenController extends Controller
 			   'mediciones' => count($medicionXpuntos),
             );    
 	}
+	
+	/**
+     * @Route("/resumen", name="resumen")
+     * @Template()
+     */
+    public function riegoAction(Request $request)
+    {
+		
+		$end = $request->request->get('end', date("d-m-Y"));
+		$date_end= date_create($end);
+		$date_start= date_create($end);		/*valor temporal, que se modifica en la siguiente linea, es creado ahora solo para el caso inicial*/
+		$start = $request->request->get('start',$date_start->modify('-3 months')->format('d-m-Y'));
+		$date_start= date_create($start);
+		
+		$em = $this->getDoctrine()->getManager();
+		$grafico = $em->getRepository('Eye3CaminosBundle:Aditivo')->GraficarAditivo($date_start->format('Y-m-d'),$date_end->format('Y-m-d'));
+		
+		$promedio = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(true,$date_end->format('Y-m-d'),$date_start->format('Y-m-d'));
 
+        return array(
+		    'start' => $start,
+		    'end' => $end,
+		    'grafico' => $grafico,
+			'promedio' => $promedio,  
+        );
+	}
 }
