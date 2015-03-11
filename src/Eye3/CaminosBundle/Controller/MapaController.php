@@ -26,7 +26,7 @@ class MapaController extends Controller
     {
 		
 		// $fecha = date("d-m-Y");
-		$fecha = $request->request->get('fecha', '03-12-2014');;
+		$fecha = $request->request->get('fecha', '20-01-2015');;
 		$date= date_create($fecha);
 
 		$em = $this->getDoctrine()->getManager();
@@ -281,7 +281,7 @@ class MapaController extends Controller
     {
 		
 		// $fecha = date("d-m-Y");
-		$fecha = $request->request->get('fecha', '03-12-2014');;
+		$fecha = $request->request->get('fecha', '20-01-2015');;
 		$date= date_create($fecha);
 
 		$em = $this->getDoctrine()->getManager();
@@ -388,5 +388,6 @@ class MapaController extends Controller
 			   'rutas' => count($tramos),
             );    
 	}
+	
 
 }

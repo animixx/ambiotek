@@ -20,7 +20,7 @@ class NivelesController extends Controller
     public function polvoAction(Request $request)
     {
 		$rango = $request->request->get('rango');
-		$fecha = $request->request->get('fecha', '03-12-2014');
+		$fecha = $request->request->get('fecha', '20-01-2015');
 		$end = $request->request->get('end', $fecha);
 		$date= date_create($fecha);
 		$date_end= date_create($end);

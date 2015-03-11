@@ -1,0 +1,243 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+{{ parent() }}
+                <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker.css') }}" />
+                <link rel="stylesheet" href="{{ asset('bundles/eye3caminos/css/datepicker3.css') }}" />
+{% endblock %}
+
+{%- block body -%}
+   
+    <div class="row" >
+                <div class="col-md-4 col-xs-2"></div>
+                <div class="col-md-3 col-xs-8">
+                        <!-- #section:plugins/date-time.datepicker -->
+                                <form action="#" method="POST">
+                        <div class="input-group">
+                                <input class="form-control date-picker" name="fecha" id="id-date-picker-1" type="text"  placeholder="{{fecha}}" value="{{fecha}}" />
+                                <span class="input-group-addon">
+                                        <i class="fa fa-calendar "></i>
+                                </span>
+                        </div>
+                                <input type="submit" value="ver">
+                                </form>
+                </div>
+        </div>
+		
+		
+<div class="row">
+				<div class="col-12">
+					<div class="page-header"><h1>Resumen Última Medición</h1></div>
+				</div>
+</div>
+<div class="row">
+	<div class="col-md-10">
+	{{ google_map_container(map) }}
+	{{ google_map_js(map) }}
+	</div>
+
+	<div class="col-md-2">
+	
+	<table class="table table-bordered" >
+	<tr class="widget-header-flat">	<th colspan=2 > Escala de PM10 | ug/m3 </th> </tr>
+	<tr> <td>1000 - 6000</td><td style="background-color:#EE3830"> &nbsp;&nbsp; </td> </tr>
+	<tr> <td>600 - 999</td> <td style="background-color:#FDDF16"> &nbsp;&nbsp; </td></tr>
+	<tr> <td>300 - 599</td><td style="background-color:#9CCC51"> &nbsp;&nbsp; </td> </tr>
+	<tr> <td>0 - 299</td> <td style="background-color:#00AC5C"> &nbsp;&nbsp;</td></tr>
+	</table>
+	</div>
+</div>
+
+<div class="col-12">
+			
+		<div id="placeholder1" style="position: relative; display: none" ></div><div id="legendContainer1" style="display: none"></div><br><br>
+		<div id="placeholder2" style="position: relative; display: inline-block"></div></div><div id="legendContainer2" style="display: none" ></div><br><br>
+		<div id="placeholder3" style="position: relative; display: none"></div></div><div id="legendContainer3" style="display: none" ></div><br><br>
+		<div id="placeholder4" style="position: relative; display: none"></div></div><div id="legendContainer4" style="display: none" ></div>
+</div>
+{% endblock %}
+	
+{% block js %}
+<!-- basic scripts en base -->
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{{asset('bundles/eye3caminos/js/jquery.js')}}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+		<script type="text/javascript">
+		 window.jQuery || document.write("<script src='{{asset('bundles/eye3caminos/js/jquery1x.js')}}'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+		
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='{{asset('bundles/eye3caminos/js/jquery.mobile.custom.js')}}'>"+"<"+"/script>");
+		</script>
+		
+{#		
+		{% javascripts 
+			'bundles/eye3caminos/js/date-time/bootstrap-datepicker.js'
+			'bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js'
+            %}
+            <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% endjavascripts %}
+#}
+			<script src="{{ asset('bundles/eye3caminos/js/date-time/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/date-time/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/bootstrap.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/ace/ace.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/ace/ace.sidebar.js') }}" type="text/javascript"></script>
+			
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.min.js') }}" type="text/javascript"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.symbol.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.axislabels.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.time.min.js') }}"></script>
+			<script src="{{ asset('bundles/eye3caminos/js/flot/jquery.flot.resize.min.js') }}" type="text/javascript"></script>
+
+			{% set colores = [['#EE3830','#F79C83',"#F79974"], ['#F47A2C','#FAB788',"#FDC271"], ['#9CCC51','#9ACEA5',"#B8D985"], ['#00828F','#8EB2BC',"#8D97CB"]] %}
+			{% set graficos = {'tpm':["TPM","(ug/m3)"], 'pm10':["PM10","(ug/m3)"], 'pm25':["PM2,5","(ug/m3)"], 'pm1':["PM1","(ug/m3)"]} %}
+			{% set fecha_minima = {} %}
+			{% set fecha_maxima = {} %}
+			{% set m_pm10 = 0 %}
+			{% set tramos = {} %}
+
+<script type="text/javascript">
+		$(document).ready(function () {
+					xdia();
+        });
+		
+		function xdia() {
+			//flot chart resize plugin, somehow manipulates default browser resize event to optimize it!
+			  //but sometimes it brings up errors with normal resize event handlers
+			  $.resize.throttleWindow = false;
+			  
+			
+			var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+			var previousPoint = null;
+			{% set tramotemp = null %}
+			{% set contadortemporal = 0 %}	  
+			
+			{% for medicion,titulos in graficos if datos is not empty %}
+{# aun falta modificar pero la idea es que el primer dato de la serie contiene el promedio de la medicion, asi si el promedio no existe no se muestra el grafico #}
+				{% if datos[0][medicion]  %}  
+						var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'300px'});
+						var leyenda{{loop.index}} = $('#legendContainer{{loop.index}}').css({'width':'5%' , 'min-height':'300px'});
+				
+						var build_{{medicion}}_data = [
+								{%- for i in datos[1:] -%}
+									[{{(fecha|date("Ymd")~'T'~(i.utctime|round))|date("U")}}000, {{i[medicion]}}]
+									{% if not loop.last %},{% endif %}
+								{%- endfor -%}
+							  ]
+						var extra_{{medicion}}_data = [
+								{%- for i in datos[1:] -%}
+									{% set contadortemporal = contadortemporal +(tramotemp != i.NombreTramo?1:0) %}
+									{% if tramotemp != i.NombreTramo %}
+										{% set tramos = tramos |merge({ (i.NombreTramo):((fecha|date("Ymd")~'T'~(i.utctime|round))|date("U"))}) %}
+									{% endif %}
+									'{{contadortemporal%2}}{{ i.NombreTramo }}'
+									{% set tramotemp = i.NombreTramo %}
+									{% if not loop.last %},{% endif %}
+								{%- endfor -%}
+							  ]
+						var gps_{{medicion}}_data = [
+								{%- for i in datos[1:] -%}
+									['{{i.latitud}},{{ i.longitud }}']
+									{% if not loop.last %},{% endif %}
+								{%- endfor -%}
+							  ]
+
+						var data{{loop.index}} = [
+							{label: "{{titulos.0}}", data: build_{{medicion}}_data,  points: { symbol: "diamond" },color: "{{colores[loop.index0].0}}",
+							{# estos ya son valores extras para adornar el grafico :D #}
+							colores: ['{{colores[loop.index0].1}}','{{colores[loop.index0].2}}'], extra: extra_{{medicion}}_data, gps: gps_{{medicion}}_data}
+							
+						];
+			 
+						var options = {
+							axisLabels: {
+								show: true
+							},xaxis: { 
+									mode: "time" ,
+									axisLabel: 'Tiempo/tramos',
+									timezone: "browser"
+								{#	timezone: "UTC" la otra opcion #}
+							}, yaxis: {
+									min : 0,
+									axisLabel: '{{titulos.0 ~ titulos.1}}'
+							}, grid: {
+								hoverable: true,
+								clickable: true,
+						{#% if medicion == "pm10" %#}
+								markings: [
+										{%- for nombre,posicion in tramos  -%}
+											 { color: 'green', xaxis: { from: {{posicion}}000, to: {{posicion}}000  } }
+											 {% if not loop.last %},{% endif %}
+										{% endfor %}
+											],
+						{#% endif %#}
+								borderWidth: .3
+							}, legend: {
+								container:$("#legendContainer{{loop.index}}")        
+							}, series: {
+									points: {
+											show: true,
+											radius: 3
+											}
+							}
+						};
+		 
+					var plot = $.plot($("#placeholder{{loop.index}}"), data{{loop.index}}, options);	
+					
+						placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
+							if(item) {
+									var fecha = new Date(item.datapoint[0]);
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia= " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
+									$tooltip.show().children(0).html(tip);
+								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
+								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
+							} else {
+								$tooltip.hide();
+								previousPoint = null;
+							}
+							
+						 });
+						 
+						 placeholder{{loop.index}}.on('plotclick', function (event, pos, item) {
+							if(item) {
+							document.getElementById('img1').src = "http://maps.googleapis.com/maps/api/staticmap?markers="+item.series['gps'][item.dataIndex][0]+"&zoom=16&size=600x400&maptype=satellite&sensor=false";
+							$('#modalito').find('#titulo').text(item.series['extra'][item.dataIndex].substring(1) + "-> {{titulos.0}}=" + item.datapoint[1].toFixed(1) + "(ug/m3)" );
+									$('#modalito').modal('show')  ;
+							}
+							
+						 });
+				{% endif %}
+			{% endfor %}
+		}
+
+        jQuery(function($) {
+
+
+
+                                //datepicker plugin
+                                //link
+                                $('.date-picker').datepicker({
+                                        autoclose: true,
+                                        weekStart: 1,
+                                        language: "es",
+                                        todayBtn: "linked",
+                                        format: "dd-mm-yyyy",
+                                        todayHighlight: true
+                                })
+                                //show datepicker when clicking on the icon
+                                .next().on(ace.click_event, function(){
+                                        $(this).prev().focus();
+                                });
+
+
+                        });
+
+</script>	
+{% endblock %}

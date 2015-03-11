@@ -105,5 +105,19 @@ class SightdataRepository extends EntityRepository
 			return $query->fetchcolumn(0);
 		}
 
+		public function LastDato()
+		{ 
+			
+			$query = $this->getEntityManager()
+			->getConnection()
+			->prepare(
+				"SELECT max(fecha) FROM pmdata join gpsdata on id_gps=id where pmdata.id_tramo is not null"
+			);
+			
+			$query->execute();
+
+			return $query->fetchcolumn(0);
+		}
+
 }
 		
