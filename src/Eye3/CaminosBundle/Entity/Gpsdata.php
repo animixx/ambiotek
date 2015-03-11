@@ -118,6 +118,16 @@ class Gpsdata
      * @ORM\Column(name="altitude", type="string", length=10, nullable=true)
      */
     private $altitude;
+ 
+	/**
+     * @var \Tramomapa
+     *
+     * @ORM\ManyToOne(targetEntity="Tramomapa")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_tramo", referencedColumnName="id")
+     * })
+     */
+    private $idTramo;
 
 
 
@@ -451,5 +461,28 @@ class Gpsdata
     public function getAltitude()
     {
         return $this->altitude;
+    }
+	
+	/**
+     * Set idTramo
+     *
+     * @param \Eye3\CaminosBundle\Entity\Tramomapa $idTramo
+     * @return Pmdata
+     */
+    public function setIdTramo(\Eye3\CaminosBundle\Entity\Tramomapa $idTramo = null)
+    {
+        $this->idTramo = $idTramo;
+
+        return $this;
+    }
+
+    /**
+     * Get idTramo
+     *
+     * @return \Eye3\CaminosBundle\Entity\Tramomapa 
+     */
+    public function getIdTramo()
+    {
+        return $this->idTramo;
     }
 }

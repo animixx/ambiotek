@@ -20,7 +20,6 @@ class NivelesController extends Controller
     public function polvoAction(Request $request)
     {
 		$rango = $request->request->get('rango');
-
 		$fecha = $request->request->get('fecha', '03-12-2014');
 		$end = $request->request->get('end', $fecha);
 		$date= date_create($fecha);
@@ -49,16 +48,16 @@ class NivelesController extends Controller
      */
     public function aditivoAction(Request $request)
     {
-		$rango = $request->request->get('rango');
+		$rango = $request->request->get('rango','on');
 
-		$end = $request->request->get('end', '03-12-2014');
+		$end = $request->request->get('end', date("d-m-Y"));
 		$date_end= date_create($end);
 		$date_start= date_create($end);		/*valor temporal, que se modifica en la siguiente linea, es creado ahora solo para el caso inicial*/
-		$start = $request->request->get('start',$date_start->modify('-4 months')->format('d-m-Y'));
+		$start = $request->request->get('start',$date_start->modify('-6 months')->format('d-m-Y'));
 		$date_start= date_create($start);
 		
 		$em = $this->getDoctrine()->getManager();
-		// $promedio = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(true,$date_end->format('Y-m-d'),$date_start->format('Y-m-d'));
+		$grafico = $em->getRepository('Eye3CaminosBundle:Aditivo')->GraficarAditivo($date_start->format('Y-m-d'),$date_end->format('Y-m-d'));
 		
 		 $dataTable = $this->get('data_tables.manager')->getTable('aditivoTable');
         if ($response = $dataTable->ProcessRequest($request)) {
@@ -70,6 +69,7 @@ class NivelesController extends Controller
 		    'rango' => $rango,
 		    'start' => $start,
 		    'end' => $end,
+		    'grafico' => $grafico,
 			  
         );
 		

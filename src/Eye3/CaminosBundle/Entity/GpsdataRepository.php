@@ -23,7 +23,7 @@ class GpsdataRepository extends EntityRepository
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"SELECT zonaid FROM pmdata join gpsdata  gps on id_gps = gps.id join tramoMapa tramo on id_tramo = tramo.id where fecha like '$fecha%' group by zonaid"
+					"SELECT zonaid FROM pmdata join gpsdata  gps on id_gps = gps.id join tramoMapa tramo on pmdata.id_tramo = tramo.id where fecha like '$fecha%' group by zonaid"
 				);
 			$query->execute();
 			return $query->fetchColumn();
@@ -93,8 +93,8 @@ class GpsdataRepository extends EntityRepository
 				->getConnection()
 				->prepare(
 					"SELECT altitude, d.id_gps as id_gps ,tsplat ,pm10lat ,pm25lat ,pm1lat ,fecha, latitud, longitud ,speed ,value ,NombreTramo , NombreZona FROM pmdata d 
-		join gpsdata  gps on d.id_gps = gps.id join tramoMapa tramo on id_tramo = tramo.id join zonaMapa z on zonaid=z.id left join sightdata o on d.id_gps =o.id_gps  
-		WHERE fecha BETWEEN :desde and :hasta  and id_tramo is not null order by date_format(fecha,'%Y%m%d'), zonaid, id_tramo ;"
+		join gpsdata  gps on d.id_gps = gps.id join tramoMapa tramo on d.id_tramo = tramo.id join zonaMapa z on zonaid=z.id left join sightdata o on d.id_gps =o.id_gps  
+		WHERE fecha BETWEEN :desde and :hasta  and d.id_tramo is not null order by date_format(fecha,'%Y%m%d'), zonaid, d.id_tramo ;"
 
 			);
 				$query->bindValue('desde', $desde );
