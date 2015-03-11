@@ -270,6 +270,123 @@ class MapaController extends Controller
 			   'observaciones' => count($puntos),
 			   'mediciones' => count($medicionXpuntos),
 			   'tramos' => count($medicionXtramos),
-            );    }
+            );    
+	}
+			
+	/**
+     * @Route("/riego", name="riego")
+     * @Template()
+     */
+    public function riegoAction(Request $request)
+    {
+		
+		// $fecha = date("d-m-Y");
+		$fecha = $request->request->get('fecha', '03-12-2014');;
+		$date= date_create($fecha);
+
+		$em = $this->getDoctrine()->getManager();
+		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetSightDots($date->format('dmy'));
+		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
+		$medicionXtramos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(true,$date->format('dmy'));
+
+		$area = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetAreas($date->format('Y-m-d'));
+		
+		// todavia falta validar cuando mas de un area
+		$tramos = (is_numeric($area))?$em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos($area):array();
+		
+		$map = new Map();
+
+		if( ( count($tramos) + count($puntos) + count($medicionXpuntos) + count($medicionXtramos))>0)
+		{
+			// Enable the auto zoom flag
+			$map->setAutoZoom(true);
+		}
+		else
+		{
+			$map->setCenter(-21.004101,-68.792018, true);
+			$map->setMapOption('zoom', 16);
+		}
+			
+		$map->setMapOption('streetViewControl', false);
+		$map->setMapOption('mapTypeId', MapTypeId::SATELLITE);
+		$map->setMapOption('mapTypeControl', false);
+	
+		
+		$dot_red = 'http://eye3.cl/teck/bundles/eye3caminos/images/punto_rojo.png';
+		$dot_blue = 'http://eye3.cl/teck/bundles/eye3caminos/images/punto_azul.png';
+		$dot_green = 'http://eye3.cl/teck/bundles/eye3caminos/images/punto_verde.png';
+		$dot_yellow = 'http://eye3.cl/teck/bundles/eye3caminos/images/dot-yellow.png';
+		
+		// $dot_red =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-red.png');
+		// $dot_blue =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-blue.png','eye3caminos');
+		// $dot_green =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-green.png','eye3caminos');
+		// $dot_yellow =  $this->container->get('templating.helper.assets')->getUrl('bundles/eye3caminos/images/dot-yellow.png','eye3caminos');
+		
+		$cuentaPunto=0;
+		
+		
+		$eventos[]=array('ruta','polylines');
+		foreach ($tramos as $tramo)
+		{
+			$polyline="polyline".$tramo['id'];
+			$$polyline = new Polyline();
+			$$polyline->setPrefixJavascriptVariable('ruta_');
+			
+			$punto_tramo = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramo($tramo['id']);
+
+			if (is_array($punto_tramo))
+			{
+				foreach ($punto_tramo as $coordenada)
+				{
+					$$polyline->addCoordinate($coordenada['Y'], $coordenada['X'], true);
+				}
+			}
+			
+			$$polyline->setOptions(array(
+				'geodesic'    => true,
+				'strokeOpacity'    => 0.4,
+				'strokeColor' => '#00ffff',
+			));
+			$map->addPolyline($$polyline);
+		}
+		
+		foreach ($eventos as $evento)
+		{
+				$event = 'event_'.$evento[0];
+				$instance = 'instance_'.$evento[0];
+				$handle = 'handle_'.$evento[0];
+				
+				$$event = new Event();
+
+				$$instance = 'document.getElementById("'.$evento[0].'")';
+				$$handle = 'function(){ 
+										var map; var container = '.$map->getJavascriptVariable().'_container; 
+										if ('.$$instance.'.checked){ map = '.$map->getJavascriptVariable().';};
+										for (var dato in container.'.$evento[1].') 
+												{ if (dato.split("_",1)=="'.$evento[0].'") {container.'.$evento[1].'[dato].setMap(map)}}
+									}';
+				// Configure your event
+				$$event->setInstance($$instance);
+				$$event->setEventName('click');
+				$$event->setHandle($$handle);
+				
+				$map->getEventManager()->addDomEvent($$event);
+				
+		}
+	
+		
+		$map->setStylesheetOptions(array(
+			'width'  => '100%',
+			'height' => '500px'
+		));
+
+		$map->setLanguage('es');
+
+        return array(
+               'map' => $map,
+			   'fecha' => $fecha,
+			   'rutas' => count($tramos),
+            );    
+	}
 
 }
