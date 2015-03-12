@@ -96,7 +96,7 @@
 				{% set contador = 0 %}
 			{% set graficos = { 'pm10':["PM10","(ug/m3)"]} %}
 			{% set fecha_minima = {} %}
-			{% set fecha_maxima = {} %}
+			{% set fecha_maxima = {'pm10':null} %}
 			{% set m_pm10 = 0 %}
 			{% set tramos = {} %}
 				
@@ -106,19 +106,19 @@
 				 
 		 var graficame1 = { data: [
 					{% for i in grafico %}
-						[{{i.fecha|date("U")}}000, {{i.agua}}]
+						[{{i.fecha|date_modify("-10 hour")|date("U")}}000, {{i.agua}}]
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}
-					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 20 }};
+					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 500 * 60 * 60 * 24 }};
 				  	 
 		 var graficame2 = { data: [
 					{% for i in grafico %}
-						[{{i.fecha|date_modify("+3 hour")|date("U")}}000, {{i.aditivo}}]
+						[{{i.fecha|date_modify("+4 hour")|date("U")}}000, {{i.aditivo}}]
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}
-					], color: "{{ cycle(colores, contador ) }}", bars: { show: true }};
+					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 500 * 60 * 60 * 24 }};
 				  
 				
 		
@@ -128,7 +128,7 @@
 							},xaxis: { 
 									mode: "time" ,
 									min : {{(grafico|first)["fecha"]|date_modify("-1 day")|date("U")}}000,   
-									max : {{(grafico|last)["fecha"]|date_modify("-1 day")|date("U")}}000,   
+									max : {{(grafico|last)["fecha"]|date_modify("+1 day")|date("U")}}000,   
 									tickSize: [1, "day"],
 									axisLabel: 'Fecha'
 							},yaxis: { 
@@ -179,10 +179,14 @@
 										{% if fecha_minima[medicion] is not defined  %}		{#  seteo de primera fecha válida #}
 											{% set fecha_minima = fecha_minima| merge ({ (medicion): i.fecha }) %}
 										{% endif %}
+										{% if i.fecha > fecha_maxima[medicion]   %}		
+											{% set fecha_maxima = fecha_maxima| merge ({ (medicion): i.fecha }) %}
+										{% endif %}
 										{% if medicion == "pm10" and m_pm10 < i[medicion] %}	{#  seteo del valor máximo #}	
 											{% set m_pm10= i[medicion] %}
 										{% endif %}
-										[{{i.fecha|date("U")}}000, {{i[medicion]}}]
+										{% set adelando = "+"~loop.index0~" hour" %}
+										[{{i.fecha|date_modify("+0 day 00:00:00")|date_modify(adelando)|date("U")}}000, {{i[medicion]}}]
 										{% if not loop.last %},{% endif %}
 									{% endif %}
 								{%- endfor -%}
@@ -220,11 +224,14 @@
 								{%- if fecha_minima[medicion] is defined -%}
 									min : {{fecha_minima[medicion]|date_modify("-1 day")|date("U")}}000,
 								{%- endif -%}
+								{%- if fecha_maxima[medicion] is defined -%}
+									max : {{fecha_maxima[medicion]|date_modify("+1 day 00:00:00")|date("U")}}000,
+								{%- endif -%}
 								
 									axisLabel: 'Fecha/zonas',
 									tickSize: [1, "day"],
-									timezone: "browser"
-								{#	timezone: "UTC" la otra opcion #}
+									timezone: "UTC"
+								{#	timezone: "browser" la otra opcion #}
 							}, yaxis: {
 									min : 0,
 						{#% if medicion == "pm10"  %}
@@ -266,7 +273,7 @@
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
 									previousPoint = item.seriesIndex;
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.getUTCDate() + "/" + fecha.getUTCMonth()+1 + "/" + fecha.getUTCFullYear() + "<br>promedió=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
 									$tooltip.show().children(0).html(tip);
 								
 									$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
@@ -302,5 +309,4 @@
                         });
 
 </script>	
-
 {% endblock %}

@@ -157,7 +157,7 @@
 			{% set colores = [['#EE3830','#F79C83',"#F79974"], ['#F47A2C','#FAB788',"#FDC271"], ['#9CCC51','#9ACEA5',"#B8D985"], ['#00828F','#8EB2BC',"#8D97CB"]] %}
 			{% set graficos = {'tpm':["TPM","(ug/m3)"], 'pm10':["PM10","(ug/m3)"], 'pm25':["PM2,5","(ug/m3)"], 'pm1':["PM1","(ug/m3)"]} %}
 			{% set fecha_minima = {} %}
-			{% set fecha_maxima = {} %}
+			{% set fecha_maxima = {'tpm':null,'pm10':null,'pm25':null,'pm1':null} %}
 			{% set m_pm10 = 0 %}
 			{% set tramos = {} %}
 			
@@ -318,10 +318,15 @@
 										{% if fecha_minima[medicion] is not defined  %}		{#  seteo de primera fecha válida #}
 											{% set fecha_minima = fecha_minima| merge ({ (medicion): i.fecha }) %}
 										{% endif %}
+										{% if i.fecha > fecha_maxima[medicion]   %}		
+											{% set fecha_maxima = fecha_maxima| merge ({ (medicion): i.fecha }) %}
+										{% endif %}
+										
 										{% if medicion == "pm10" and m_pm10 < i[medicion] %}	{#  seteo del valor máximo #}	
 											{% set m_pm10= i[medicion] %}
 										{% endif %}
-										[{{i.fecha|date("U")}}000, {{i[medicion]}}]
+										{% set adelando = "+"~(loop.index0-8)~" hour" %}
+										[{{i.fecha|date_modify("+0 day 00:00:00")|date_modify(adelando)|date("U")}}000, {{i[medicion]}}]
 										{% if not loop.last %},{% endif %}
 									{% endif %}
 								{%- endfor -%}
@@ -359,11 +364,13 @@
 								{%- if fecha_minima[medicion] is defined -%}
 									min : {{fecha_minima[medicion]|date_modify("-1 day")|date("U")}}000,
 								{%- endif -%}
-								
+								{%- if fecha_maxima[medicion] is defined -%}
+									max : {{fecha_maxima[medicion]|date_modify("+1 day 00:00:00")|date("U")}}000,
+								{%- endif -%}
 									axisLabel: 'Fecha/zonas',
 									tickSize: [1, "day"],
 									timezone: "browser"
-								{#	timezone: "UTC" la otra opcion #}
+								{#	timezone: "browser" la otra opcion #}
 							}, yaxis: {
 									min : 0,
 						{#% if medicion == "pm10"  %}
@@ -405,7 +412,7 @@
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
 									previousPoint = item.seriesIndex;
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleString() + fecha.getUTCDate() + "/" + fecha.getUTCMonth()+1 + "/" + fecha.getUTCFullYear() + "<br>promedió=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
 									$tooltip.show().children(0).html(tip);
 								
 									$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
@@ -462,5 +469,4 @@
                         });
 
 </script>		
-	
 {% endblock %}

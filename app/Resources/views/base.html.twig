@@ -148,7 +148,7 @@
 
 				<ul class="nav nav-list">
 					
-					<li class="#">
+					<li class="{% if app.request.attributes.get('_controller')|slice(30,7) == 'Resumen' %}active open{% endif %}">
 						<a href="" class="dropdown-toggle" >
 							<i class="menu-icon fa fa fa-tachometer"></i>
 
@@ -159,7 +159,7 @@
 								<b class="arrow"></b>
 
 									<ul class="submenu">
-										<li class="#">
+										<li class="{% if app.request.attributes.get('_controller')|slice(30,30) == 'ResumenController::indexAction' %}active {% endif %}">
 											<a href="{{path('ultimo')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
 												Última Medición
@@ -168,7 +168,7 @@
 											<b class="arrow"></b>
 										</li>
 
-										<li class="#">
+										<li class="{% if app.request.attributes.get('_controller')|slice(30,30) == 'ResumenController::riegoAction' %}active {% endif %}">
 											<a href="{{path('resumen')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
 												Medición y Riego
@@ -190,7 +190,7 @@
 						<b class="arrow"></b>
 
 									<ul class="submenu">
-										<li class="#">
+										<li class="{% if app.request.attributes.get('_controller')|slice(30,27) == 'MapaController::indexAction' %}active {% endif %}">
 											<a href="{{path('mapa')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
 												Material Particulado
@@ -199,7 +199,7 @@
 											<b class="arrow"></b>
 										</li>
 
-										<li class="#">
+										<li class="{% if app.request.attributes.get('_controller')|slice(30,27) == 'MapaController::riegoAction' %}active {% endif %}">
 											<a href="{{path('riego')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
 												Riego 
