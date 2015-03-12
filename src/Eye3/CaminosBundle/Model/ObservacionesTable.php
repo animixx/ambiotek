@@ -51,7 +51,8 @@ class ObservacionesTable extends QueryBuilderDataTable implements QueryBuilderDa
 
 	/**
      * @var string
-     * @DataTable\Column(source="sightdata.idGps.idTramo",name="Tramo" )
+     * @DataTable\Column(source="sightdata.idGps.idTramo.nombretramo",name="Tramo" )
+	 * @DataTable\Format(dataFields={"dato":"sightdata.idGps.idTramo.nombretramo"}, template="Eye3CaminosBundle:Planificacion:tramo.html.twig")
      */
     public $tramo;
 
