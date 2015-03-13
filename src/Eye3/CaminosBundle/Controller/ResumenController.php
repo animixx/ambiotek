@@ -28,7 +28,7 @@ class ResumenController extends Controller
     {
 		
 		// $fecha = date("d-m-Y");
-		$fecha = $request->request->get('fecha', '20-01-2015');;
+		$fecha = $request->request->get('fecha', '12-03-2015');;
 		$date= date_create($fecha);
 
 		$em = $this->getDoctrine()->getManager();
@@ -78,7 +78,7 @@ class ResumenController extends Controller
 			// Add marker overlay to your map
 				$$marker = new Marker();
 				$$marker->setPrefixJavascriptVariable('medicion_');
-				$$marker->setPosition($maraca['latitud'],$maraca['longitud'], true);  
+				$$marker->setPosition($maraca['latitude'],$maraca['longitude'], true);  
 				if ($maraca['pm10lat']>999)
 				{ $$marker->setIcon($dot_red);}
 				elseif ($maraca['pm10lat']>599)

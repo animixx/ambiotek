@@ -346,9 +346,9 @@
 						var extra_{{medicion}}_data = [
 								{%- for i in promedio -%}
 									{% if i[medicion] %}
-										{% set contadortemporal = contadortemporal +(zonatemp != i.NombreZona?1:0) %}
-										'{{contadortemporal%2}}{{ i.NombreZona }}->{{ i.NombreTramo }}'
-										{% set zonatemp = i.NombreZona %}
+										{% set contadortemporal = contadortemporal +(zonatemp != "zona" ?1:0) %}
+										'{{contadortemporal%2}}{{ i.NombreTramo }}'
+										{% set zonatemp = "zona" %}
 										{% if not loop.last %},{% endif %}
 									{% endif %}
 								{%- endfor -%}
@@ -367,7 +367,7 @@
 								{%- if fecha_maxima[medicion] is defined -%}
 									max : {{fecha_maxima[medicion]|date_modify("+1 day 00:00:00")|date("U")}}000,
 								{%- endif -%}
-									axisLabel: 'Fecha/zonas',
+									axisLabel: 'Fecha/tramos',
 									tickSize: [1, "day"],
 									timezone: "browser"
 								{#	timezone: "browser" la otra opcion #}

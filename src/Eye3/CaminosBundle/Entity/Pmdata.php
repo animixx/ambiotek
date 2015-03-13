@@ -80,17 +80,23 @@ class Pmdata
      */
     private $idGps;
 
-    /**
-     * @var \Tramomapa
+	 /**
+     * @var \Eye3\CaminosBundle\Entity\Graficarmapa
      *
-     * @ORM\ManyToOne(targetEntity="Tramomapa")
+     * @ORM\ManyToOne(targetEntity="Eye3\CaminosBundle\Entity\Graficarmapa")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_tramo", referencedColumnName="id")
      * })
      */
+	
     private $idTramo;
 
-
+	/**
+     * @var float
+     *
+     * @ORM\Column(name="recorrido", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $recorrido;
 
     /**
      * Set tsplat
@@ -320,5 +326,28 @@ class Pmdata
     public function getIdTramo()
     {
         return $this->idTramo;
+    }
+	
+	 /**
+     * Set recorrido
+     *
+     * @param float $recorrido
+     * @return Pmdata
+     */
+    public function setRecorrido($recorrido)
+    {
+        $this->recorrido = $recorrido;
+
+        return $this;
+    }
+
+    /**
+     * Get recorrido
+     *
+     * @return float 
+     */
+    public function getRecorrido()
+    {
+        return $this->recorrido;
     }
 }

@@ -7,20 +7,21 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Gpsdata
  *
- * @ORM\Table(name="gpsdata")
+ * @ORM\Table(name="gpsdata", indexes={@ORM\Index(name="tramoid", columns={"tramoid"})})
  * @ORM\Entity(repositoryClass="Eye3\CaminosBundle\Entity\GpsdataRepository")
  */
 class Gpsdata
 {
+
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
 
+    private $id;
     /**
      * @var string
      *
@@ -38,7 +39,7 @@ class Gpsdata
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="datetime", nullable=false)
+     * @ORM\Column(name="fecha", type="datetime", nullable=true)
      */
     private $fecha;
 
@@ -50,44 +51,16 @@ class Gpsdata
     private $status;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="latitude", type="string", length=9, nullable=true)
-     */
-    private $latitude;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ns", type="string", length=1, nullable=true)
-     */
-    private $ns;
-
-    /**
      * @var float
      *
-     * @ORM\Column(name="latitud", type="float", precision=10, scale=6, nullable=true)
+     * @ORM\Column(name="latitude", type="float", precision=10, scale=6, nullable=true)
      */
     private $latitud;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="longitude", type="string", length=10, nullable=true)
-     */
-    private $longitude;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ew", type="string", length=1, nullable=true)
-     */
-    private $ew;
-
-    /**
      * @var float
      *
-     * @ORM\Column(name="longitud", type="float", precision=10, scale=6, nullable=true)
+     * @ORM\Column(name="longitude", type="float", precision=10, scale=6, nullable=true)
      */
     private $longitud;
 
@@ -115,21 +88,49 @@ class Gpsdata
     /**
      * @var string
      *
+     * @ORM\Column(name="magnetic_variation", type="string", length=10, nullable=true)
+     */
+    private $magneticVariation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="course", type="string", length=10, nullable=true)
+     */
+    private $course;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="altitude", type="string", length=10, nullable=true)
      */
     private $altitude;
- 
-	/**
-     * @var \Tramomapa
+
+
+    /**
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Tramomapa")
+     * @ORM\Column(name="gprmc", type="string", length=82, nullable=true)
+     */
+    private $gprmc;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gpgga", type="string", length=82, nullable=true)
+     */
+    private $gpgga;
+
+
+    /**
+     * @var \Eye3\CaminosBundle\Entity\Graficarmapa
+     *
+     * @ORM\ManyToOne(targetEntity="Eye3\CaminosBundle\Entity\Graficarmapa")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_tramo", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="tramoid", referencedColumnName="id")
      * })
      */
-    private $idTramo;
-
-
+    private $tramoid;
 
     /**
      * Get id
@@ -234,52 +235,6 @@ class Gpsdata
     }
 
     /**
-     * Set latitude
-     *
-     * @param string $latitude
-     * @return Gpsdata
-     */
-    public function setLatitude($latitude)
-    {
-        $this->latitude = $latitude;
-
-        return $this;
-    }
-
-    /**
-     * Get latitude
-     *
-     * @return string 
-     */
-    public function getLatitude()
-    {
-        return $this->latitude;
-    }
-
-    /**
-     * Set ns
-     *
-     * @param string $ns
-     * @return Gpsdata
-     */
-    public function setNs($ns)
-    {
-        $this->ns = $ns;
-
-        return $this;
-    }
-
-    /**
-     * Get ns
-     *
-     * @return string 
-     */
-    public function getNs()
-    {
-        return $this->ns;
-    }
-
-    /**
      * Set latitud
      *
      * @param float $latitud
@@ -300,52 +255,6 @@ class Gpsdata
     public function getLatitud()
     {
         return $this->latitud;
-    }
-
-    /**
-     * Set longitude
-     *
-     * @param string $longitude
-     * @return Gpsdata
-     */
-    public function setLongitude($longitude)
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
-
-    /**
-     * Get longitude
-     *
-     * @return string 
-     */
-    public function getLongitude()
-    {
-        return $this->longitude;
-    }
-
-    /**
-     * Set ew
-     *
-     * @param string $ew
-     * @return Gpsdata
-     */
-    public function setEw($ew)
-    {
-        $this->ew = $ew;
-
-        return $this;
-    }
-
-    /**
-     * Get ew
-     *
-     * @return string 
-     */
-    public function getEw()
-    {
-        return $this->ew;
     }
 
     /**
@@ -441,6 +350,52 @@ class Gpsdata
     }
 
     /**
+     * Set magneticVariation
+     *
+     * @param string $magneticVariation
+     * @return Gpsdata
+     */
+    public function setMagneticVariation($magneticVariation)
+    {
+        $this->magneticVariation = $magneticVariation;
+
+        return $this;
+    }
+
+    /**
+     * Get magneticVariation
+     *
+     * @return string 
+     */
+    public function getMagneticVariation()
+    {
+        return $this->magneticVariation;
+    }
+
+    /**
+     * Set course
+     *
+     * @param string $course
+     * @return Gpsdata
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+
+        return $this;
+    }
+
+    /**
+     * Get course
+     *
+     * @return string 
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
      * Set altitude
      *
      * @param string $altitude
@@ -462,27 +417,73 @@ class Gpsdata
     {
         return $this->altitude;
     }
-	
-	/**
-     * Set idTramo
+
+    /**
+     * Set gprmc
      *
-     * @param \Eye3\CaminosBundle\Entity\Tramomapa $idTramo
-     * @return Pmdata
+     * @param string $gprmc
+     * @return Gpsdata
      */
-    public function setIdTramo(\Eye3\CaminosBundle\Entity\Tramomapa $idTramo = null)
+    public function setGprmc($gprmc)
     {
-        $this->idTramo = $idTramo;
+        $this->gprmc = $gprmc;
 
         return $this;
     }
 
     /**
-     * Get idTramo
+     * Get gprmc
      *
-     * @return \Eye3\CaminosBundle\Entity\Tramomapa 
+     * @return string 
      */
-    public function getIdTramo()
+    public function getGprmc()
     {
-        return $this->idTramo;
+        return $this->gprmc;
+    }
+
+    /**
+     * Set gpgga
+     *
+     * @param string $gpgga
+     * @return Gpsdata
+     */
+    public function setGpgga($gpgga)
+    {
+        $this->gpgga = $gpgga;
+
+        return $this;
+    }
+
+    /**
+     * Get gpgga
+     *
+     * @return string 
+     */
+    public function getGpgga()
+    {
+        return $this->gpgga;
+    }
+
+    /**
+     * Set tramoid
+     *
+     * @param \Eye3\CaminosBundle\Entity\Graficarmapa $tramoid
+     * @return Gpsdata
+     */
+    public function setTramoid(\Eye3\CaminosBundle\Entity\Graficarmapa $tramoid = null)
+    {
+        $this->tramoid = $tramoid;
+
+        return $this;
+    }
+
+    /**
+     * Get tramoid
+     *
+     * @return \Eye3\CaminosBundle\Entity\Graficarmapa 
+     */
+    public function getTramoid()
+    {
+        return $this->tramoid;
     }
 }

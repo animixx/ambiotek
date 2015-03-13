@@ -26,7 +26,7 @@ class MapaController extends Controller
     {
 		
 		// $fecha = date("d-m-Y");
-		$fecha = $request->request->get('fecha', '20-01-2015');;
+		$fecha = $request->request->get('fecha', '12-03-2015');;
 		$date= date_create($fecha);
 
 		$em = $this->getDoctrine()->getManager();
@@ -34,10 +34,11 @@ class MapaController extends Controller
 		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
 		$medicionXtramos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(true,$date->format('dmy'));
 
-		$area = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetAreas($date->format('Y-m-d'));
+		// $area = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetAreas($date->format('Y-m-d'));
+		
 		
 		// todavia falta validar cuando mas de un area
-		$tramos = (is_numeric($area))?$em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos($area):array();
+		$tramos = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos();
 		
 		$map = new Map();
 
@@ -151,7 +152,7 @@ class MapaController extends Controller
 			// Add marker overlay to your map
 				$$marker = new Marker();
 				$$marker->setPrefixJavascriptVariable('medicion_');
-				$$marker->setPosition($maraca['latitud'],$maraca['longitud'], true);  
+				$$marker->setPosition($maraca['latitude'],$maraca['longitude'], true);  
 				if ($maraca['id_tramo']>0)
 					$$marker->setIcon($dot_green);
 				else
@@ -191,18 +192,21 @@ class MapaController extends Controller
 		{
 			// if (!is_numeric ($marca->getValue()))
 			// {
-				$latitud = substr($marca->getIdGps()->getLatitude(),0,2);
-				$longitud = substr($marca->getIdGps()->getLongitude(),0,3);
-				$decimal_latitud = substr($marca->getIdGps()->getLatitude(), 2);
-				$decimal_longitud = substr($marca->getIdGps()->getLongitude(), 3);
 				
-					$cuentaPunto++;
+				
+				$latitud = $marca->getIdGps()->getLatitud();
+				$longitud = $marca->getIdGps()->getLongitud();
+				// $decimal_latitud = $marca->getIdGps()->getLatitude(), 2);
+				// $decimal_longitud = substr($marca->getIdGps()->getLongitude(), 3);
+
+				$cuentaPunto++;
 					$marker="marker".$cuentaPunto;
 					$infoWindow="infoWindow".$cuentaPunto;
 				// Add marker overlay to your map
 					$$marker = new Marker();
 					$$marker->setPrefixJavascriptVariable('observacion_');
-					$$marker->setPosition(-($latitud+($decimal_latitud/60+0.00002)),-($longitud+($decimal_longitud/60+0.00003)), true);  
+					// $$marker->setPosition(-($latitud+($decimal_latitud/60+0.00002)),-($longitud+($decimal_longitud/60+0.00003)), true);  
+					$$marker->setPosition(($latitud-0.00002),($longitud-0.00003), true);  
 					$$marker->setIcon($dot_blue);
 					
 
@@ -289,10 +293,10 @@ class MapaController extends Controller
 		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
 		$medicionXtramos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(true,$date->format('dmy'));
 
-		$area = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetAreas($date->format('Y-m-d'));
+		// $area = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetAreas($date->format('Y-m-d'));
 		
 		// todavia falta validar cuando mas de un area
-		$tramos = (is_numeric($area))?$em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos($area):array();
+		$tramos = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramos();
 		
 		$map = new Map();
 

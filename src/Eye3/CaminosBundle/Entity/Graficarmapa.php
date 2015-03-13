@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Graficarmapa
  *
- * @ORM\Table(name="graficarMapa", indexes={@ORM\Index(name="tramoid", columns={"tramoid"})})
+ * @ORM\Table(name="graficarMapa")
  * @ORM\Entity
  */
 class Graficarmapa
@@ -15,11 +15,18 @@ class Graficarmapa
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="NombreTramo", type="string", length=60, nullable=false)
+     */
+    private $nombretramo;
 
     /**
      * @var linestring
@@ -31,19 +38,17 @@ class Graficarmapa
     /**
      * @var polygon
      *
-     * @ORM\Column(name="zona", type="polygon", nullable=false)
+     * @ORM\Column(name="zona", type="polygon", nullable=true)
      */
     private $zona;
 
     /**
-     * @var \Tramomapa
+     * @var float
      *
-     * @ORM\ManyToOne(targetEntity="Tramomapa")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tramoid", referencedColumnName="id")
-     * })
+     * @ORM\Column(name="largoTramo", type="float", precision=18, scale=6, nullable=true)
      */
-    private $tramoid;
+    private $largotramo;
+
 
 
 
@@ -55,6 +60,29 @@ class Graficarmapa
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set nombretramo
+     *
+     * @param string $nombretramo
+     * @return Graficarmapa
+     */
+    public function setNombretramo($nombretramo)
+    {
+        $this->nombretramo = $nombretramo;
+
+        return $this;
+    }
+
+    /**
+     * Get nombretramo
+     *
+     * @return string 
+     */
+    public function getNombretramo()
+    {
+        return $this->nombretramo;
     }
 
     /**
@@ -104,25 +132,25 @@ class Graficarmapa
     }
 
     /**
-     * Set tramoid
+     * Set largotramo
      *
-     * @param \Eye3\CaminosBundle\Entity\Tramomapa $tramoid
+     * @param float $largotramo
      * @return Graficarmapa
      */
-    public function setTramoid(\Eye3\CaminosBundle\Entity\Tramomapa $tramoid = null)
+    public function setLargotramo($largotramo)
     {
-        $this->tramoid = $tramoid;
+        $this->largotramo = $largotramo;
 
         return $this;
     }
 
     /**
-     * Get tramoid
+     * Get largotramo
      *
-     * @return \Eye3\CaminosBundle\Entity\Tramomapa 
+     * @return float 
      */
-    public function getTramoid()
+    public function getLargotramo()
     {
-        return $this->tramoid;
+        return $this->largotramo;
     }
 }
