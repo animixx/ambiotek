@@ -308,10 +308,10 @@ class Pmdata
     /**
      * Set idTramo
      *
-     * @param \Eye3\CaminosBundle\Entity\Tramomapa $idTramo
+     * @param \Eye3\CaminosBundle\Entity\Graficarmapa $idTramo
      * @return Pmdata
      */
-    public function setIdTramo(\Eye3\CaminosBundle\Entity\Tramomapa $idTramo = null)
+    public function setIdTramo(\Eye3\CaminosBundle\Entity\Graficarmapa $idTramo = null)
     {
         $this->idTramo = $idTramo;
 
@@ -321,7 +321,7 @@ class Pmdata
     /**
      * Get idTramo
      *
-     * @return \Eye3\CaminosBundle\Entity\Tramomapa 
+     * @return \Eye3\CaminosBundle\Entity\Graficarmapa 
      */
     public function getIdTramo()
     {

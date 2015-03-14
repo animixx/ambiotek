@@ -31,6 +31,24 @@ class AditivoRepository extends EntityRepository
 			 
 			 return $query->fetchAll();
 		}
+		
+		//formato fecha desde y hasta "yyyy-mm-dd"
+		public function historial_excel($desde = "2014-12-01" ,$hasta = "2014-12-31")
+		{
+
+			$query = $this->getEntityManager()
+				->getConnection()
+				->prepare(
+					"select *, null as NombreTramo, null as NombreZona, null as value from aditivo join usuario on usuario = usuario.id WHERE fecha BETWEEN :desde and :hasta order by fecha;"
+
+			);
+				$query->bindValue('desde', $desde );
+				$query->bindValue('hasta', $hasta );
+// VER EL ORDEN, EL FORMATO ANTERIOR AHORA NO ES VALIDO -->order by date_format(fecha,'%Y%m%d'), zonaid, d.id_tramo ;"
+			 $query->execute();
+			 
+			 return $query->fetchAll();
+		}
 
 }
 		

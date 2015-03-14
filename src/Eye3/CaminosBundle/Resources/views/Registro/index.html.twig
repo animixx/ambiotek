@@ -40,10 +40,10 @@
 										{{meses[(innermes)]}}-{{anyo}}
 									</td>
 									<td class="center">
-										<a class="green" href='{{path('genera_excel',{'fecha':anyo~'/'~(innermes+1)})}}'><i class="fa fa-file-excel-o fa-2x"></i></a>
+										<a class="green" href='{{path('genera_excel_polvo',{'fecha':anyo~'/'~(innermes+1)})}}'><i class="fa fa-file-excel-o fa-2x"></i></a>
 									</td>
 									<td class="center">
-										<a class="red" href="#"{#{path('reporte_mensual',{'fecha':anyo~'/'~(innermes+1),'descarga':'D'})}#}><i class="fa fa-file-excel-o fa-2x"></i></a>
+										<a class="green" href='{{path('genera_excel_liquidos',{'fecha':anyo~'/'~(innermes+1)})}}'><i class="fa fa-file-excel-o fa-2x"></i></a>
 									</td>
 								</tr>
 							{% endfor %}
