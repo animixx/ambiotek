@@ -162,7 +162,7 @@ class ActividadesController extends Controller
      *
      * @Route("/actividades/deleteconfirm/{id}", name="actividad_deleteconfirm")
      * @Method("GET")
-     * @Template()
+     * @Template("Eye3CaminosBundle:Niveles:deleteconfirm.html.twig")
      */
     public function deleteconfirmAction(Request $request, $id)
     {

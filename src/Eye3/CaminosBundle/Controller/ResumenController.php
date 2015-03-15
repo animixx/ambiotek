@@ -26,14 +26,15 @@ class ResumenController extends Controller
      */
     public function indexAction(Request $request)
     {
+		$em = $this->getDoctrine()->getManager();
 		
 		// $fecha = date("d-m-Y");
-		$fecha = $request->request->get('fecha', '12-03-2015');;
+		$fecha = $request->request->get('fecha', $em->getRepository('Eye3CaminosBundle:Sightdata')->LastDato());;
 		$date= date_create($fecha);
 
-		$em = $this->getDoctrine()->getManager();
-		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
+		// echo $em->getRepository('Eye3CaminosBundle:Sightdata')->LastDato(); exit;
 
+		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
 		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(false,$date->format('Y-m-d'));
 		
 		$map = new Map();

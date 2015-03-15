@@ -249,3 +249,16 @@ img.login:hover {
 .table-hover > tbody > tr.info:hover > th {
   background-color: #ccccc;
 } 
+
+.btn-default,
+.btn-default:focus {
+  background-color: #abbac3!important;
+  border-color: #abbac3;
+}
+
+.btn-default:hover,
+.btn-default:active,
+.open .btn-default.dropdown-toggle {
+  background-color: #A6D287 !important;
+  border-color: #A6D287;
+}

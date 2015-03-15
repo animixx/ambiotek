@@ -15,9 +15,9 @@ class AditivoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-			->add('fecha', 'datetime',array('label'=>'Fecha','widget'=>'single_text','format'=>'dd/MM/yyyy HH:mm' ))
-			->add('agua', 'text', array('label'=>'Agua','required' => true))
-			->add('aditivo', 'text', array('label'=>'Aditivo','required' => true))
+			->add('fecha', 'datetime',array('label'=>'Fecha/Hora','widget'=>'single_text','format'=>'dd/MM/yyyy HH:mm' ))
+			->add('agua', 'text', array('label'=>'Agua (m3)','required' => true))
+			->add('aditivo', 'text', array('label'=>'Aditivo (m3)','required' => true))
         ;
     }
     

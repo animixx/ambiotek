@@ -2,11 +2,48 @@
 
 {% block body -%}
 
-<div class="row">
-	<div class="col-md-8 col-md-offset-2">
-    <h2>Seguro?</h2>
-   {{ form(delete_form) }}
-	</div>
-</div>
 
+
+
+<div class="page-content-area">
+						<div class="page-header">
+							<h1>Confirmación para eliminar</h1>
+						</div><!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								 {{ form_start(delete_form, {'attr':{'class':'form-horizontal'}}) }}
+								<!-- #section:elements.form -->
+							
+
+								<!-- /section:elements.form -->
+								<div class="space-4"></div>
+
+								<div class="space"></div>
+								
+								<div class="form-group">
+								<div class="input-group col-sm-offset-1 pull-left">
+										¿Está seguro que desea eliminar la información seleccionada?
+									</div>
+									
+									
+								</div>	
+								
+								
+								<div class="clearfix form-actions" />
+								<div class="col-md-offset-5 col-md-7">
+
+								{{ form_widget(delete_form.submit, {'label':'Eliminar', 'attr':{'class':'btn btn-primary'}}) }}
+
+								&nbsp; &nbsp;
+								<button type="reset" class="btn btn-default">
+									Cancelar
+								</button>
+								</div>
+							</div>
+						</div>
+						{{ form_end(delete_form) }}
+	
+	
 {% endblock %}

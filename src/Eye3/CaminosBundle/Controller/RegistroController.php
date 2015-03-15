@@ -20,8 +20,6 @@ class RegistroController extends Controller
      */
     public function indexAction()
     {
-        $fecha = date("d-m-Y");
-		
 		
 		$em = $this->getDoctrine()->getManager();
         $primerizo = $em->getRepository('Eye3CaminosBundle:Sightdata')->FirstDato();

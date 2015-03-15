@@ -111,7 +111,7 @@ class SightdataRepository extends EntityRepository
 			$query = $this->getEntityManager()
 			->getConnection()
 			->prepare(
-				"SELECT max(fecha) FROM pmdata join gpsdata on id_gps=id where pmdata.id_tramo is not null"
+				"SELECT date_format( max(fecha) ,'%d-%m-%Y') FROM pmdata join gpsdata on id_gps=id where pmdata.id_tramo is not null"
 			);
 			
 			$query->execute();

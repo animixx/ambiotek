@@ -218,6 +218,7 @@ class AccesoController extends Controller
 		$form
 			->add('plainPassword', 'repeated', array(
                 'type'=>'password',
+				 'required' => false,
                 'invalid_message' => 'Las claves deben coincidir.',
                 'first_options'  => array('label' => 'Contraseña'),
                 'second_options' => array('label' => 'Confirmar'),
@@ -265,7 +266,7 @@ class AccesoController extends Controller
      *
      * @Route("/usuarios/deleteconfirm/{id}", name="user_deleteconfirm")
      * @Method("GET")
-     * @Template()
+     * @Template("Eye3CaminosBundle:Niveles:deleteconfirm.html.twig")
      */
     public function deleteconfirmAction(Request $request, $id)
     {

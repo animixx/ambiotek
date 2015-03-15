@@ -25,11 +25,11 @@ class MapaController extends Controller
     public function indexAction(Request $request)
     {
 		
-		// $fecha = date("d-m-Y");
-		$fecha = $request->request->get('fecha', '12-03-2015');;
+		$em = $this->getDoctrine()->getManager();
+	
+		$fecha = $request->request->get('fecha', $em->getRepository('Eye3CaminosBundle:Sightdata')->LastDato());;
 		$date= date_create($fecha);
 
-		$em = $this->getDoctrine()->getManager();
 		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetSightDots($date->format('dmy'));
 		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
 		$medicionXtramos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(true,$date->format('dmy'));
@@ -79,7 +79,6 @@ class MapaController extends Controller
 			$$polyline->setPrefixJavascriptVariable('tramo_');
 			
 			$punto_tramo = $em->getRepository('Eye3CaminosBundle:Gpsdata')->GetTramo($tramo['id']);
-		// print_r($medicionXtramos);exit;
 
 			if (is_array($punto_tramo))
 			{
@@ -284,7 +283,6 @@ class MapaController extends Controller
     public function riegoAction(Request $request)
     {
 		
-		// $fecha = date("d-m-Y");
 		$fecha = $request->request->get('fecha', '20-01-2015');;
 		$date= date_create($fecha);
 

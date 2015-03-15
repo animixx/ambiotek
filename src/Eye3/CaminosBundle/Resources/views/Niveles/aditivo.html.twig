@@ -155,14 +155,14 @@
 				 
 		 var graficame1 = [
 					{% for i in grafico %}
-						{ data: [[{{i.fecha|date("U")}}000, {{i.agua}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 1000 * 60 * 60 * 24 },extra:"{{i.nombre}}"}
+						{ data: [[{{i.fecha|date("U")}}000, {{i.agua}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true },extra:"{{i.nombre}}"}
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}
 				  ]	 
 		 var graficame2 = [
 					{% for i in grafico %}
-						{ data: [[{{i.fecha|date("U")}}000, {{i.aditivo}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 1000 * 60 * 60 * 24 }}
+						{ data: [[{{i.fecha|date("U")}}000, {{i.aditivo}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true }}
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}

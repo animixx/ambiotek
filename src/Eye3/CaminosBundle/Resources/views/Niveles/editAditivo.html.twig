@@ -10,7 +10,7 @@
 
 	<div class="page-content-area">
 						<div class="page-header">
-							<h1>Agregar Valores de Agua y Aditivo</h1>
+							<h1>Editar Valores de Agua y Aditivo</h1>
 						</div><!-- /.page-header -->
 
 						<div class="row">
@@ -65,17 +65,17 @@
 
 								<div class="space"></div>
 
-								<div class="clearfix form-actions">
+								<div class="clearfix form-actions" />
 								<div class="col-md-offset-5 col-md-7">
 
 
-								{{ form_widget(form.submit, {'label':'Guardar', 'attr':{'class':'btn btn-info'}}) }}
+								{{ form_widget(form.submit, {'label':'Guardar', 'attr':{'class':'btn btn-primary'}}) }}
 
 								&nbsp; &nbsp;
-								<button type="reset" class="btn">
-									<i class="ace-icon fa fa-undo bigger-110"></i>
-									Borrar
+								<button type="reset" class="btn btn-default">
+									Cancelar
 								</button>
+								</div>
 							</div>
 						</div>
 						{{ form_end(form) }}
@@ -120,8 +120,8 @@
 <script type="text/javascript">
 
         jQuery(function($) {
-								$('#form_aditivo_agua').ace_spinner({value:0,min:0,max:10000,step:100, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
-								$('#form_aditivo_aditivo').ace_spinner({value:0,min:0,max:10000,step:10, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+								$('#form_aditivo_agua').ace_spinner({value:0,min:0,max:10000, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-default' , btn_down_class:'btn-default'});
+								$('#form_aditivo_aditivo').ace_spinner({value:0,min:0,max:10000, on_sides: true, icon_up:'ace-icon fa fa-plus bigger-110', icon_down:'ace-icon fa fa-minus bigger-110', btn_up_class:'btn-default' , btn_down_class:'btn-default'});
 		
 								$('.date-timepicker1').datetimepicker({
 										setDate: new Date(),

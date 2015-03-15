@@ -26,14 +26,14 @@ class ActividadesTable extends QueryBuilderDataTable implements QueryBuilderData
      */
     public $cuando; 
 	
-	 /**
+	/**
      * @var time
      * @DataTable\Column(source="actividad.hora", name="Hora" )
 	 * @DataTable\Format(dataFields={"dato":"actividad.hora"}, template="Eye3CaminosBundle:Actividades:hora.html.twig")
      */
     public $hora; 
 
-   /**
+	/**
      * @var string
      * @DataTable\Column(source="actividad.usuario", name="Usuario")
      */
