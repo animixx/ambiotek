@@ -43,6 +43,26 @@ class AccesoController extends Controller
         );
     }
 
+    /**
+    * Lists all Registro entities.
+    *
+    * @Route("/dios", name="uso_dios")
+    * @Template("Eye3CaminosBundle:Acceso:uso.html.twig")
+	* @param \Symfony\Component\HttpFoundation\Request $request
+    * @return array
+    */
+    public function usoDiosAction(Request $request)
+    {
+        $dataTable = $this->get('data_tables.manager')->getTable('accesoDiosTable');
+        if ($response = $dataTable->ProcessRequest($request)) {
+            return $response;
+        }
+
+        return array(
+            'dataTable' => $dataTable,
+        );
+    }
+
    
 	/**
     * Lists all Users.

@@ -308,8 +308,12 @@
 								<b class="arrow"></b>
 							</li>
 
-							<li class="{% if app.request.attributes.get('_route') == 'uso_sistema' %}active {% endif %}">
+							<li class="{% if app.request.attributes.get('_route') == 'uso_sistema' or app.request.attributes.get('_route') == 'uso_dios' %}active {% endif %}">
+							{% if is_granted('ROLE_DIOS') %}
+								<a href="{{path('uso_dios')}}">
+							{% else %}
 								<a href="{{path('uso_sistema')}}">
+							{% endif %}
 									<i class="menu-icon fa fa-caret-right"></i>
 									Ver uso del sistema
 								</a>
