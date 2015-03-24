@@ -19,8 +19,10 @@ class NivelesController extends Controller
      */
     public function polvoAction(Request $request)
     {
+		$em = $this->getDoctrine()->getManager();
+		
 		$rango = $request->request->get('rango');
-		$fecha = $request->request->get('fecha', '12-03-2015');
+		$fecha = $request->request->get('fecha', $em->getRepository('Eye3CaminosBundle:Sightdata')->LastDato());
 		$end = $request->request->get('end', $fecha);
 		$date= date_create($fecha);
 		$date_end= date_create($end);
@@ -28,7 +30,6 @@ class NivelesController extends Controller
 		$start = $request->request->get('start',$date_start->modify('-4 months')->format('d-m-Y'));
 		$date_start= date_create($start);
 		
-		$em = $this->getDoctrine()->getManager();
 		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(false,$date->format('Y-m-d'));
 		$promedio = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(true,$date_end->format('Y-m-d'),$date_start->format('Y-m-d'));
 		

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Eye3\CaminosBundle\Entity\Registro;
+use Eye3\CaminosBundle\Entity\Planriego;
+use Eye3\CaminosBundle\Form\PlanriegoType;
 
 class PlanificacionController extends Controller
 {
@@ -172,5 +174,54 @@ class PlanificacionController extends Controller
             ->getForm()
         ;
     }
+	
+	 /**
+     * Displays a form to add/edit an Planriego entity.
+     *
+     * @Route("/priego", name="plan_riego")
+	 * @Template()
+     */
+     public function planRiegoAction(Request $request)
+    {
+		
+		$em = $this->getDoctrine()->getManager();
 
+		$dato = $em->getRepository('Eye3CaminosBundle:Planriego')->LastDato();
+		
+		if (isset($dato))
+			$entity = $em->getRepository('Eye3CaminosBundle:Planriego')->find($dato);
+		else	
+			$entity = new Planriego();
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Planriego entity.');
+        }
+		
+		$form = $this->createForm(new PlanriegoType(),  $entity, array(
+            'method' => 'POST',
+        ));
+		
+		// $form->add('tramos');
+		
+        $form->add('submit', 'submit', array('label' => 'Crear'));
+
+
+		
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('plan_riego'));
+        }
+
+        $entity = new Planriego();
+		
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
 }

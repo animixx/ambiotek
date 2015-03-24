@@ -1,0 +1,137 @@
+{% extends '::base.html.twig' %}
+{%- block body -%}
+ 
+
+	<div class="page-content-area">
+						<div class="page-header">
+							<h1>Planificación Riego</h1>
+						</div><!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								 {{ form_start(form, {'attr':{'class':'form-horizontal'}}) }}
+								<!-- #section:elements.form -->
+							
+								<div class="space-4"></div>
+								<div class="space"></div>
+
+								<div class="form-group">
+									{{ form_label(form.tipo, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.tipo, {'attr': {'class': 'col-xs-10 col-sm-2 col-sm-offset-1', 'placeholder': 'Tipo de riego' }}) }}
+									<div class="col-sm-3">
+										{{ form_errors(form.tipo) }}
+									</div>
+								</div>	
+								
+								<div class="form-group ">
+									{{ form_label(form.tasaFinal, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.tasaFinal, {'attr': {'class': 'col-xs-10 col-sm-1 col-sm-offset-1', 'placeholder': 'Ingrese tasaFinal' }}) }}
+										
+									<div class="col-sm-3">(lts/m2)</div>
+									<div class="col-sm-3">
+										{{ form_errors(form.tasaFinal) }}
+									</div>
+								</div>	
+
+							
+								<div class="form-group">
+									{{ form_label(form.tasaRiego, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.tasaRiego, {'attr': {'class': 'col-xs-10 col-sm-1 col-sm-offset-1', 'placeholder': 'Ingrese tasaRiego' }}) }}
+									<div class="col-sm-3">(lts/m2)</div>
+									<div class="col-sm-3">
+										{{ form_errors(form.tasaRiego) }}
+									</div>
+								</div>	
+
+							
+								<div class="form-group">
+									{{ form_label(form.dilucion, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.dilucion, {'attr': {'class': 'col-xs-10 col-sm-1 col-sm-offset-1', 'placeholder': 'Ingrese dilucion' }}) }}
+									<div class="col-sm-3">(%)</div>
+									<div class="col-sm-3">
+										{{ form_errors(form.dilucion) }}
+									</div>
+								</div>	
+
+							
+								<div class="form-group">
+									{{ form_label(form.superficie, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.superficie, {'attr': {'class': 'col-xs-10 col-sm-1 col-sm-offset-1', 'placeholder': 'Ingrese superficie' }}) }}
+									<div class="col-sm-3">(m2)</div>
+									<div class="col-sm-3">
+										{{ form_errors(form.superficie) }}
+									</div>
+								</div>	
+
+								<div class="form-group">
+									{{ form_label(form.ancho, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.ancho, {'attr': {'class': 'col-xs-10 col-sm-1 col-sm-offset-1', 'placeholder': 'Ingrese ancho' }}) }}
+									<div class="col-sm-3">(m)</div>
+									<div class="col-sm-3">
+										{{ form_errors(form.ancho) }}
+									</div>
+								</div>	
+
+								<div class="form-group">
+									{{ form_label(form.tramos, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.tramos, {'attr': {'class': 'col-xs-10 col-sm-2 col-sm-offset-1', 'placeholder': 'Ingrese tramos' }}) }}
+									<div class="col-sm-3">
+										{{ form_errors(form.tramos) }}
+									</div>
+								</div>	
+
+								<div class="form-group">
+									{{ form_label(form.volumen, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.volumen, {'attr': {'class': 'col-xs-10 col-sm-1 col-sm-offset-1', 'placeholder': 'Ingrese volumen' }}) }}
+									<div class="col-sm-3">(m3)</div>
+									<div class="col-sm-3">
+										{{ form_errors(form.volumen) }}
+									</div>
+								</div>	
+
+								<div class="form-group">
+									{{ form_label(form.estanque, '', { 'label_attr': { 'class': 'col-sm-3 control-label no-padding-right' }}) }}
+
+										{{ form_widget(form.estanque, {'attr':{'class':'col-xs-10 col-sm-1 col-sm-offset-1', 'placeholder': 'Ingrese estanque' }}) }}
+									<div class="col-sm-3">(m3)</div>
+									<div class="col-sm-3">
+										{{ form_errors(form.estanque) }}
+									</div>
+								</div>	
+
+							
+								
+
+								<!-- /section:elements.form -->
+								<div class="space-4"></div>
+
+								<div class="space"></div>
+
+								<div class="clearfix form-actions">
+								<div class="col-md-offset-5 col-md-7">
+
+
+								{{ form_widget(form.submit, {'label':'Guardar', 'attr':{'class':'btn btn-primary'}}) }}
+
+								&nbsp; &nbsp;
+								<button type="reset" class="btn btn-default">
+									Cancelar
+								</button>
+							</div>
+						</div>
+						{{ form_end(form) }}
+	
+	
+
+				
+
+{% endblock %}

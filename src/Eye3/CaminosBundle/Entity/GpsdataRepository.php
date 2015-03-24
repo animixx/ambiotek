@@ -93,6 +93,20 @@ class GpsdataRepository extends EntityRepository
 			 
 			 return $query->fetchAll();
 		}
+		
+		public function LastDato()
+		{ 
+			
+			$query = $this->getEntityManager()
+			->getConnection()
+			->prepare(
+				"SELECT date_format( max(fecha) ,'%d-%m-%Y') FROM pmdata join gpsdata on id_gps=id where pmdata.id_tramo is not null"
+			);
+			
+			$query->execute();
+
+			return $query->fetchcolumn(0);
+		}
 
 }
 		

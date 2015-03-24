@@ -5,7 +5,7 @@ eye3_caminos:
 
 home_page:
     path: /
-    defaults: { _controller: Eye3CaminosBundle:Mapa:index }
+    defaults: { _controller: Eye3CaminosBundle:Resumen:index }
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
