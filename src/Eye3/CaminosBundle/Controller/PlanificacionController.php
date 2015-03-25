@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Eye3\CaminosBundle\Entity\Registro;
+use Eye3\CaminosBundle\Entity\Usuario;
 use Eye3\CaminosBundle\Entity\Planriego;
 use Eye3\CaminosBundle\Form\PlanriegoType;
 
@@ -187,21 +188,32 @@ class PlanificacionController extends Controller
 		$em = $this->getDoctrine()->getManager();
 
 		$dato = $em->getRepository('Eye3CaminosBundle:Planriego')->LastDato();
+		$entity2 = new Planriego();
 		
-		if (isset($dato))
+		if (isset($dato)){
 			$entity = $em->getRepository('Eye3CaminosBundle:Planriego')->find($dato);
-		else	
-			$entity = new Planriego();
+				$entity2->setTipo($entity->getTipo());
+				$entity2->setTasaFinal($entity->getTasaFinal());
+				$entity2->setTasaRiego($entity->getTasaRiego());
+				$entity2->setDilucion($entity->getDilucion());
+				$entity2->setSuperficie($entity->getSuperficie());
+				$entity2->setAncho($entity->getAncho());
+				$entity2->setTramos($entity->getTramos());
+				$entity2->setVolumen($entity->getVolumen());
+				$entity2->setEstanque($entity->getEstanque());
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Planriego entity.');
-        }
+			if (!$entity) {
+				throw $this->createNotFoundException('Unable to find Planriego entity.');
+			}
+		}
 		
-		$form = $this->createForm(new PlanriegoType(),  $entity, array(
+		
+		$form = $this->createForm(new PlanriegoType(),  $entity2, array(
             'method' => 'POST',
         ));
 		
-		// $form->add('tramos');
+		if($this->get('security.context')->isGranted('ROLE_PLAN')) 
+			$form->add('validar', 'submit', array('label' => 'Validar'));
 		
         $form->add('submit', 'submit', array('label' => 'Crear'));
 
@@ -210,17 +222,28 @@ class PlanificacionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+			if($this->get('security.context')->isGranted('ROLE_PLAN') and $form->get('validar')->isClicked()) 
+				$entity2->setValidado(1);
+			else
+				$entity2->setValidado(0);
+			
+			$entity2->setCuando();
+			$entity2->setQuien($em->getRepository('Eye3CaminosBundle:Usuario')->find($this->getUser()));
+			$registry = new Registro();
+			$registry->setAccion("Se ".(($entity2->getValidado())?'Valida':'Guarda')." plan Riego");
+			$registry->setDetalle("Valores: tipo=".$entity2->getTipo().",final=".$entity2->getTasaFinal().",riego=".$entity2->getTasaRiego().",dilucion=".$entity2->getDilucion().",superficie=".$entity2->getSuperficie().",ancho=".$entity2->getAncho().",tramos=".(implode(',',$entity2->getTramos())).",volumen=".$entity2->getVolumen().",estanque=".$entity2->getEstanque());
+			$registry->setFecha();
+			$registry->setUsuario($em->getRepository('Eye3CaminosBundle:Usuario')->find($this->getUser()));
+            $em->persist($entity2);
+            $em->persist($registry);
+		
             $em->flush();
 
             return $this->redirect($this->generateUrl('plan_riego'));
         }
 
-        $entity = new Planriego();
 		
         return array(
-            'entity' => $entity,
             'form'   => $form->createView(),
         );
     }

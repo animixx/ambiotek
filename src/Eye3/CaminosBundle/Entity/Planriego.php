@@ -7,93 +7,108 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Planriego
  *
- * @ORM\Table(name="planRiego")
+ * @ORM\Table(name="planRiego", indexes={@ORM\Index(name="quien", columns={"quien"})})
  * @ORM\Entity(repositoryClass="Eye3\CaminosBundle\Entity\PlanriegoRepository")
  */
 class Planriego
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=20)
+     * @ORM\Column(name="tipo", type="string", length=20, nullable=false)
      */
     private $tipo;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="tasa_final", type="integer")
+     * @ORM\Column(name="tasa_final", type="integer", nullable=false)
      */
     private $tasaFinal;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="tasa_riego", type="integer")
+     * @ORM\Column(name="tasa_riego", type="integer", nullable=false)
      */
     private $tasaRiego;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="dilucion", type="integer")
+     * @ORM\Column(name="dilucion", type="integer", nullable=false)
      */
     private $dilucion;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="superficie", type="bigint")
+     * @ORM\Column(name="superficie", type="bigint", nullable=false)
      */
     private $superficie;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="ancho", type="integer")
+     * @ORM\Column(name="ancho", type="integer", nullable=false)
      */
     private $ancho;
 
     /**
-     * @var array
+     * @var simple_array
      *
-     * @ORM\Column(name="tramos", type="simple_array")
+     * @ORM\Column(name="tramos", type="simple_array", nullable=true)
      */
     private $tramos;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="volumen", type="integer")
+     * @ORM\Column(name="volumen", type="integer", nullable=false)
      */
     private $volumen;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="estanque", type="integer")
+     * @ORM\Column(name="estanque", type="integer", nullable=false)
      */
     private $estanque;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="cuando", type="datetime", nullable=true)
+     */
+    private $cuando;
 
     /**
-     * Get id
+     * @var boolean
      *
-     * @return integer 
+     * @ORM\Column(name="validado", type="boolean", nullable=false)
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $validado;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Eye3\CaminosBundle\Entity\Usuario
+     *
+     * @ORM\ManyToOne(targetEntity="Eye3\CaminosBundle\Entity\Usuario")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="quien", referencedColumnName="id")
+     * })
+     */
+    private $quien;
+
+
 
     /**
      * Set tipo
@@ -236,7 +251,7 @@ class Planriego
     /**
      * Set tramos
      *
-     * @param array $tramos
+     * @param \simple_array $tramos
      * @return Planriego
      */
     public function setTramos($tramos)
@@ -249,7 +264,7 @@ class Planriego
     /**
      * Get tramos
      *
-     * @return array 
+     * @return \simple_array 
      */
     public function getTramos()
     {
@@ -300,5 +315,96 @@ class Planriego
     public function getEstanque()
     {
         return $this->estanque;
+    }
+
+    /**
+     * Set cuando
+     *
+     * @param \DateTime $cuando
+     * @return Planriego
+     */
+    public function setCuando()
+    {
+        $this->cuando = new \DateTime('now');
+
+        return $this;
+    }
+
+    /**
+     * Get cuando
+     *
+     * @return \DateTime 
+     */
+    public function getCuando()
+    {
+        return $this->cuando;
+    }
+
+    /**
+     * Set validado
+     *
+     * @param boolean $validado
+     * @return Planriego
+     */
+    public function setValidado($validado)
+    {
+        $this->validado = $validado;
+
+        return $this;
+    }
+
+    /**
+     * Get validado
+     *
+     * @return boolean 
+     */
+    public function getValidado()
+    {
+        return $this->validado;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    } 
+	
+	/**
+     * Clear id
+     *
+     * @return Planriego 
+     */
+    public function clearId()
+    {
+		$this->id = null ;
+		
+        return $this;
+    }
+
+    /**
+     * Set quien
+     *
+     * @param \Eye3\CaminosBundle\Entity\Usuario $quien
+     * @return Planriego
+     */
+    public function setQuien(\Eye3\CaminosBundle\Entity\Usuario $quien = null)
+    {
+        $this->quien = $quien;
+
+        return $this;
+    }
+
+    /**
+     * Get quien
+     *
+     * @return \Eye3\CaminosBundle\Entity\Usuario 
+     */
+    public function getQuien()
+    {
+        return $this->quien;
     }
 }
