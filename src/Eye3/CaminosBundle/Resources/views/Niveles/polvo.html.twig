@@ -275,7 +275,7 @@
 						placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia= " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>Hora: " + fecha.toLocaleTimeString() + "<br>Valor: " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
 									$tooltip.show().children(0).html(tip);
 								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
 								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
@@ -412,7 +412,7 @@
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
 									previousPoint = item.seriesIndex;
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleString() + fecha.getUTCDate() + "/" + fecha.getUTCMonth()+1 + "/" + fecha.getUTCFullYear() + "<br>promedió=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleString() + "<br>Valor:" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
 									$tooltip.show().children(0).html(tip);
 								
 									$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});

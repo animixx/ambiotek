@@ -160,12 +160,12 @@ class MapaController extends Controller
 			$$infoWindow = new InfoWindow();
 			
 			// Configure your info window options
-			$info='';
-			if ($maraca['tsplat']) {$info.=" TSP=".$maraca['tsplat'];};
-			if ($maraca['pm10lat']) {$info.=" PM10=".$maraca['pm10lat'];};
-			if ($maraca['pm25lat']) {$info.=" PM2.5=".$maraca['pm25lat'];};
-			if ($maraca['pm1lat']) {$info.=" PM1=".$maraca['pm1lat'];};
-			$$infoWindow->setContent("<div style='width:".(strlen($info)*6+10)."px;'>$info</div>");
+			$info='<u>PM (ug/m3)</u>';
+			if ($maraca['tsplat']) {$info.="<br>TSP=".$maraca['tsplat'];};
+			if ($maraca['pm10lat']) {$info.="<br>PM10=".$maraca['pm10lat'];};
+			if ($maraca['pm25lat']) {$info.="<br>PM2.5=".$maraca['pm25lat'];};
+			if ($maraca['pm1lat']) {$info.="<br>PM1=".$maraca['pm1lat'];};
+			$$infoWindow->setContent("<div style='width:85px;'>$info</div>");
 			$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
 			// $$infoWindow->setOptions(array(
 				// 'disableAutoPan' => true,

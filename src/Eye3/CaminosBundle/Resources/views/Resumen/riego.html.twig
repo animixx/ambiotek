@@ -133,6 +133,10 @@
 									axisLabel: 'Fecha'
 							},yaxis: { 
 									axisLabel: 'Liquidos(m3)'
+							}, grid: {
+								hoverable: true,
+								clickable: true,
+								borderWidth: .3
 							}});
 			
 			
@@ -142,10 +146,11 @@
 
 			
 
-			placeholder2.on('plothover', function (event, pos, item) {alert("tip");
+			placeholder2.on('plothover', function (event, pos, item)  {
 				if(item) {
-						var tip =  "algo";
-						$tooltip.show().children(0).text(tip);
+						var fecha = new Date(item.datapoint[0]);
+						var tip = 'Cantidad: ' + item.datapoint[1]  + ' m3<br>' + fecha.toLocaleDateString() ; 
+						$tooltip.show().children(0).html(tip);
 					
 					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
 				} else {
@@ -273,7 +278,7 @@
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
 									previousPoint = item.seriesIndex;
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.getUTCDate() + "/" + fecha.getUTCMonth()+1 + "/" + fecha.getUTCFullYear() + "<br>promedió=" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>PM10 = " + item.datapoint[1].toFixed(1) +  "<br>" + fecha.toLocaleDateString() ; 
 									$tooltip.show().children(0).html(tip);
 								
 									$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});

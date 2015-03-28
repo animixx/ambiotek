@@ -155,14 +155,14 @@
 				 
 		 var graficame1 = [
 					{% for i in grafico %}
-						{ data: [[{{i.fecha|date("U")}}000, {{i.agua}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true },extra:"{{i.nombre}}"}
+						{ data: [[{{i.fecha|date("U")}}000, {{i.agua}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 500 * 60 * 60 * 24 },extra:"{{i.nombre}}"}
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}
 				  ]	 
 		 var graficame2 = [
 					{% for i in grafico %}
-						{ data: [[{{i.fecha|date("U")}}000, {{i.aditivo}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true }}
+						{ data: [[{{i.fecha|date("U")}}000, {{i.aditivo}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 500 * 60 * 60 * 24 },extra:"{{i.nombre}}"}
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}
@@ -179,6 +179,10 @@
 									axisLabel: 'Fecha'
 							},yaxis: { 
 									axisLabel: 'Agua(m3)'
+							}, grid: {
+								hoverable: true,
+								clickable: true,
+								borderWidth: .3
 							}});
 			  $.plot(placeholder2, graficame2, {
 							axisLabels: {
@@ -191,19 +195,36 @@
 									axisLabel: 'Fecha'
 							},yaxis: { 
 									axisLabel: 'Aditivo(m3)'
+							}, grid: {
+								hoverable: true,
+								clickable: true,
+								borderWidth: .3
 							}});
 			
 			
-			  //pie chart tooltip example
 			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
 			  var previousPoint = null;
 
 			
 
-			placeholder2.on('plothover', function (event, pos, item) {alert("tip");
+			placeholder1.on('plothover', function (event, pos, item) {
 				if(item) {
-						var tip =  "algo";
-						$tooltip.show().children(0).text(tip);
+						var fecha = new Date(item.datapoint[0]);
+						var tip = 'Agua (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.toLocaleString() ; 
+						$tooltip.show().children(0).html(tip);
+					
+					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+				} else {
+					$tooltip.hide();
+					previousPoint = null;
+				}
+				
+			 });
+			placeholder2.on('plothover', function (event, pos, item) {
+				if(item) {
+						var fecha = new Date(item.datapoint[0]);
+						var tip = 'Aditivo (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.toLocaleString() ; 
+						$tooltip.show().children(0).html(tip);
 					
 					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
 				} else {
