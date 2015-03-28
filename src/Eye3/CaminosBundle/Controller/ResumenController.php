@@ -94,7 +94,7 @@ class ResumenController extends Controller
 			// Configure your info window options
 			$info='';
 			if ($maraca['pm10lat']) {$info.=" PM10=".$maraca['pm10lat'];};
-			$$infoWindow->setContent("<div style='width:".(strlen($info)*6+10)."px;'>$info</div>");
+			$$infoWindow->setContent("<div style='width:auto;'>$info</div>");
 			$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
 			// $$infoWindow->setOptions(array(
 				// 'disableAutoPan' => true,

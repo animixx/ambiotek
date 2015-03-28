@@ -266,7 +266,7 @@
 										</li>
 
 			{% endif %}
-										<li class="">
+										<li class="{% if app.request.attributes.get('_controller')|slice(55,9) == 'planRiego' %}active {% endif %}">
 											<a href="{{path('plan_riego')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
 												Planificación Riego

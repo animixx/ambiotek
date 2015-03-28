@@ -210,7 +210,7 @@
 			placeholder1.on('plothover', function (event, pos, item) {
 				if(item) {
 						var fecha = new Date(item.datapoint[0]);
-						var tip = 'Agua (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.toLocaleString() ; 
+						var tip = 'Agua (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.getUTCDate()  ; 
 						$tooltip.show().children(0).html(tip);
 					
 					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
@@ -223,7 +223,7 @@
 			placeholder2.on('plothover', function (event, pos, item) {
 				if(item) {
 						var fecha = new Date(item.datapoint[0]);
-						var tip = 'Aditivo (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.toLocaleString() ; 
+						var tip = 'Aditivo (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.toUTCString() ; 
 						$tooltip.show().children(0).html(tip);
 					
 					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});

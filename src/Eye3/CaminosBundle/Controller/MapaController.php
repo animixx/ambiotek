@@ -165,7 +165,7 @@ class MapaController extends Controller
 			if ($maraca['pm10lat']) {$info.="<br>PM10=".$maraca['pm10lat'];};
 			if ($maraca['pm25lat']) {$info.="<br>PM2.5=".$maraca['pm25lat'];};
 			if ($maraca['pm1lat']) {$info.="<br>PM1=".$maraca['pm1lat'];};
-			$$infoWindow->setContent("<div style='width:85px;'>$info</div>");
+			$$infoWindow->setContent("<div style='width:auto;'>$info</div>");
 			$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
 			// $$infoWindow->setOptions(array(
 				// 'disableAutoPan' => true,
@@ -212,7 +212,7 @@ class MapaController extends Controller
 				$$infoWindow = new InfoWindow();
 
 				// Configure your info window options
-				$$infoWindow->setContent("<div style='width:".(strlen($marca->getValue())*6+10)."px;'>".$marca->getValue()."</div>");
+				$$infoWindow->setContent("<div style='width:auto;'>".$marca->getValue()."</div>");
 				$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
 				$$infoWindow->setOptions(array(
 					'disableAutoPan' => true,
