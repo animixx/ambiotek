@@ -201,22 +201,20 @@
 			{% set contadortemporal = 0 %}	  
 			
 			{% for medicion,titulos in graficos if datos is not empty %}
-{# aun falta modificar pero la idea es que el primer dato de la serie contiene el promedio de la medicion, asi si el promedio no existe no se muestra el grafico #}
-				{% if datos[0][medicion]  %}  
 						var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'300px', 'display': 'inline-block'});
 						var leyenda{{loop.index}} = $('#legendContainer{{loop.index}}').css({'width':'5%' , 'min-height':'300px', 'display': 'inline-block'});
 				
 						var build_{{medicion}}_data = [
-								{%- for i in datos[1:] -%}
-									[{{(fecha|date("Ymd")~'T'~(i.utctime|round))|date("U")}}000, {{i[medicion]}}]
+								{%- for i in datos[medicion] -%}
+									[{{i.fecha|date("U")}}000, {{i[medicion]}}]
 									{% if not loop.last %},{% endif %}
 								{%- endfor -%}
 							  ]
 						var extra_{{medicion}}_data = [
-								{%- for i in datos[1:] -%}
+								{%- for i in datos[medicion] -%}
 									{% set contadortemporal = contadortemporal +(tramotemp != i.NombreTramo?1:0) %}
 									{% if tramotemp != i.NombreTramo %}
-										{% set tramos = tramos |merge({ (i.NombreTramo):((fecha|date("Ymd")~'T'~(i.utctime|round))|date("U"))}) %}
+										{% set tramos = tramos |merge({ (i.NombreTramo):(i.fecha|date("U"))}) %}
 									{% endif %}
 									'{{contadortemporal%2}}{{ i.NombreTramo }}'
 									{% set tramotemp = i.NombreTramo %}
@@ -224,7 +222,7 @@
 								{%- endfor -%}
 							  ]
 						var gps_{{medicion}}_data = [
-								{%- for i in datos[1:] -%}
+								{%- for i in datos[medicion] -%}
 									['{{i.latitud}},{{ i.longitud }}']
 									{% if not loop.last %},{% endif %}
 								{%- endfor -%}
@@ -243,8 +241,8 @@
 							},xaxis: { 
 									mode: "time" ,
 									axisLabel: 'Tiempo/tramos',
-									timezone: "browser"
-								{#	timezone: "UTC" la otra opcion #}
+									timezone: "UTC"
+								{#	timezone: "browser" la otra opcion #}
 							}, yaxis: {
 									min : 0,
 									axisLabel: '{{titulos.0 ~ titulos.1}}'
@@ -275,7 +273,7 @@
 						placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>Hora: " + fecha.toLocaleTimeString() + "<br>Valor: " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>Hora: " + ( (fecha.getUTCHours()<10)?0:'') + fecha.getUTCHours() + ":" + ((fecha.getUTCMinutes()<10)?0:'') + fecha.getUTCMinutes() + ":" + ((fecha.getUTCSeconds()<10)?0:'') +fecha.getUTCSeconds() + "<br>Valor: " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
 									$tooltip.show().children(0).html(tip);
 								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
 								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
@@ -294,7 +292,7 @@
 							}
 							
 						 });
-				{% endif %}
+				{#% endif %#}
 			{% endfor %}
 		}
 
@@ -311,10 +309,11 @@
 			{% set contadortemporal = 0 %}	  
 			
 			{% for medicion,titulos in graficos if promedio is not empty %}
-				
+						{% set distanciador=0 %}
+						{% set fecha_anterior=null %}
 						var build_{{medicion}}_data = [
-								{%- for i in promedio -%}
-									{% if i[medicion] %}				
+								{%- for i in promedio[medicion] -%}
+									{#% if i[medicion] %#}				
 										{% if fecha_minima[medicion] is not defined  %}		{#  seteo de primera fecha válida #}
 											{% set fecha_minima = fecha_minima| merge ({ (medicion): i.fecha }) %}
 										{% endif %}
@@ -325,10 +324,12 @@
 										{% if medicion == "pm10" and m_pm10 < i[medicion] %}	{#  seteo del valor máximo #}	
 											{% set m_pm10= i[medicion] %}
 										{% endif %}
-										{% set adelando = "+"~(loop.index0-8)~" hour" %}
+										{% set distanciador = ((i.date == fecha_anterior)?(distanciador + 1) : 0) %}
+										{% set fecha_anterior = i.date %}
+										{% set adelando = "+"~(distanciador )~" hour" %}
 										[{{i.fecha|date_modify("+0 day 00:00:00")|date_modify(adelando)|date("U")}}000, {{i[medicion]}}]
 										{% if not loop.last %},{% endif %}
-									{% endif %}
+									{#% endif %#}
 								{%- endfor -%}
 							  ]
 							  
@@ -344,13 +345,13 @@
 					}
 							  
 						var extra_{{medicion}}_data = [
-								{%- for i in promedio -%}
-									{% if i[medicion] %}
-										{% set contadortemporal = contadortemporal +(zonatemp != "zona" ?1:0) %}
+								{%- for i in promedio[medicion] -%}
+									{#% if i[medicion] %#}
+										{% set contadortemporal = contadortemporal +(fecha_anterior != i.date?1:0) %}
 										'{{contadortemporal%2}}{{ i.NombreTramo }}'
-										{% set zonatemp = "zona" %}
+										{% set fecha_anterior = i.date %}
 										{% if not loop.last %},{% endif %}
-									{% endif %}
+									{#% endif %#}
 								{%- endfor -%}
 							  ]
 							  
@@ -365,12 +366,12 @@
 									min : {{fecha_minima[medicion]|date_modify("-1 day")|date("U")}}000,
 								{%- endif -%}
 								{%- if fecha_maxima[medicion] is defined -%}
-									max : {{fecha_maxima[medicion]|date_modify("+1 day 00:00:00")|date("U")}}000,
+									max : {{fecha_maxima[medicion]|date_modify("+0 day 12:00:00")|date("U")}}000,
 								{%- endif -%}
 									axisLabel: 'Fecha/tramos',
 									tickSize: [1, "day"],
 									timezone: "browser"
-								{#	timezone: "browser" la otra opcion #}
+								{#	timezone: "browser"UTC la otra opcion #}
 							}, yaxis: {
 									min : 0,
 						{#% if medicion == "pm10"  %}
@@ -412,7 +413,7 @@
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
 									previousPoint = item.seriesIndex;
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleString() + "<br>Valor:" + item.datapoint[1].toFixed(1) + "(ug/m^3)" ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.getUTCDate() + "/" + (fecha.getUTCMonth()+1) + "/" + fecha.getUTCFullYear() + "<br>Valor:" + item.datapoint[1].toFixed(1) + "(ug/m^3)"  ; 
 									$tooltip.show().children(0).html(tip);
 								
 									$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});

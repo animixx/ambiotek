@@ -35,7 +35,7 @@ class ResumenController extends Controller
 		// echo $em->getRepository('Eye3CaminosBundle:Sightdata')->LastDato(); exit;
 
 		$medicionXpuntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GetMedicion(false,$date->format('dmy'));
-		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(false,$date->format('Y-m-d'));
+		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(false,'pm10',$date->format('Y-m-d'));
 		
 		$map = new Map();
 
@@ -92,8 +92,7 @@ class ResumenController extends Controller
 			$$infoWindow = new InfoWindow();
 			
 			// Configure your info window options
-			$info='';
-			if ($maraca['pm10lat']) {$info.=" PM10=".$maraca['pm10lat'];};
+			$info = "PM10=".$maraca['pm10lat'];
 			$$infoWindow->setContent("<div style='width:auto;'>$info</div>");
 			$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
 			// $$infoWindow->setOptions(array(
@@ -148,7 +147,7 @@ class ResumenController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$grafico = $em->getRepository('Eye3CaminosBundle:Aditivo')->GraficarAditivo($date_start->format('Y-m-d'),$date_end->format('Y-m-d'));
 		
-		$promedio = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(true,$date_end->format('Y-m-d'),$date_start->format('Y-m-d'));
+		$promedio = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(true,'pm10',$date_end->format('Y-m-d'),$date_start->format('Y-m-d'));
 
         return array(
 		    'start' => $start,

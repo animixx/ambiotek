@@ -20,7 +20,7 @@ class ObservacionesTable extends QueryBuilderDataTable implements QueryBuilderDa
 
     /**
      * @var datetime
-     * @DataTable\Column(source="sightdata.idGps.fecha",name="Fecha Ingreso" )
+     * @DataTable\Column(source="sightdata.idGps.fecha",name="Fecha Ingreso", stype="date-euro" )
 	 * @DataTable\Format(dataFields={"dato":"sightdata.idGps.fecha"}, template="Eye3CaminosBundle:Registro:fecha.html.twig")
 	 * @DataTable\DefaultSort()
      */
@@ -52,7 +52,7 @@ class ObservacionesTable extends QueryBuilderDataTable implements QueryBuilderDa
 	/**
      * @var string
      * @DataTable\Column(source="sightdata.idGps.idTramo.nombretramo",name="Tramo" )
-	 * @DataTable\Format(dataFields={"dato":"sightdata.idGps.idTramo.nombretramo"}, template="Eye3CaminosBundle:Planificacion:tramo.html.twig")
+	 * @DataTable\Format(dataFields={"dato":"sightdata.idGps.tramoid.nombretramo"}, template="Eye3CaminosBundle:Planificacion:tramo.html.twig")
      */
     public $tramo;
 

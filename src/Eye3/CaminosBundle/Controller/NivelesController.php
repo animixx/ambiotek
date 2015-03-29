@@ -30,8 +30,11 @@ class NivelesController extends Controller
 		$start = $request->request->get('start',$date_start->modify('-4 months')->format('d-m-Y'));
 		$date_start= date_create($start);
 		
-		$puntos = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(false,$date->format('Y-m-d'));
-		$promedio = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(true,$date_end->format('Y-m-d'),$date_start->format('Y-m-d'));
+		$tipo = array( 'tpm' , 'pm10' , 'pm25' , 'pm1' );
+		foreach ( $tipo as $medicion ) {
+			$puntos[$medicion] = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(false,$medicion,$date->format('Y-m-d'));
+			$promedio[$medicion] = $em->getRepository('Eye3CaminosBundle:Sightdata')->GraficarMedicion(true,$medicion,$date_end->format('Y-m-d'),$date_start->format('Y-m-d'));
+		}
 		
 		return array(
                'fecha' => $fecha,

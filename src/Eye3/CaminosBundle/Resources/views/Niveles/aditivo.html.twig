@@ -149,20 +149,30 @@
 			{% set colores = ["#EE3830", "#F47A2C", "#9CCC51", "#00828F", "#6C56A4", "#C44A72", "#F05A30", "#FAAB33", "#FDDF16", "#00AC5C", "#2E57A7" , "#9256A2" ] %}
 				{% set contador = 0 %}
 				
-				  var placeholder1 = $('#placeholder1').css({'width':'90%' , 'min-height':'300px'});
-				  var placeholder2 = $('#placeholder2').css({'width':'90%' , 'min-height':'300px'});
-					
+				  var placeholder1 = $('#placeholder1').css({'width':'98%' , 'min-height':'300px'});
+				  var placeholder2 = $('#placeholder2').css({'width':'98%' , 'min-height':'300px'});
+				{% set calculo =  ("+0 days"|date("U") +( (grafico|last)["fecha"]|date("U") - (grafico|first)["fecha"]|date("U"))) %}
+				{% if calculo < "+6 days"|date("U") %}	
+						{% set diferencia = 80 %}
+						{% set adelando = "+5 hour" %}
+				{% elseif calculo < "+30 days"|date("U") %}
+						{% set diferencia = 250 %}
+						{% set adelando = "+8 hour" %}
+				{% else %}
+						{% set diferencia = 800 %}
+						{% set adelando = "+1 day" %}
+				{% endif %}	
 				 
 		 var graficame1 = [
 					{% for i in grafico %}
-						{ data: [[{{i.fecha|date("U")}}000, {{i.agua}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 500 * 60 * 60 * 24 },extra:"{{i.nombre}}"}
+						{ data: [[{{i.fecha|date_modify("+0 day 00:00:00")|date("U")}}000, {{i.agua}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: {{diferencia}} * 60 * 60 * 24 },extra:"{{i.nombre}}",hora:"{{i.fecha|date('d/m/Y H:i')}}"}
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}
 				  ]	 
 		 var graficame2 = [
 					{% for i in grafico %}
-						{ data: [[{{i.fecha|date("U")}}000, {{i.aditivo}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: 500 * 60 * 60 * 24 },extra:"{{i.nombre}}"}
+						{ data: [[{{i.fecha|date_modify("+0 day 00:00:00")|date("U")}}000, {{i.aditivo}}]], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: {{diferencia}} * 60 * 60 * 24 },extra:"{{i.nombre}}",hora:"{{i.fecha|date('d/m/Y H:i')}}"}
 						{% if not loop.last %},{% endif %}
 						{%set contador = contador +1 %}
 					{% endfor %}
@@ -174,15 +184,16 @@
 							},xaxis: { 
 									mode: "time" ,
 									min : {{(grafico|first)["fecha"]|date_modify("-1 day")|date("U")}}000,   
-									max : {{(grafico|last)["fecha"]|date_modify("-1 day")|date("U")}}000,   
-									tickSize: [1, "month"],
+									max : {{(grafico|last)["fecha"]|date_modify(adelando)|date("U")}}000,   
+							{% if diferencia < 400 %}
+									tickSize: [1, "day"],
+							{% endif %}
 									axisLabel: 'Fecha'
 							},yaxis: { 
 									axisLabel: 'Agua(m3)'
 							}, grid: {
 								hoverable: true,
-								clickable: true,
-								borderWidth: .3
+								borderWidth: .2
 							}});
 			  $.plot(placeholder2, graficame2, {
 							axisLabels: {
@@ -190,15 +201,17 @@
 							},xaxis: { 
 									mode: "time" ,
 									min : {{(grafico|first)["fecha"]|date_modify("-1 day")|date("U")}}000,   
-									max : {{(grafico|last)["fecha"]|date_modify("-1 day")|date("U")}}000,   
-									tickSize: [1, "month"],
+									max : {{(grafico|last)["fecha"]|date_modify(adelando)|date("U")}}000,   
+							{% if diferencia < 400 %}
+									tickSize: [1, "day"],
+							{% endif %}
 									axisLabel: 'Fecha'
 							},yaxis: { 
 									axisLabel: 'Aditivo(m3)'
 							}, grid: {
 								hoverable: true,
 								clickable: true,
-								borderWidth: .3
+								borderWidth: .2
 							}});
 			
 			
@@ -209,8 +222,8 @@
 
 			placeholder1.on('plothover', function (event, pos, item) {
 				if(item) {
-						var fecha = new Date(item.datapoint[0]);
-						var tip = 'Agua (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.getUTCDate()  ; 
+					{#	var fecha = new Date(item.datapoint[0]);  #}
+						var tip = 'Agua (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + item.series['hora'] ; 
 						$tooltip.show().children(0).html(tip);
 					
 					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
@@ -222,8 +235,7 @@
 			 });
 			placeholder2.on('plothover', function (event, pos, item) {
 				if(item) {
-						var fecha = new Date(item.datapoint[0]);
-						var tip = 'Aditivo (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + fecha.toUTCString() ; 
+						var tip = 'Aditivo (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'] + '<br>fecha/Hora: ' + item.series['hora']  ;  
 						$tooltip.show().children(0).html(tip);
 					
 					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});

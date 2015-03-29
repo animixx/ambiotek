@@ -160,7 +160,7 @@ class MapaController extends Controller
 			$$infoWindow = new InfoWindow();
 			
 			// Configure your info window options
-			$info='<u>PM (ug/m3)</u>';
+			$info='<u>'.(($maraca['NombreTramo']=='')?'Sin Tramo':$maraca['NombreTramo']).' (ug/m3)</u>';
 			if ($maraca['tsplat']) {$info.="<br>TSP=".$maraca['tsplat'];};
 			if ($maraca['pm10lat']) {$info.="<br>PM10=".$maraca['pm10lat'];};
 			if ($maraca['pm25lat']) {$info.="<br>PM2.5=".$maraca['pm25lat'];};

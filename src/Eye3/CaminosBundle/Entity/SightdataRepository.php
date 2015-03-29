@@ -32,7 +32,7 @@ class SightdataRepository extends EntityRepository
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"SELECT * FROM pmdata join gpsdata on id_gps=id where date='$fecha'"
+					"SELECT * FROM pmdata join gpsdata gps on id_gps=gps.id left join graficarMapa tt on id_tramo=tt.id where date='$fecha'"
 				);
 			}
 			$query->execute();
@@ -40,18 +40,37 @@ class SightdataRepository extends EntityRepository
 			return $query->fetchAll();
 		}
 		
-		public function GraficarMedicion($tipo=true,$fecha = '2014-12-03',$fecha_inicio = "2014-12-02")
+		public function GraficarMedicion($promedio=true,$tipo='pm10',$fecha = '2014-12-03',$fecha_inicio = "2014-12-02")
 		{ 
-			if ($tipo)
+				switch (strtolower($tipo) ) {
+					case 'tpm':
+						$variable = 'tsplat';
+						break;
+					case 'pm10':
+						$variable = 'pm10lat';
+						break;
+					case 'pm25':
+						$variable = 'pm25lat';
+						break;
+					case 'pm1':
+						$variable = 'pm1lat';
+						break;
+					default:
+						$tipo = 'pm10';
+						$variable = 'pm10lat';
+						break;
+				}	
+				
+			if ($promedio)
 			{
 				//con esta opcion se obtienen las mediciones promediadas por zonas para filtro xrango
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"SELECT round(avg(tsplat),1) as tpm, round(avg(pm10lat),1) as pm10, round(avg(pm25lat),1) as pm25, round(avg(pm1lat),1) as pm1, NombreTramo, date, fecha FROM pmdata 
+					"SELECT round(avg($variable),1) as ".strtolower($tipo).", NombreTramo, date, fecha FROM pmdata 
 					join gpsdata gps on id_gps=gps.id join graficarMapa tramo on pmdata.id_tramo=tramo.id where  fecha >= '$fecha_inicio' and fecha <= '$fecha 23:59:59' 
-							and	( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null) and pmdata.id_tramo is not null 
-						group by tramo.id, date"
+							and	( $variable< 6000 or $variable is null) and pmdata.id_tramo is not null 
+						group by date,pmdata.id_tramo "
 				);
 			}
 			else
@@ -60,14 +79,10 @@ class SightdataRepository extends EntityRepository
 				$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"SELECT round(avg(tsplat),1) as tpm, round(avg(pm10lat),1) as pm10, round(avg(pm25lat),1) as pm25, round(avg(pm1lat),1) as pm1, null as NombreTramo, null as utctime,null as fecha,null as latitud,null as longitud FROM pmdata 
-					join gpsdata gps on id_gps=gps.id join graficarMapa tramo on pmdata.id_tramo=tramo.id  where fecha like '$fecha%' 
-							and ( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null) and pmdata.id_tramo is not null 
-					UNION
-					SELECT round(tsplat,1), round(pm10lat,1), round(pm25lat,1), round(pm1lat,1), NombreTramo, utctime, fecha, latitude as latitud, longitude as longitud FROM pmdata 
-					join gpsdata gps on id_gps=gps.id join graficarMapa tramo on pmdata.id_tramo=tramo.id  where fecha like '$fecha%'  
-							and ( tsplat< 6000 or tsplat is null) and (pm10lat< 6000 or pm10lat is null) and (pm25lat< 6000 or pm25lat is null) and (pm1lat< 6000 or pm1lat is null)  and pmdata.id_tramo is not null
-						order by  utctime"
+					"SELECT round($variable,1) as ".strtolower($tipo).", NombreTramo, utctime, convert_tz(fecha,'GMT','-3:00') as fecha, latitude as latitud, longitude as longitud FROM pmdata 
+					join gpsdata gps on id_gps=gps.id join graficarMapa tramo on pmdata.id_tramo=tramo.id  where convert_tz(fecha,'GMT','-3:00') like '$fecha%'  
+							and ( $variable< 6000 or $variable is null) and pmdata.id_tramo is not null
+						order by fecha"
 				);
 			}
 			$query->execute();

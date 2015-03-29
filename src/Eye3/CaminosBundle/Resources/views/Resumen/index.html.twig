@@ -49,11 +49,8 @@
 </div>
 
 <div class="col-12">
-			
-		<div id="placeholder1" style="position: relative; display: none" ></div><div id="legendContainer1" style="display: none"></div><br><br>
-		<div id="placeholder2" style="position: relative; display: inline-block"></div></div><div id="legendContainer2" style="display: none" ></div><br><br>
-		<div id="placeholder3" style="position: relative; display: none"></div></div><div id="legendContainer3" style="display: none" ></div><br><br>
-		<div id="placeholder4" style="position: relative; display: none"></div></div><div id="legendContainer4" style="display: none" ></div>
+			<br><br>
+		<div id="placeholder1" style="position: relative; display: inline-block" ></div>
 </div>
 {% endblock %}
 	
@@ -112,30 +109,28 @@
 			//flot chart resize plugin, somehow manipulates default browser resize event to optimize it!
 			  //but sometimes it brings up errors with normal resize event handlers
 			  $.resize.throttleWindow = false;
-			  
 			
 			var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
 			var previousPoint = null;
 			{% set tramotemp = null %}
 			{% set contadortemporal = 0 %}	  
 			
-			{% for medicion,titulos in graficos if datos is not empty %}
-{# aun falta modificar pero la idea es que el primer dato de la serie contiene el promedio de la medicion, asi si el promedio no existe no se muestra el grafico #}
-				{% if datos[0][medicion]  %}  
-						var placeholder{{loop.index}} = $('#placeholder{{loop.index}}').css({'width':'90%' , 'min-height':'300px'});
-						var leyenda{{loop.index}} = $('#legendContainer{{loop.index}}').css({'width':'5%' , 'min-height':'300px'});
+			{% if datos is not empty %}
+			{% set medicion = 'pm10' %}
+			{% set titulos = ["PM10","(ug/m3)"] %}
+						var placeholder1 = $('#placeholder1').css({'width':'84%' , 'min-height':'300px'});
 				
 						var build_{{medicion}}_data = [
-								{%- for i in datos[1:] -%}
-									[{{(fecha|date("Ymd")~'T'~(i.utctime|round))|date("U")}}000, {{i[medicion]}}]
+								{%- for i in datos -%}
+									[{{i.fecha|date("U")}}000, {{i[medicion]}}]
 									{% if not loop.last %},{% endif %}
 								{%- endfor -%}
 							  ]
 						var extra_{{medicion}}_data = [
-								{%- for i in datos[1:] -%}
+								{%- for i in datos -%}
 									{% set contadortemporal = contadortemporal +(tramotemp != i.NombreTramo?1:0) %}
 									{% if tramotemp != i.NombreTramo %}
-										{% set tramos = tramos |merge({ (i.NombreTramo):((fecha|date("Ymd")~'T'~(i.utctime|round))|date("U"))}) %}
+										{% set tramos = tramos |merge({ (i.NombreTramo):(i.fecha|date("U"))}) %}
 									{% endif %}
 									'{{contadortemporal%2}}{{ i.NombreTramo }}'
 									{% set tramotemp = i.NombreTramo %}
@@ -143,16 +138,16 @@
 								{%- endfor -%}
 							  ]
 						var gps_{{medicion}}_data = [
-								{%- for i in datos[1:] -%}
+								{%- for i in datos -%}
 									['{{i.latitud}},{{ i.longitud }}']
 									{% if not loop.last %},{% endif %}
 								{%- endfor -%}
 							  ]
 
-						var data{{loop.index}} = [
-							{label: "{{titulos.0}}", data: build_{{medicion}}_data,  points: { symbol: "diamond" },color: "{{colores[loop.index0].0}}",
+						var data1 = [
+							{label: "{{titulos.0}}", data: build_{{medicion}}_data,  points: { symbol: "diamond" },color: "{{colores[1].0}}",
 							{# estos ya son valores extras para adornar el grafico :D #}
-							colores: ['{{colores[loop.index0].1}}','{{colores[loop.index0].2}}'], extra: extra_{{medicion}}_data, gps: gps_{{medicion}}_data}
+							colores: ['{{colores[1].1}}','{{colores[1].2}}'], extra: extra_{{medicion}}_data, gps: gps_{{medicion}}_data}
 							
 						];
 			 
@@ -162,8 +157,8 @@
 							},xaxis: { 
 									mode: "time" ,
 									axisLabel: 'Tiempo/tramos',
-									timezone: "browser"
-								{#	timezone: "UTC" la otra opcion #}
+									timezone: "UTC" 
+								{#	timezone: "browser" la otra opcion #}
 							}, yaxis: {
 									min : 0,
 									axisLabel: '{{titulos.0 ~ titulos.1}}'
@@ -180,7 +175,7 @@
 						{#% endif %#}
 								borderWidth: .3
 							}, legend: {
-								container:$("#legendContainer{{loop.index}}")        
+								container:$("#legendContainer1")        
 							}, series: {
 									points: {
 											show: true,
@@ -189,12 +184,13 @@
 							}
 						};
 		 
-					var plot = $.plot($("#placeholder{{loop.index}}"), data{{loop.index}}, options);	
+					var plot = $.plot($("#placeholder1"), data1, options);	
 					
-						placeholder{{loop.index}}.on('plothover', function (event, pos, item) {
+						placeholder1.on('plothover', function (event, pos, item) {
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia= " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>Hora: " + ( (fecha.getUTCHours()<10)?0:'') + fecha.getUTCHours() + ":" + ((fecha.getUTCMinutes()<10)?0:'') + fecha.getUTCMinutes() + ":" + ((fecha.getUTCSeconds()<10)?0:'') +fecha.getUTCSeconds() + "<br>Valor: " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ; 
+								{#	var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.toLocaleTimeString() + "<br>tenia= " + item.datapoint[1].toFixed(1) + "(ug/m3)"  ;  #}
 									$tooltip.show().children(0).html(tip);
 								$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
 								$tooltip.children(0).css({ background:item.series['colores'][item.series['extra'][item.dataIndex].charAt(0)]});
@@ -205,7 +201,7 @@
 							
 						 });
 						 
-						 placeholder{{loop.index}}.on('plotclick', function (event, pos, item) {
+						 placeholder1.on('plotclick', function (event, pos, item) {
 							if(item) {
 							document.getElementById('img1').src = "http://maps.googleapis.com/maps/api/staticmap?markers="+item.series['gps'][item.dataIndex][0]+"&zoom=16&size=600x400&maptype=satellite&sensor=false";
 							$('#modalito').find('#titulo').text(item.series['extra'][item.dataIndex].substring(1) + "-> {{titulos.0}}=" + item.datapoint[1].toFixed(1) + "(ug/m3)" );
@@ -213,8 +209,7 @@
 							}
 							
 						 });
-				{% endif %}
-			{% endfor %}
+			{% endif %}
 		}
 
         jQuery(function($) {
