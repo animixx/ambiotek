@@ -150,13 +150,15 @@
 							colores: ['{{colores[1].1}}','{{colores[1].2}}'], extra: extra_{{medicion}}_data, gps: gps_{{medicion}}_data}
 							
 						];
-			 
+
+		 				var meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "jul", "Ago", "sep", "Oct", "nov", "dec"];
 						var options = {
 							axisLabels: {
 								show: true
 							},xaxis: { 
 									mode: "time" ,
 									axisLabel: 'Tiempo/tramos',
+									monthNames: meses,									
 									timezone: "UTC" 
 								{#	timezone: "browser" la otra opcion #}
 							}, yaxis: {

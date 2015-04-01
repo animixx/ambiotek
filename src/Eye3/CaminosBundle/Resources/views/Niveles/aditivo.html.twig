@@ -178,13 +178,15 @@
 					{% endfor %}
 				  ]
 				
+				var meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "jul", "Ago", "sep", "Oct", "nov", "dec"];
 			  $.plot(placeholder1, graficame1, {
 							axisLabels: {
 								show: true
 							},xaxis: { 
 									mode: "time" ,
 									min : {{(grafico|first)["fecha"]|date_modify("-1 day")|date("U")}}000,   
-									max : {{(grafico|last)["fecha"]|date_modify(adelando)|date("U")}}000,   
+									max : {{(grafico|last)["fecha"]|date_modify(adelando)|date("U")}}000,  
+									monthNames: meses,									
 							{% if diferencia < 400 %}
 									tickSize: [1, "day"],
 							{% endif %}
@@ -202,6 +204,7 @@
 									mode: "time" ,
 									min : {{(grafico|first)["fecha"]|date_modify("-1 day")|date("U")}}000,   
 									max : {{(grafico|last)["fecha"]|date_modify(adelando)|date("U")}}000,   
+									monthNames: meses,									
 							{% if diferencia < 400 %}
 									tickSize: [1, "day"],
 							{% endif %}

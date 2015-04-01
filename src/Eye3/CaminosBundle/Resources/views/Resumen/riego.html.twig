@@ -130,7 +130,8 @@
 					{% endfor %}
 					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: {{diferencia}} * 60 * 60 * 24 }};
 				  
-				
+
+				var meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "jul", "Ago", "sep", "Oct", "nov", "dec"];
 		
 			  $.plot(placeholder2, [graficame1,graficame2], {
 							axisLabels: {
@@ -139,6 +140,7 @@
 									mode: "time" ,
 									min : {{(grafico|first)["fecha"]|date_modify("-1 day")|date("U")}}000,   
 									max : {{(grafico|last)["fecha"]|date_modify("+5 hour")|date("U")}}000,   
+									monthNames: meses,									
 						{% if diferencia < 400 %}		
 									tickSize: [1, "day"],
 						{% endif %}
@@ -236,7 +238,8 @@
 						var data{{loop.index}} = [
 							{label: "{{titulos.0}}", data: build_{{medicion}}_data , points: { symbol: "circle" }, color: "{{colorpm10[loop.index0].0}}",colores: ['{{colorpm10[loop.index0].1}}','{{colorpm10[loop.index0].2}}'], extra: extra_{{medicion}}_data}
 						];
-			 
+
+		 				var meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "jul", "Ago", "sep", "Oct", "nov", "dec"];
 						var options = {
 							xaxis: { 
 									mode: "time" ,
@@ -249,6 +252,7 @@
 								
 									axisLabel: 'Fecha/tramos',
 									tickSize: [1, "day"],
+									monthNames: meses,									
 									timezone: "browser"
 								{#	timezone: "UTC" la otra opcion #}
 							}, yaxis: {
