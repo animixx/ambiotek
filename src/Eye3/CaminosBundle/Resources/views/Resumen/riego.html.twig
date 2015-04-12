@@ -81,103 +81,15 @@
 					xriego();
         });
 		
-		
-		
-
-		function xriego() {
-		
-			$.resize.throttleWindow = false;
-			
-			<!-- $('.tabla').css({'display': 'none'}); -->
-			<!-- $('.graficos').css({'display': ''}); -->
-			
-			{% set colores = ["#EE3830", "#F47A2C", "#9CCC51", "#00828F", "#6C56A4", "#C44A72", "#F05A30", "#FAAB33", "#FDDF16", "#00AC5C", "#2E57A7" , "#9256A2" ] %}
-			{% set colorpm10 = [['#F47A2C','#FAB788',"#FDC271"]] %}
-				{% set contador = 0 %}
-			{% set graficos = { 'pm10':["PM10","(ug/m3)"]} %}
-			{% set fecha_minima = {} %}
-			{% set fecha_maxima = {'pm10':null} %}
-			{% set m_pm10 = 0 %}
-			{% set tramos = {} %}
-				
-				  <!-- var placeholder1 = $('#placeholder1').css({'width':'90%' , 'min-height':'300px'}); -->
-				  var placeholder2 = $('#placeholder2').css({'width':'90%' , 'min-height':'300px'});
-				{% set calculo =  ("+0 days"|date("U") +( (grafico|last)["fecha"]|date("U") - (grafico|first)["fecha"]|date("U"))) %}
-				{% if calculo < "+6 days"|date("U") %}	
-						{% set diferencia = 80 %}
-						{% set adelando = "+2 hour" %}
-				{% elseif calculo < "+30 days"|date("U") %}
-						{% set adelando = "+6 hour" %}
-						{% set diferencia = 250 %}
-				{% else %}
-						{% set adelando = "+12 hour" %}
-						{% set diferencia = 500 %}
-				{% endif %}			
-				 
-		 var graficame1 = { data: [
-					{% for i in grafico %}
-						[{{i.fecha|date_modify("+0 day 00:00:00")|date("U")}}000, {{i.agua}}]
-						{% if not loop.last %},{% endif %}
-						{%set contador = contador +1 %}
-					{% endfor %}
-					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: {{diferencia}} * 60 * 60 * 24 }};
-				  	 
-		 var graficame2 = { data: [
-					{% for i in grafico %}
-						[{{i.fecha|date_modify("+0 day 00:00:00")|date_modify(adelando)|date("U")}}000, {{i.aditivo}}]
-						{% if not loop.last %},{% endif %}
-						{%set contador = contador +1 %}
-					{% endfor %}
-					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: {{diferencia}} * 60 * 60 * 24 }};
-				  
-
-				var meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "jul", "Ago", "sep", "Oct", "nov", "dec"];
-		
-			  $.plot(placeholder2, [graficame1,graficame2], {
-							axisLabels: {
-								show: true
-							},xaxis: { 
-									mode: "time" ,
-									min : {{(grafico|first)["fecha"]|date_modify("-1 day")|date("U")}}000,   
-									max : {{(grafico|last)["fecha"]|date_modify("+5 hour")|date("U")}}000,   
-									monthNames: meses,									
-						{% if diferencia < 400 %}		
-									tickSize: [1, "day"],
-						{% endif %}
-									axisLabel: 'Fecha'
-							},yaxis: { 
-									axisLabel: 'Liquidos(m3)'
-							}, grid: {
-								hoverable: true,
-								clickable: true,
-								borderWidth: .3
-							}});
-			
-			
-			  //pie chart tooltip example
-			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
-			  var previousPoint = null;
-
-			
-
-			placeholder2.on('plothover', function (event, pos, item)  {
-				if(item) {
-						var fecha = new Date(item.datapoint[0]);
-						var tip = 'Cantidad: ' + item.datapoint[1]  + ' m3<br>' + fecha.getUTCDate() + "/" + (fecha.getUTCMonth()+1) + "/" + fecha.getUTCFullYear() ; 
-						$tooltip.show().children(0).html(tip);
-					
-					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
-				} else {
-					$tooltip.hide();
-					previousPoint = null;
-				}
-				
-			 });
-			 
-			
-			}
-
-		
+		{% set colores = ["#EE3830", "#F47A2C", "#9CCC51", "#00828F", "#6C56A4", "#C44A72", "#F05A30", "#FAAB33", "#FDDF16", "#00AC5C", "#2E57A7" , "#9256A2" ] %}
+		{% set colorpm10 = [['#F47A2C','#FAB788',"#FDC271"]] %}
+			{% set contador = 0 %}
+		{% set graficos = { 'pm10':["PM10","(ug/m3)"]} %}
+		{% set fecha_minima = (grafico|first)["fecha"] %}
+		{% set fecha_maxima = (grafico|last)["fecha"] %}
+		{% set m_pm10 = 0 %}
+		{% set tramos = {} %}
+	
 		function xrango() {
 		
 			$.resize.throttleWindow = false;
@@ -195,16 +107,16 @@
 						var build_{{medicion}}_data = [
 								{%- for i in promedio -%}
 									{% if i[medicion] %}				
-										{% if fecha_minima[medicion] is not defined  %}		{#  seteo de primera fecha válida #}
-											{% set fecha_minima = fecha_minima| merge ({ (medicion): i.fecha }) %}
+										{% if i.fecha <  (grafico|first)["fecha"] %} {#  seteo de primera fecha válida #}
+											{% set fecha_minima =  i.fecha %}
 										{% endif %}
-										{% if i.fecha > fecha_maxima[medicion]   %}		
-											{% set fecha_maxima = fecha_maxima| merge ({ (medicion): i.fecha }) %}
+										{% if i.fecha > fecha_maxima %}		
+											{% set fecha_maxima =  i.fecha  %}
 										{% endif %}
 										{% if medicion == "pm10" and m_pm10 < i[medicion] %}	{#  seteo del valor máximo #}	
 											{% set m_pm10= i[medicion] %}
 										{% endif %}
-										{% set distanciador = ((i.date == fecha_anterior)?(distanciador + 1) : 0) %}
+										{% set distanciador = ((i.date == fecha_anterior)?(distanciador + 2) : 0) %}
 										{% set fecha_anterior = i.date %}
 										{% set adelando = "+"~(distanciador )~" hour" %}
 										[{{i.fecha|date_modify("+0 day 00:00:00")|date_modify(adelando)|date("U")}}000, {{i[medicion]}}]
@@ -243,11 +155,11 @@
 						var options = {
 							xaxis: { 
 									mode: "time" ,
-								{%- if fecha_minima[medicion] is defined -%}
-									min : {{fecha_minima[medicion]|date_modify("-1 day")|date("U")}}000,
+								{%- if fecha_minima is defined -%}
+									min : {{fecha_minima|date_modify("-1 day")|date("U")}}000,
 								{%- endif -%}
-								{%- if fecha_maxima[medicion] is defined -%}
-									max : {{fecha_maxima[medicion]|date_modify("+0 day 12:00:00")|date("U")}}000,
+								{%- if fecha_maxima is defined -%}
+									max : {{fecha_maxima|date_modify("+0 day 18:00:00")|date("U")}}000,
 								{%- endif -%}
 								
 									axisLabel: 'Fecha/tramos',
@@ -257,6 +169,7 @@
 								{#	timezone: "UTC" la otra opcion #}
 							}, yaxis: {
 									min : 0,
+									labelWidth : 38,
 						{#% if medicion == "pm10"  %}
 									max : 5000,
 						{% endif %#}
@@ -286,9 +199,9 @@
 						
 {% if medicion == "pm10" and m_pm10 > 1500 %}
 	var o;
-    o = plot.pointOffset({ x:{{fecha_minima[medicion]|date("U")}}000, y:1610});
+    o = plot.pointOffset({ x:{{fecha_minima|date("U")}}000, y:1610});
     $('#placeholder3b').append('<div style="position:absolute;left:' + (o.left + 6) + 'px;top:' + o.top + 'px;color:#666;font-size:smaller">Umbral de riego</div>');
-    o = plot.pointOffset({ x:{{fecha_minima[medicion]|date("U")}}000, y:2050});
+    o = plot.pointOffset({ x:{{fecha_minima|date("U")}}000, y:2050});
     $('#placeholder3b').append('<div style="position:absolute;left:' + (o.left + 6) + 'px;top:' + o.top + 'px;color:#666;font-size:smaller">Máximo norma</div>');
 {% endif %}	
 
@@ -311,7 +224,120 @@
 			{% endfor %}
 
 		}
+			
+
+		function xriego() {
 		
+			$.resize.throttleWindow = false;
+			
+			<!-- $('.tabla').css({'display': 'none'}); -->
+			<!-- $('.graficos').css({'display': ''}); -->
+			
+				
+				  <!-- var placeholder1 = $('#placeholder1').css({'width':'90%' , 'min-height':'300px'}); -->
+				  var placeholder2 = $('#placeholder2').css({'width':'90%' , 'min-height':'300px'});
+				{% set calculo =  ("+0 days"|date("U") +( (grafico|last)["fecha"]|date("U") - (grafico|first)["fecha"]|date("U"))) %}
+				{% if calculo < "+6 days"|date("U") %}	
+						{% set diferencia = 80 %}
+						{% set adelando = "+2 hour" %}
+				{% elseif calculo < "+30 days"|date("U") %}
+						{% set adelando = "+6 hour" %}
+						{% set diferencia = 250 %}
+				{% else %}
+						{% set adelando = "+12 hour" %}
+						{% set diferencia = 500 %}
+				{% endif %}			
+				 
+		 var graficame1 = { data: [
+					{% set extra_hora = "[" %}
+					{% set extra_quien = "[" %}
+					{% for i in grafico %}
+						[{{i.fecha|date_modify("+0 day 00:00:00")|date("U")}}000, {{i.agua}}]
+						{% if not loop.last %},{% endif %}
+						{%set contador = contador +1 %}
+							{%set extra_hora = extra_hora ~ '"' ~ i.fecha|date('d/m/Y H:i') ~ '"' %}
+							{%set extra_quien = extra_quien ~ '"' ~ i.username ~ '"' %}
+						{% if not loop.last %}
+							{%set extra_hora = extra_hora ~ ","%}
+							{%set extra_quien = extra_quien ~ ","%}
+						{% else %}
+							{%set extra_hora = extra_hora ~ "]"%}
+							{%set extra_quien = extra_quien ~ "]"%}
+						{% endif %}
+					{% endfor %}
+					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: {{diferencia}} * 60 * 60 * 24 },extra:{{extra_quien|raw}},tipo:"Agua",hora:{{extra_hora|raw}}};
+		 var graficame2 = { data: [
+					{% set extra_hora = "[" %}
+					{% set extra_quien = "[" %}
+					{% for i in grafico %}
+						[{{i.fecha|date_modify("+0 day 00:00:00")|date_modify(adelando)|date("U")}}000, {{i.aditivo}}]
+						{% if not loop.last %},{% endif %}
+						{%set contador = contador +1 %}
+							{%set extra_hora = extra_hora ~ '"' ~ i.fecha|date('d/m/Y H:i') ~ '"' %}
+							{%set extra_quien = extra_quien ~ '"' ~ i.username ~ '"' %}
+						{% if not loop.last %}
+							{%set extra_hora = extra_hora ~ ","%}
+							{%set extra_quien = extra_quien ~ ","%}
+						{% else %}
+							{%set extra_hora = extra_hora ~ "]"%}
+							{%set extra_quien = extra_quien ~ "]"%}
+						{% endif %}
+						
+					{% endfor %}
+					], color: "{{ cycle(colores, contador ) }}", bars: { show: true, barWidth: {{diferencia}} * 60 * 60 * 24 },extra:{{extra_quien|raw}},tipo:"Aditivo",hora:{{extra_hora|raw}}};
+				  
+
+				var meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "jul", "Ago", "sep", "Oct", "nov", "dec"];
+		
+			  $.plot(placeholder2, [graficame1,graficame2], {
+							axisLabels: {
+								show: true
+							},xaxis: { 
+									mode: "time" ,
+									min : {{fecha_minima|date_modify("-1 day")|date("U")}}000,
+									max : {{fecha_maxima|date_modify("+0 day 18:00:00")|date("U")}}000,
+									monthNames: meses,									
+						{% if diferencia < 400 %}		
+									tickSize: [1, "day"],
+						{% endif %}
+									axisLabel: 'Fecha'
+							},yaxis: { 
+									axisLabel: 'Liquidos(m3)',
+									labelWidth : 38
+							}, grid: {
+								hoverable: true,
+								clickable: true,
+								borderWidth: .3
+							}});
+			
+			
+			  //pie chart tooltip example
+			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+			  var previousPoint = null;
+
+			
+
+			placeholder2.on('plothover', function (event, pos, item)  {
+				if(item) {
+						var fecha = new Date(item.datapoint[0]);
+						<!-- var tip = 'Cantidad: ' + item.datapoint[1]  + ' m3<br>' + fecha.getUTCDate() + "/" + (fecha.getUTCMonth()+1) + "/" + fecha.getUTCFullYear() ;  -->
+
+						var tip = item.series['tipo'] + ' (m3): ' + item.datapoint[1] + '<br>Ingresado por: ' + item.series['extra'][item.dataIndex] + '<br>fecha/Hora: ' + item.series['hora'][item.dataIndex] ; 
+		
+						$tooltip.show().children(0).html(tip);
+					
+					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+				} else {
+					$tooltip.hide();
+					previousPoint = null;
+				}
+				
+			 });
+			 
+			
+			}
+			
+			
         jQuery(function($) {
 
 								//or change it into a date range picker

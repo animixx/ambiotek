@@ -25,4 +25,5 @@ class PlanriegoRepository extends EntityRepository
 
 			return $query->fetchcolumn(0);
 		}
+		
 }

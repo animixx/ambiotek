@@ -102,7 +102,9 @@
 												}) 
 						}}
 					</div>
+				{% if is_granted('ROLE_PLAN') %}
 					<a class="btn btn-primary" href="{{ path('aditivo_new') }}"><i class="ace-icon fa fa-plus"></i>Agregar Valores</a> 
+				{% endif %}
 			</div>
 					
 	

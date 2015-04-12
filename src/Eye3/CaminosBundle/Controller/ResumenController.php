@@ -55,6 +55,7 @@ class ResumenController extends Controller
 		$map->setMapOption('mapTypeControl', false);
 	
 		
+		$dot_morado = 'http://eye3.cl/teck/bundles/eye3caminos/images/punto_morado.png';
 		$dot_red = 'http://eye3.cl/teck/bundles/eye3caminos/images/punto_rojo.png';
 		$dot_blue = 'http://eye3.cl/teck/bundles/eye3caminos/images/punto_azul.png';
 		$dot_green = 'http://eye3.cl/teck/bundles/eye3caminos/images/punto_verde.png';
@@ -80,7 +81,9 @@ class ResumenController extends Controller
 				$$marker = new Marker();
 				$$marker->setPrefixJavascriptVariable('medicion_');
 				$$marker->setPosition($maraca['latitude'],$maraca['longitude'], true);  
-				if ($maraca['pm10lat']>999)
+				if ($maraca['pm10lat']>6000)
+				{ $$marker->setIcon($dot_morado);}
+				elseif ($maraca['pm10lat']>999)
 				{ $$marker->setIcon($dot_red);}
 				elseif ($maraca['pm10lat']>599)
 				{ $$marker->setIcon($dot_yellow);}
@@ -92,7 +95,8 @@ class ResumenController extends Controller
 			$$infoWindow = new InfoWindow();
 			
 			// Configure your info window options
-			$info = "PM10=".$maraca['pm10lat'];
+			$info='<u>'.(($maraca['NombreTramo']=='')?'Sin Tramo':$maraca['NombreTramo']).' (ug/m3)</u>';
+			$info .= "<br>PM10=".$maraca['pm10lat'];
 			$$infoWindow->setContent("<div style='width:auto;'>$info</div>");
 			$$infoWindow->setPixelOffset(1.1, 2.1, 'px', 'pt');
 			// $$infoWindow->setOptions(array(

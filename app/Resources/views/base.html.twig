@@ -255,7 +255,7 @@
 								<b class="arrow"></b>
 
 									<ul class="submenu">
-			{% if is_granted('ROLE_PLAN') %}		
+			{#% if is_granted('ROLE_PLAN') %#}		
 										<li class="{% if app.request.attributes.get('_controller')|slice(55,13) == 'observaciones' %}active {% endif %}">
 											<a href="{{path('observaciones')}}">
 												<i class="menu-icon fa fa-caret-right"></i>
@@ -265,7 +265,7 @@
 											<b class="arrow"></b>
 										</li>
 
-			{% endif %}
+			{#% endif %#}
 										<li class="{% if app.request.attributes.get('_controller')|slice(55,9) == 'planRiego' %}active {% endif %}">
 											<a href="{{path('plan_riego')}}">
 												<i class="menu-icon fa fa-caret-right"></i>

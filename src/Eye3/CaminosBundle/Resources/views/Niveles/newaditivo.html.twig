@@ -126,6 +126,7 @@
 								$('.date-timepicker1').datetimepicker({
 										setDate: new Date(),
                                         locale: 'es',
+										minDate: new Date("January 01,{{fecha|date("Y")}} 00:00:00")
 						{#				sideBySide: true   #}
                                 }).next().on(ace.click_event, function(){
 									$(this).prev().focus();

@@ -32,22 +32,49 @@ class AditivoRepository extends EntityRepository
 			 return $query->fetchAll();
 		}
 		
-		//formato fecha desde y hasta "yyyy-mm-dd"
-		public function historial_excel($desde = "2014-12-01" ,$hasta = "2014-12-31")
+		//formato año "yyyy"
+		public function historial_excel( $ano = "2014" )
 		{
 
 			$query = $this->getEntityManager()
 				->getConnection()
 				->prepare(
-					"select *, null as NombreTramo, null as NombreZona, null as value from aditivo join usuario on usuario = usuario.id WHERE fecha BETWEEN :desde and :hasta order by fecha;"
+					"select *, null as NombreTramo, null as NombreZona, null as value from aditivo join usuario on usuario = usuario.id WHERE fecha like :desde order by fecha;"
 
 			);
-				$query->bindValue('desde', $desde );
-				$query->bindValue('hasta', $hasta );
-// VER EL ORDEN, EL FORMATO ANTERIOR AHORA NO ES VALIDO -->order by date_format(fecha,'%Y%m%d'), zonaid, d.id_tramo ;"
-			 $query->execute();
+				$query->bindValue('desde', $ano.'%' );
+
+				$query->execute();
 			 
 			 return $query->fetchAll();
+		}
+		
+		public function InicioDatos()
+		{ 
+			
+			$query = $this->getEntityManager()
+			->getConnection()
+			->prepare(
+				"SELECT min(fecha) FROM aditivo"
+			);
+			
+			$query->execute();
+
+			return $query->fetchcolumn(0);
+		}
+
+	public function FinalDatos()
+		{ 
+			
+			$query = $this->getEntityManager()
+			->getConnection()
+			->prepare(
+				"SELECT max(fecha) FROM aditivo"
+			);
+			
+			$query->execute();
+
+			return $query->fetchcolumn(0);
 		}
 
 }

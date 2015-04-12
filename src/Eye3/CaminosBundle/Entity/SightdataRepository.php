@@ -45,19 +45,24 @@ class SightdataRepository extends EntityRepository
 				switch (strtolower($tipo) ) {
 					case 'tpm':
 						$variable = 'tsplat';
+						$saturado = 6000;
 						break;
 					case 'pm10':
 						$variable = 'pm10lat';
+						$saturado = 6000;
 						break;
 					case 'pm25':
 						$variable = 'pm25lat';
+						$saturado = 600;
 						break;
 					case 'pm1':
 						$variable = 'pm1lat';
+						$saturado = 600;
 						break;
 					default:
 						$tipo = 'pm10';
 						$variable = 'pm10lat';
+						$saturado = 6000;
 						break;
 				}	
 				
@@ -69,7 +74,7 @@ class SightdataRepository extends EntityRepository
 				->prepare(
 					"SELECT round(avg($variable),1) as ".strtolower($tipo).", NombreTramo, date, fecha FROM pmdata 
 					join gpsdata gps on id_gps=gps.id join graficarMapa tramo on pmdata.id_tramo=tramo.id where  fecha >= '$fecha_inicio' and fecha <= '$fecha 23:59:59' 
-							and	( $variable< 6000 or $variable is null) and pmdata.id_tramo is not null 
+							and	( $variable< $saturado or $variable is null) and pmdata.id_tramo is not null 
 						group by date,pmdata.id_tramo "
 				);
 			}
@@ -81,7 +86,7 @@ class SightdataRepository extends EntityRepository
 				->prepare(
 					"SELECT round($variable,1) as ".strtolower($tipo).", NombreTramo, utctime, convert_tz(fecha,'GMT','-3:00') as fecha, latitude as latitud, longitude as longitud FROM pmdata 
 					join gpsdata gps on id_gps=gps.id join graficarMapa tramo on pmdata.id_tramo=tramo.id  where convert_tz(fecha,'GMT','-3:00') like '$fecha%'  
-							and ( $variable< 6000 or $variable is null) and pmdata.id_tramo is not null
+							and ( $variable< $saturado or $variable is null) and pmdata.id_tramo is not null
 						order by fecha"
 				);
 			}

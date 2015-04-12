@@ -66,7 +66,9 @@
 																</span>
 																
 														</div>
-																Seleccione el día en el cuadro superior para visualizar las mediciones realizadas en la fecha seleccionada.</span>
+																Seleccione el día en el cuadro superior para visualizar las mediciones realizadas en la fecha seleccionada.<br>
+																<br>ZOOM<br>
+																Para realizar zoom sobre el gráfico seleccione un área sobre el gráfico de medición que desea acercar. Para volver al tamaño inicial, o deshacer el zoom, sólo presione 2 veces sobre el gráfico.</span>
 													
 														<div class="input-group col-md-10 input-daterange white">
 																<input class="input-sm form-control" disabled type="text" placeholder="{{start}}" value="{{start}}"/>
@@ -363,7 +365,7 @@
 										{% if medicion == "pm10" and m_pm10 < i[medicion] %}	{#  seteo del valor máximo #}	
 											{% set m_pm10= i[medicion] %}
 										{% endif %}
-										{% set distanciador = ((i.date == fecha_anterior)?(distanciador + 1) : 0) %}
+										{% set distanciador = ((i.date == fecha_anterior)?(distanciador + 2) : 0) %}
 										{% set fecha_anterior = i.date %}
 										{% set adelando = "+"~(distanciador )~" hour" %}
 										[{{i.fecha|date_modify("+0 day 00:00:00")|date_modify(adelando)|date("U")}}000, {{i[medicion]}}]
@@ -455,7 +457,8 @@
 							if(item) {
 									var fecha = new Date(item.datapoint[0]);
 									previousPoint = item.seriesIndex;
-									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>el " + fecha.getUTCDate() + "/" + (fecha.getUTCMonth()+1) + "/" + fecha.getUTCFullYear() + "<br>Valor:" + item.datapoint[1].toFixed(1) + "(ug/m^3)"  ; 
+									
+									var tip = item.series['extra'][item.dataIndex].substring(1) + "<br>Fecha: " + fecha.getUTCDate() + "/" + (fecha.getUTCMonth()+1) + "/" + fecha.getUTCFullYear() + "<br>Promedio:" + item.datapoint[1].toFixed(1) + "(ug/m^3)"  ; 
 									$tooltip.show().children(0).html(tip);
 								
 									$tooltip.css({top:pos.pageY + 5 , left:pos.pageX + 5, background:item.series['color']});
