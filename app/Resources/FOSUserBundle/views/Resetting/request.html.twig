@@ -1,3 +1,42 @@
-{% extends "FOSUserBundle:Security:login.html.twig" %}
+{% if app.request.headers.get("referer")[-8:] == 'usuarios' %}
 
+	{% set base = '::base.html.twig' %}
 
+	{% block body %}
+		<form method='post' action='{{ path('fos_user_resetting_send_email') }}' >
+			<fieldset>
+						<div class="space-4"></div>
+
+								<div class="space"></div>
+								
+								<div class="form-group">
+								<div class="input-group col-sm-offset-1 pull-left">
+										Se enviará un correo para restablecer la contraseña al usuario {{app.request.query.get("usuario")}}<br>
+										¿Desea continuar?
+									</div>
+									
+									
+								</div>	
+								
+				<label class="block clearfix">
+					<span class="block input-icon input-icon-right">
+					</span>
+				</label>
+						<input type="hidden" class="form-control" id="username" name="username" value="{{app.request.query.get("usuario")}}" />
+						<div class="clearfix form-actions" />
+						<div class="col-md-offset-5 col-md-7">
+
+								<button type="submit" class="btn btn-primary">
+									Enviar
+								</button>
+								&nbsp; &nbsp;
+								<button type="reset" class="btn btn-default">
+									Cancelar
+								</button>
+			</fieldset>
+		</form>
+	{% endblock %}
+{% else %}
+	{% set base = "FOSUserBundle:Security:login.html.twig" %}
+{% endif %}
+	{% extends base %}

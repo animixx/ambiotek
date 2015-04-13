@@ -20,15 +20,15 @@ class UsuariosTable extends QueryBuilderDataTable implements QueryBuilderDataTab
 
     /**
      * @var datetime
-     * @DataTable\Column(source="usuario.last_login", name="Último Acceso")
+     * @DataTable\Column(source="usuario.last_login", name="Último Acceso", stype="date-euro")
 	 * @DataTable\Format(dataFields={"dato":"usuario.last_login"}, template="Eye3CaminosBundle:Registro:fecha.html.twig")
+	 * @DataTable\DefaultSort()
      */
     public $fecha; 
 	
     /**
      * @var string
      * @DataTable\Column(source="usuario.username",name="Usuario" )
-	 * @DataTable\DefaultSort()
      */
     public $nombre;
 
@@ -54,7 +54,7 @@ class UsuariosTable extends QueryBuilderDataTable implements QueryBuilderDataTab
 	/**
      * @var int
      * @DataTable\Column(source="usuario.id", name="",sortable=false,searchable=false)
-	 * @DataTable\Format(dataFields={"id":"usuario.id"}, template="Eye3CaminosBundle:Acceso:modifica.html.twig")
+	 * @DataTable\Format(dataFields={"id":"usuario.id","user":"usuario.username","venc":"usuario.password_requested_at"}, template="Eye3CaminosBundle:Acceso:modifica.html.twig")
      */
     public $id;
 

@@ -92,12 +92,12 @@
 													<div class="space"></div>
 
 													<div class="clearfix">
-												<!--		<label class="inline">
+												{#		<label class="inline">
 															<input type="checkbox" class="ace" name="_remember_me" checked  />
-															<span class="lbl"> Recordarme</span>	-->
+															<span class="lbl"> Recordarme</span>	#}
 														</label> 
 														
-														<input type="hidden" name="_csrf_token" value="{% if csrf_token is defined %}{{ csrf_token }}{% endif %}" />
+														<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
 														<input type="hidden" name="_target_path" value="/" />  
 														 
 														<button type="submit" class="width-40 pull-right btn btn-sm btn-primary">
@@ -226,5 +226,7 @@
 			
 			
 		</script>
+{% block script %}
+{% endblock script %}	
 	</body>
 </html>

@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Eye3\CaminosBundle\Entity\Usuario;
 use Eye3\CaminosBundle\Form\UsuarioType;
@@ -28,6 +29,7 @@ class AccesoController extends Controller
     *
     * @Route("/uso", name="uso_sistema")
     * @Template()
+	* @Security("has_role('ROLE_ADMIN')")
 	* @param \Symfony\Component\HttpFoundation\Request $request
     * @return array
     */
@@ -48,6 +50,7 @@ class AccesoController extends Controller
     *
     * @Route("/dios", name="uso_dios")
     * @Template("Eye3CaminosBundle:Acceso:uso.html.twig")
+	* @Security("has_role('ROLE_DIOS')")
 	* @param \Symfony\Component\HttpFoundation\Request $request
     * @return array
     */
@@ -247,13 +250,6 @@ class AccesoController extends Controller
 			->remove('tipo')
 			->add('submit', 'submit', array('label' => 'Editar'));
 		
-        // $builder->add('plainPassword', 'repeated', array(
-            // 'type' => 'password',
-            // 'options' => array('translation_domain' => 'FOSUserBundle'),
-            // 'first_options' => array('label' => 'form.new_password'),
-            // 'second_options' => array('label' => 'form.new_password_confirmation'),
-            // 'invalid_message' => 'fos_user.password.mismatch',
-        // ));
 		
 		
         $form->handleRequest($request);

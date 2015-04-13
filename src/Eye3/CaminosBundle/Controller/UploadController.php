@@ -5,6 +5,7 @@ namespace Eye3\CaminosBundle\Controller;
 use Eye3\CaminosBundle\Entity\Upload;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,6 +21,7 @@ class UploadController extends Controller
 
 		/**
 		 * @Template()
+		 * @Security("has_role('ROLE_SYNC')")
 		 * @Route("/subiendo", name="subida")
 		 */
 		public function uploadAction(Request $request)

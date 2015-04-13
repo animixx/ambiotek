@@ -3,10 +3,15 @@
 	<a class="green" href="{{ path('editar_usuario', {'id': id }) }}">
 		<i class="ace-icon fa fa-pencil bigger-130"></i>
 	</a>
-
-	<a class="light-orange" href="{{ id  }}">
+{% if  "now"|date_modify("-1 day") > venc %}
+	<a class="light-orange"  href="{{ path('fos_user_resetting_request', {'usuario': user })  }}" >
 		<i class="ace-icon fa fa-key bigger-130"></i>
 	</a>
+{% else %}
+	<a style="color:darkgray;"  disabled >
+		<i class="ace-icon fa fa-key bigger-130"></i>
+	</a>
+{% endif %}
 	
 	<a class="red" href="{{ path('user_deleteconfirm', {'id': id }) }}">
 		<i class="ace-icon fa fa-trash-o bigger-130"></i>
